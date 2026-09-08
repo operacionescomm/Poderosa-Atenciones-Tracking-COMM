@@ -1,6 +1,6 @@
 # Poderosa Atenciones Tracking · COMM
 
-Motor visual para generar automáticamente el informe mensual de atenciones de Tracking Poderosa. El proyecto toma como referencia la calidad y el sistema gráfico de `Poderosa-COMM`, pero utiliza plantillas, indicadores y contratos de datos propios.
+Motor visual para generar automáticamente el informe mensual de atenciones de Tracking Poderosa. Utiliza plantillas, indicadores y contratos de datos propios.
 
 ## Arquitectura
 
