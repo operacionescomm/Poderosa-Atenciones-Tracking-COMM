@@ -11,13 +11,12 @@ const API_KEY = String(process.env.RENDER_API_KEY || '').trim();
 const sampleReport = require('./data/sample-report.json');
 
 const SLIDES = [
-  { number: '01', view: 'cover', title: 'Portada' },
-  { number: '02', view: 'summary', title: 'Resumen ejecutivo' },
-  { number: '03', view: 'daily', title: 'Evolución diaria' },
-  { number: '04', view: 'categories', title: 'Categorías de atención' },
-  { number: '05', view: 'demand', title: 'Demanda operativa' },
-  { number: '06', view: 'supplies', title: 'Insumos utilizados' },
-  { number: '07', view: 'insights', title: 'Hallazgos y acciones' }
+  { number: '10', view: 'slide10', style: 'summary', title: 'RESUMEN EJECUTIVO DEL PERIODO' },
+  { number: '11', view: 'slide11', style: 'daily', title: 'EVOLUCIÓN DIARIA DE ATENCIONES' },
+  { number: '12', view: 'slide12', style: 'categories', title: 'DISTRIBUCIÓN POR CATEGORÍA DE ATENCIÓN' },
+  { number: '13', view: 'slide13', style: 'demand', title: 'CONCENTRACIÓN DE LA DEMANDA OPERATIVA' },
+  { number: '15', view: 'slide15', style: 'supplies', title: 'INSUMOS UTILIZADOS' },
+  { number: '17', view: 'slide17', style: 'insights', title: 'HALLAZGOS Y ACCIONES PRIORITARIAS' }
 ];
 
 app.use(express.json({ limit: '10mb' }));
@@ -35,9 +34,9 @@ app.get('/', (req, res) => {
     slides: SLIDES,
     endpoints: {
       health: '/health',
-      preview: '/test-slide{01..07}',
-      png: '/test-slide{01..07}-png',
-      render: '/render/slide{01..07}'
+      preview: SLIDES.map(slide => `/test-slide${slide.number}`),
+      png: SLIDES.map(slide => `/test-slide${slide.number}-png`),
+      render: SLIDES.map(slide => `/render/slide${slide.number}`)
     }
   });
 });
@@ -100,21 +99,13 @@ function registerSlide(slide) {
 
 function buildSlideData(raw, slide) {
   const report = normalizeReportData(raw);
-  const titles = {
-    cover: 'INFORME MENSUAL DE ATENCIONES DE TRACKING',
-    summary: 'RESUMEN EJECUTIVO DEL PERIODO',
-    daily: 'EVOLUCIÓN DIARIA DE ATENCIONES',
-    categories: 'DISTRIBUCIÓN POR CATEGORÍA DE ATENCIÓN',
-    demand: 'CONCENTRACIÓN DE LA DEMANDA OPERATIVA',
-    supplies: report.supplyHeading,
-    insights: 'HALLAZGOS Y ACCIONES PRIORITARIAS'
-  };
 
   return {
     ...report,
     viewName: slide.view,
+    viewClass: slide.style,
     slideNumber: slide.number,
-    slideTitle: titles[slide.view],
+    slideTitle: slide.number === '15' ? report.supplyHeading : slide.title,
     formatNumber,
     formatPct,
     truncate

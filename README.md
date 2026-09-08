@@ -16,15 +16,14 @@ Google Sheets → Apps Script → Render → Node/EJS → Puppeteer → PNG → 
 
 ## Diapositivas disponibles
 
-| N.º | Contenido | Endpoint de prueba |
-| --- | --- | --- |
-| 01 | Portada mensual | `/test-slide01-png` |
-| 02 | Resumen ejecutivo | `/test-slide02-png` |
-| 03 | Evolución diaria | `/test-slide03-png` |
-| 04 | Categorías de atención | `/test-slide04-png` |
-| 05 | Compañías y tipos de vehículo | `/test-slide05-png` |
-| 06 | Insumos utilizados / Top 10 | `/test-slide06-png` |
-| 07 | Hallazgos y acciones | `/test-slide07-png` |
+| Diapositiva PPT | Plantilla EJS | Contenido | Endpoint de prueba |
+| --- | --- | --- | --- |
+| 10 | `views/partials/slide10.ejs` | Resumen ejecutivo | `/test-slide10-png` |
+| 11 | `views/partials/slide11.ejs` | Evolución diaria | `/test-slide11-png` |
+| 12 | `views/partials/slide12.ejs` | Categorías de atención | `/test-slide12-png` |
+| 13 | `views/partials/slide13.ejs` | Compañías y tipos de vehículo | `/test-slide13-png` |
+| 15 | `views/partials/slide15.ejs` | Insumos utilizados / Top 10 | `/test-slide15-png` |
+| 17 | `views/partials/slide17.ejs` | Hallazgos y acciones | `/test-slide17-png` |
 
 Cada vista también cuenta con:
 
@@ -96,4 +95,5 @@ Los endpoints `/render/slideNN` requieren el encabezado `x-api-key` cuando `REND
 
 - Motor visual inicial: listo.
 - Contrato mensual y regla de Top 10: listos.
-- Integración con Apps Script y plantilla definitiva de Google Slides: siguiente etapa.
+- Numeración alineada con la plantilla definitiva: lista (slides 10, 11, 12, 13, 15 y 17).
+- Integración con Apps Script: siguiente etapa.
