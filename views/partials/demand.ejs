@@ -1,0 +1,46 @@
+<section class="two-column demand-layout">
+  <article class="panel">
+    <div class="panel-heading">
+      <div>
+        <span class="panel-kicker">CONCENTRACIÓN POR CLIENTE INTERNO</span>
+        <h2>Compañías con más atenciones</h2>
+      </div>
+      <div class="panel-badge">TOP <strong><%= companies.length %></strong></div>
+    </div>
+    <div class="horizontal-bars company-bars">
+      <% companies.forEach(function(item, index) { %>
+        <div class="company-row">
+          <div class="company-name"><span><%= index + 1 %></span><%= truncate(item.name, 45) %></div>
+          <div class="company-track"><i style="width:<%= Math.max(item.width, 4) %>%;background:<%= item.color %>"></i></div>
+          <div class="company-metric"><strong><%= formatNumber(item.count) %></strong><small><%= formatPct(item.share) %></small></div>
+        </div>
+      <% }) %>
+    </div>
+    <div class="panel-footnote">La concentración permite priorizar coordinaciones y acciones preventivas con las compañías de mayor demanda.</div>
+  </article>
+
+  <article class="panel vehicle-panel">
+    <div class="panel-heading">
+      <div>
+        <span class="panel-kicker">PERFIL DE LAS UNIDADES ATENDIDAS</span>
+        <h2>Atenciones por tipo de vehículo</h2>
+      </div>
+    </div>
+    <div class="vehicle-content">
+      <div class="donut-wrap">
+        <div class="donut" style="background:<%= vehicleGradient %>">
+          <div class="donut-hole"><strong><%= formatNumber(vehicleTotal) %></strong><span>atenciones</span></div>
+        </div>
+      </div>
+      <div class="vehicle-legend">
+        <% vehicleTypes.slice(0, 7).forEach(function(item) { %>
+          <div class="legend-row">
+            <i style="background:<%= item.color %>"></i>
+            <span><%= truncate(item.name, 23) %></span>
+            <strong><%= formatPct(item.share) %></strong>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </article>
+</section>

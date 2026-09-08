@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= slideTitle %></title>
+  <link rel="stylesheet" href="/public/styles.css">
+</head>
+<body>
+  <div class="canvas">
+    <% if (viewName === 'cover') { %>
+      <%- include('partials/cover') %>
+    <% } else { %>
+      <section class="slide-frame">
+        <header class="report-header">
+          <div class="header-title">
+            <span class="title-rule"></span>
+            <div>
+              <div class="eyebrow">INFORME MENSUAL · TRACKING PODEROSA</div>
+              <h1><%= slideTitle %></h1>
+            </div>
+          </div>
+          <div class="header-meta">
+            <span class="period-chip"><%= period.toUpperCase() %></span>
+            <div class="brand">
+              <span class="brand-symbol"><i></i><b></b></span>
+              <span class="brand-name">COMM</span>
+            </div>
+          </div>
+        </header>
+
+        <main class="slide-content <%= viewName %>">
+          <%- include('partials/' + viewName) %>
+        </main>
+
+        <footer class="report-footer">
+          <span>COMM · Digitalizamos la minería peruana</span>
+          <span><%= operation %> · <%= reportName %></span>
+          <span><%= slideNumber %></span>
+        </footer>
+      </section>
+    <% } %>
+  </div>
+</body>
+</html>

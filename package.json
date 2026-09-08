@@ -1,0 +1,20 @@
+{
+  "name": "poderosa-atenciones-tracking-comm",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Motor visual para informes mensuales de atenciones de Tracking Poderosa",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "ejs": "3.1.10",
+    "express": "4.19.2",
+    "puppeteer": "23.3.0"
+  }
+}

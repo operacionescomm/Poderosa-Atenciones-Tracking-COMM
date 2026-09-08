@@ -1,2 +1,98 @@
-# Poderosa-Atenciones-Tracking-COMM
-Motor visual para la generación automática de informes mensuales de atenciones de Tracking Poderosa.
+# Poderosa Atenciones Tracking · COMM
+
+Motor visual para generar automáticamente el informe mensual de atenciones de Tracking Poderosa. El proyecto toma como referencia la calidad y el sistema gráfico de `Poderosa-COMM`, pero utiliza plantillas, indicadores y contratos de datos propios.
+
+## Arquitectura
+
+```text
+Google Sheets → Apps Script → Render → Node/EJS → Puppeteer → PNG → Google Slides
+```
+
+- **Google Sheets** conserva los registros y el mes seleccionado.
+- **Apps Script** agrupa la información y envía un JSON por diapositiva.
+- **Render** ejecuta este motor visual.
+- **Puppeteer** produce imágenes 16:9 con viewport de 1600×900 y salida de alta definición.
+- **Google Slides** recibe las imágenes y conforma el informe final.
+
+## Diapositivas disponibles
+
+| N.º | Contenido | Endpoint de prueba |
+| --- | --- | --- |
+| 01 | Portada mensual | `/test-slide01-png` |
+| 02 | Resumen ejecutivo | `/test-slide02-png` |
+| 03 | Evolución diaria | `/test-slide03-png` |
+| 04 | Categorías de atención | `/test-slide04-png` |
+| 05 | Compañías y tipos de vehículo | `/test-slide05-png` |
+| 06 | Insumos utilizados / Top 10 | `/test-slide06-png` |
+| 07 | Hallazgos y acciones | `/test-slide07-png` |
+
+Cada vista también cuenta con:
+
+- HTML: `/test-slideNN`
+- PNG de prueba: `/test-slideNN-png`
+- Producción: `POST /render/slideNN`
+
+## Regla dinámica de insumos
+
+- Si el mes tiene **10 insumos o menos**, la tabla y el gráfico muestran todos.
+- Si el mes tiene **más de 10 insumos**, muestran los 10 de mayor cantidad.
+- El orden siempre es descendente.
+- Cada cantidad conserva su unidad (`und`, `m`, `veces de uso`, etc.).
+- No se suman ni se generan porcentajes entre unidades incompatibles.
+
+## Contrato de datos
+
+Los endpoints de producción reciben el mismo objeto general y cada plantilla consume únicamente los campos que necesita.
+
+```json
+{
+  "period": "Mayo 2026",
+  "operation": "Poderosa",
+  "reportName": "Atenciones de Tracking",
+  "comparison": {
+    "previousPeriod": "Abril 2026",
+    "previousTotal": 40,
+    "variationPct": 15
+  },
+  "metrics": {
+    "totalAttentions": 46,
+    "uniqueVehicles": 42,
+    "activeDays": 14,
+    "peakDay": "04, 05, 06 y 12",
+    "peakValue": 5,
+    "distinctSupplies": 8
+  },
+  "daily": [{ "day": "01", "value": 0 }],
+  "categories": [{ "name": "MANTENIMIENTO BÁSICO", "count": 22 }],
+  "companies": [{ "name": "COMPAÑÍA A", "count": 6 }],
+  "vehicleTypes": [{ "name": "CAMIONETA", "count": 17 }],
+  "supplies": [{ "name": "CINTILLOS", "quantity": 103, "unit": "und", "uses": 27 }]
+}
+```
+
+También se aceptan equivalentes en español como `periodo`, `categorias`, `companias`, `tiposVehiculo` e `insumos`.
+
+## Ejecución local
+
+```bash
+npm install
+npm start
+```
+
+Abrir `http://localhost:3000` para ver el inventario de endpoints.
+
+## Despliegue en Render
+
+1. Crear un nuevo **Blueprint** en Render.
+2. Seleccionar este repositorio.
+3. Render leerá `render.yaml` y creará el servicio.
+4. Copiar el valor generado de `RENDER_API_KEY` a las propiedades de Apps Script.
+5. Configurar en Apps Script la URL pública del servicio.
+
+Los endpoints `/render/slideNN` requieren el encabezado `x-api-key` cuando `RENDER_API_KEY` está configurada.
+
+## Estado del proyecto
+
+- Motor visual inicial: listo.
+- Contrato mensual y regla de Top 10: listos.
+- Integración con Apps Script y plantilla definitiva de Google Slides: siguiente etapa.

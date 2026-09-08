@@ -1,0 +1,40 @@
+<section class="cover-shell">
+  <div class="cover-grid"></div>
+  <div class="cover-glow glow-one"></div>
+  <div class="cover-glow glow-two"></div>
+
+  <div class="cover-brand">
+    <span class="brand-symbol brand-symbol-light"><i></i><b></b></span>
+    <span class="cover-brand-name">COMM</span>
+  </div>
+
+  <div class="cover-copy">
+    <div class="cover-kicker">REPORTE EJECUTIVO MENSUAL</div>
+    <h1>ATENCIONES<br>DE TRACKING</h1>
+    <p>Seguimiento operativo, categorías de servicio y consumo de insumos</p>
+    <div class="cover-period"><%= period.toUpperCase() %></div>
+  </div>
+
+  <div class="cover-visual">
+    <div class="radar-ring ring-1"></div>
+    <div class="radar-ring ring-2"></div>
+    <div class="radar-ring ring-3"></div>
+    <div class="radar-axis axis-a"></div>
+    <div class="radar-axis axis-b"></div>
+    <div class="radar-dot dot-a"></div>
+    <div class="radar-dot dot-b"></div>
+    <div class="radar-dot dot-c"></div>
+    <div class="vehicle-card">
+      <div class="vehicle-icon">⌁</div>
+      <div>
+        <strong><%= formatNumber(metrics.totalAttentions) %></strong>
+        <span>atenciones registradas</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <span>OPERACIÓN <strong><%= operation.toUpperCase() %></strong></span>
+    <span>Generado para revisión gerencial</span>
+  </div>
+</section>

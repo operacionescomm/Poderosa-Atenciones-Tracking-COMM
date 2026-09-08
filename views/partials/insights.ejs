@@ -1,0 +1,27 @@
+<section class="insights-grid">
+  <% insights.slice(0, 4).forEach(function(item, index) { %>
+    <article class="insight-card <%= item.tone %>">
+      <div class="insight-number"><%= String(index + 1).padStart(2, '0') %></div>
+      <div>
+        <span>HALLAZGO</span>
+        <h2><%= item.title %></h2>
+        <p><%= item.text %></p>
+      </div>
+    </article>
+  <% }) %>
+</section>
+
+<section class="actions-panel">
+  <div class="actions-heading">
+    <span>PRÓXIMOS PASOS</span>
+    <h2>Acciones recomendadas para el siguiente periodo</h2>
+  </div>
+  <div class="actions-list">
+    <% actions.slice(0, 3).forEach(function(action, index) { %>
+      <article class="action-item">
+        <strong><%= String(index + 1).padStart(2, '0') %></strong>
+        <p><%= action %></p>
+      </article>
+    <% }) %>
+  </div>
+</section>

@@ -1,0 +1,57 @@
+<section class="summary-kpis">
+  <article class="metric-card blue">
+    <div class="metric-icon">01</div>
+    <div class="metric-label">ATENCIONES DEL MES</div>
+    <div class="metric-value"><%= formatNumber(metrics.totalAttentions) %></div>
+    <div class="metric-note">Servicios registrados en el periodo</div>
+  </article>
+  <article class="metric-card teal">
+    <div class="metric-icon">02</div>
+    <div class="metric-label">VEHÍCULOS ÚNICOS</div>
+    <div class="metric-value"><%= formatNumber(metrics.uniqueVehicles) %></div>
+    <div class="metric-note">Unidades diferentes atendidas</div>
+  </article>
+  <article class="metric-card orange">
+    <div class="metric-icon">03</div>
+    <div class="metric-label">DÍAS CON ACTIVIDAD</div>
+    <div class="metric-value"><%= formatNumber(metrics.activeDays) %></div>
+    <div class="metric-note">Días con al menos una atención</div>
+  </article>
+  <article class="metric-card purple">
+    <div class="metric-icon">04</div>
+    <div class="metric-label">MÁXIMO DIARIO</div>
+    <div class="metric-value"><%= formatNumber(metrics.peakValue) %></div>
+    <div class="metric-note">Día(s): <%= metrics.peakDay || 'Sin registro' %></div>
+  </article>
+  <article class="metric-card navy">
+    <div class="metric-icon">05</div>
+    <div class="metric-label">CATEGORÍA PRINCIPAL</div>
+    <div class="metric-value compact"><%= formatPct(topCategory.share) %></div>
+    <div class="metric-note"><%= truncate(topCategory.name, 44) %></div>
+  </article>
+  <article class="metric-card green">
+    <div class="metric-icon">06</div>
+    <div class="metric-label">INSUMOS DIFERENTES</div>
+    <div class="metric-value"><%= formatNumber(metrics.distinctSupplies) %></div>
+    <div class="metric-note">Tipos consumidos durante el mes</div>
+  </article>
+</section>
+
+<section class="executive-strip">
+  <div class="strip-block comparison <%= comparison.tone %>">
+    <span>VARIACIÓN VS. <%= comparison.previousPeriod.toUpperCase() %></span>
+    <strong><%= comparison.label %></strong>
+  </div>
+  <div class="strip-divider"></div>
+  <div class="strip-block">
+    <span>MAYOR DEMANDA</span>
+    <strong><%= truncate(topCompany.name, 42) %></strong>
+    <small><%= formatNumber(topCompany.count) %> atenciones · <%= formatPct(topCompany.share) %></small>
+  </div>
+  <div class="strip-divider"></div>
+  <div class="strip-block">
+    <span>LECTURA EJECUTIVA</span>
+    <strong>Demanda concentrada en <%= truncate(topCategory.name, 34) %></strong>
+    <small>Requiere seguimiento preventivo y disponibilidad de insumos.</small>
+  </div>
+</section>

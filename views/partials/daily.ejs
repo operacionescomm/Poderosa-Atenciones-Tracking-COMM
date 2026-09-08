@@ -1,0 +1,45 @@
+<section class="daily-layout">
+  <article class="panel chart-panel">
+    <div class="panel-heading">
+      <div>
+        <span class="panel-kicker">COMPORTAMIENTO DEL MES</span>
+        <h2>Atenciones por día</h2>
+      </div>
+      <div class="panel-badge">Promedio: <strong><%= formatNumber(dailyAverage, 1) %></strong></div>
+    </div>
+    <div class="daily-chart">
+      <div class="grid-line line-25"></div>
+      <div class="grid-line line-50"></div>
+      <div class="grid-line line-75"></div>
+      <div class="average-line" style="bottom: calc(42px + <%= dailyAverageHeight * 0.78 %>%)">
+        <span>Promedio</span>
+      </div>
+      <div class="daily-bars">
+        <% daily.forEach(function(item) { %>
+          <div class="day-column">
+            <div class="bar-value"><%= item.value > 0 ? formatNumber(item.value) : '' %></div>
+            <div class="day-bar <%= item.isPeak ? 'peak' : '' %> <%= item.value === 0 ? 'zero' : '' %>" style="height:<%= Math.max(item.value > 0 ? 7 : 1.5, item.height * 0.78) %>%"></div>
+            <div class="day-label"><%= item.day %></div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </article>
+
+  <aside class="daily-side">
+    <article class="side-card primary">
+      <span class="side-label">PICO DEL MES</span>
+      <strong><%= formatNumber(metrics.peakValue) %></strong>
+      <p>atenciones en los días <%= metrics.peakDay %></p>
+    </article>
+    <article class="side-card">
+      <span class="side-label">DÍAS ACTIVOS</span>
+      <strong><%= formatNumber(metrics.activeDays) %></strong>
+      <p>de <%= daily.length %> días del periodo</p>
+    </article>
+    <article class="side-insight">
+      <span>LECTURA OPERATIVA</span>
+      <p>La visualización incluye todos los días del mes, incluso aquellos sin atenciones, para evitar cortes o interpretaciones incompletas.</p>
+    </article>
+  </aside>
+</section>

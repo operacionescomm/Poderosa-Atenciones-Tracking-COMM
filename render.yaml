@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: poderosa-atenciones-tracking-comm
+    runtime: node
+    plan: free
+    buildCommand: npm install && npx puppeteer browsers install chrome-headless-shell
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20.18.0
+      - key: APP_NAME
+        value: Poderosa Atenciones Tracking - Visual Engine
+      - key: OPERATION_NAME
+        value: Poderosa Tracking
+      - key: RENDER_API_KEY
+        generateValue: true

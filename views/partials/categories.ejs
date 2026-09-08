@@ -1,0 +1,43 @@
+<section class="two-column categories-layout">
+  <article class="panel">
+    <div class="panel-heading">
+      <div>
+        <span class="panel-kicker">DISTRIBUCIÓN DEL SERVICIO</span>
+        <h2>Atenciones por categoría</h2>
+      </div>
+      <div class="panel-badge"><strong><%= categories.length %></strong> categorías</div>
+    </div>
+    <div class="horizontal-bars category-bars">
+      <% categories.forEach(function(item, index) { %>
+        <div class="hbar-row">
+          <div class="hbar-rank"><%= String(index + 1).padStart(2, '0') %></div>
+          <div class="hbar-label" title="<%= item.name %>"><%= truncate(item.name, 43) %></div>
+          <div class="hbar-track"><span style="width:<%= Math.max(item.width, item.count > 0 ? 3 : 0) %>%;background:<%= item.color %>"></span></div>
+          <div class="hbar-value"><strong><%= formatNumber(item.count) %></strong><small><%= formatPct(item.share) %></small></div>
+        </div>
+      <% }) %>
+    </div>
+  </article>
+
+  <aside class="category-side">
+    <article class="spotlight-card">
+      <span class="spotlight-kicker">PRINCIPAL MOTIVO</span>
+      <h3><%= topCategory.name %></h3>
+      <div class="spotlight-number"><%= formatNumber(topCategory.count) %></div>
+      <div class="spotlight-share"><%= formatPct(topCategory.share) %> del total mensual</div>
+    </article>
+    <article class="mini-ranking">
+      <div class="mini-title">CONCENTRACIÓN TOP 3</div>
+      <% categories.slice(0, 3).forEach(function(item, index) { %>
+        <div class="mini-row">
+          <span><b><%= index + 1 %></b><%= truncate(item.name, 28) %></span>
+          <strong><%= formatNumber(item.count) %></strong>
+        </div>
+      <% }) %>
+      <div class="mini-total">
+        <span>Participación conjunta</span>
+        <strong><%= formatPct((categories.slice(0,3).reduce((a,x)=>a+x.count,0) / Math.max(metrics.totalAttentions,1))*100) %></strong>
+      </div>
+    </article>
+  </aside>
+</section>

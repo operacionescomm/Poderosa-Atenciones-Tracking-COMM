@@ -1,0 +1,47 @@
+<section class="supplies-layout">
+  <article class="panel supplies-table-panel">
+    <div class="panel-heading compact-heading">
+      <div>
+        <span class="panel-kicker">DETALLE DEL PERIODO</span>
+        <h2><%= allSupplyCount > 10 ? 'Top 10 insumos' : 'Insumos utilizados' %></h2>
+      </div>
+      <div class="panel-badge"><strong><%= allSupplyCount %></strong> registrados</div>
+    </div>
+    <table class="executive-table">
+      <thead>
+        <tr><th>#</th><th>Insumo</th><th>Cantidad</th><th>Unidad</th></tr>
+      </thead>
+      <tbody>
+        <% supplies.forEach(function(item, index) { %>
+          <tr>
+            <td><span class="table-rank"><%= index + 1 %></span></td>
+            <td title="<%= item.name %>"><%= truncate(item.name, 32) %></td>
+            <td class="numeric"><%= formatNumber(item.quantity, Number.isInteger(item.quantity) ? 0 : 2) %></td>
+            <td><span class="unit-chip"><%= item.unit || 's/u' %></span></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </article>
+
+  <article class="panel supplies-chart-panel">
+    <div class="panel-heading compact-heading">
+      <div>
+        <span class="panel-kicker">RANKING POR CANTIDAD REGISTRADA</span>
+        <h2>Consumo mensual de insumos</h2>
+      </div>
+    </div>
+    <div class="supply-bars">
+      <% supplies.forEach(function(item, index) { %>
+        <div class="supply-row">
+          <div class="supply-label"><%= truncate(item.name, 37) %></div>
+          <div class="supply-track">
+            <span style="width:<%= Math.max(item.width, 3) %>%;background:<%= item.color %>"></span>
+          </div>
+          <b class="supply-metric"><%= formatNumber(item.quantity, Number.isInteger(item.quantity) ? 0 : 2) %> <%= item.unit %></b>
+        </div>
+      <% }) %>
+    </div>
+    <div class="unit-note">Las cantidades conservan su unidad original. No se suman ni se calculan porcentajes entre unidades incompatibles.</div>
+  </article>
+</section>
