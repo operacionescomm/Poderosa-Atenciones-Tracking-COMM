@@ -14,5 +14,7 @@ services:
         value: Poderosa Atenciones Tracking - Visual Engine
       - key: OPERATION_NAME
         value: Poderosa Tracking
+      - key: PUPPETEER_CACHE_DIR
+        value: /opt/render/project/src/.cache/puppeteer
       - key: RENDER_API_KEY
         generateValue: true
