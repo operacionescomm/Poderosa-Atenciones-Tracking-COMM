@@ -43,6 +43,7 @@ Cada vista también cuenta con:
 ## Contrato de datos
 
 Los endpoints de producción reciben el mismo objeto general y cada plantilla consume únicamente los campos que necesita.
+El archivo de prueba usa compañías anonimizadas; los nombres reales se reciben solamente durante el renderizado desde Apps Script.
 
 ```json
 {
