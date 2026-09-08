@@ -351,13 +351,13 @@ async function getBrowser() {
   if (!browserPromise) {
     const launchOptions = {
       headless: true,
+      protocolTimeout: 300000,
+      timeout: 120000,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
         '--disable-gpu',
-        '--no-zygote',
-        '--single-process',
         '--disable-software-rasterizer'
       ]
     };
@@ -404,17 +404,46 @@ function findHeadlessShellPath() {
 }
 
 async function htmlToPng(html) {
+  let lastError;
+
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    try {
+      return await captureHtmlToPng(html);
+    } catch (error) {
+      lastError = error;
+      console.warn(`Intento ${attempt} de PNG fallido; reiniciando Chrome:`, error.message);
+      await resetBrowser();
+    }
+  }
+
+  throw lastError;
+}
+
+async function captureHtmlToPng(html) {
   const browser = await getBrowser();
   const page = await browser.newPage();
   try {
     await page.setViewport({ width: 1600, height: 900, deviceScaleFactor: 2 });
-    await page.setContent(html, { waitUntil: 'networkidle0', timeout: 60000 });
+    await page.setContent(html, { waitUntil: 'domcontentloaded', timeout: 120000 });
     const stylePath = path.join(__dirname, 'public', 'styles.css');
     if (fs.existsSync(stylePath)) await page.addStyleTag({ path: stylePath });
     await page.evaluate(() => document.fonts && document.fonts.ready);
     return Buffer.from(await page.screenshot({ type: 'png', fullPage: false }));
   } finally {
-    await page.close();
+    await page.close().catch(() => {});
+  }
+}
+
+async function resetBrowser() {
+  const currentBrowser = browserPromise;
+  browserPromise = null;
+  if (!currentBrowser) return;
+
+  try {
+    const browser = await currentBrowser;
+    await browser.close();
+  } catch (error) {
+    console.warn('No se pudo cerrar Chrome limpiamente:', error.message);
   }
 }
 
