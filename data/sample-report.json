@@ -60,11 +60,11 @@
     { "name": "REINSTALACIÓN", "count": 0 }
   ],
   "companies": [
-    { "name": "COMPAÑÍA MINERA Y MADERERA RA&OR S.R.L.", "count": 6 },
-    { "name": "CMR GOLDEN SERVICE S.A.C.", "count": 5 },
-    { "name": "TRANSPORTES FLOR DE HIGO S.A.C.", "count": 4 },
-    { "name": "TRANSPORTES Y SERVICIOS BRAKI E.I.R.L.", "count": 4 },
-    { "name": "CORONEL TAMAYO DAVID", "count": 3 }
+    { "name": "COMPAÑÍA A", "count": 6 },
+    { "name": "COMPAÑÍA B", "count": 5 },
+    { "name": "COMPAÑÍA C", "count": 4 },
+    { "name": "COMPAÑÍA D", "count": 4 },
+    { "name": "COMPAÑÍA E", "count": 3 }
   ],
   "vehicleTypes": [
     { "name": "CAMIONETA", "count": 17 },
