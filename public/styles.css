@@ -110,6 +110,15 @@ p {
   letter-spacing: -0.6px;
 }
 
+.header-subtitle {
+  margin-top: 8px;
+  color: #7689a4;
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 3.4px;
+}
+
 .header-meta {
   display: flex;
   align-items: center;
@@ -120,6 +129,7 @@ p {
 .period-chip {
   display: inline-flex;
   align-items: center;
+  gap: 10px;
   height: 38px;
   padding: 0 18px;
   border-radius: 12px;
@@ -129,6 +139,16 @@ p {
   font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.6px;
+}
+
+.period-chip svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .brand {
@@ -488,7 +508,7 @@ p {
 /* Summary */
 .summary {
   display: grid;
-  grid-template-rows: 1fr 137px;
+  grid-template-rows: 1fr 154px;
   gap: 18px;
 }
 
@@ -502,11 +522,17 @@ p {
 .metric-card {
   position: relative;
   min-height: 0;
-  padding: 17px 19px 15px 93px;
+  display: grid;
+  grid-template-columns: 122px minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  padding: 22px 26px;
   border: 1px solid #dbe5f0;
-  border-radius: 18px;
-  background: white;
-  box-shadow: 0 9px 20px rgba(17, 55, 98, 0.075);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 3% 6%, color-mix(in srgb, currentColor 8%, transparent), transparent 36%),
+    white;
+  box-shadow: 0 10px 24px rgba(17, 55, 98, 0.10);
   overflow: hidden;
 }
 
@@ -516,8 +542,8 @@ p {
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 5px;
-  background: currentColor;
+  height: 8px;
+  background: linear-gradient(90deg, currentColor, color-mix(in srgb, currentColor 70%, #28b9df));
 }
 
 .metric-card.blue { color: var(--blue); }
@@ -528,66 +554,131 @@ p {
 .metric-card.green { color: var(--green); }
 
 .metric-icon {
-  position: absolute;
-  left: 18px;
-  top: 20px;
-  width: 58px;
-  height: 58px;
+  width: 112px;
+  height: 112px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 17px;
-  color: white;
-  background: currentColor;
-  font-size: 17px;
-  font-weight: 900;
-  box-shadow: 0 8px 18px color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: 50%;
+  color: currentColor;
+  background: color-mix(in srgb, currentColor 12%, white);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 11%, transparent);
+}
+
+.metric-icon svg {
+  width: 68px;
+  height: 68px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.metric-card.navy .metric-icon svg path:first-child {
+  fill: currentColor;
+  stroke: white;
+  stroke-width: 1.5;
+}
+
+.metric-copy {
+  min-width: 0;
 }
 
 .metric-label {
-  color: #66758a;
-  font-size: 12px;
+  color: #617594;
+  font-size: 15px;
   font-weight: 850;
-  letter-spacing: 0.85px;
+  letter-spacing: 0.4px;
 }
 
 .metric-value {
-  margin-top: 7px;
+  margin-top: 8px;
   color: currentColor;
-  font-size: 39px;
-  line-height: 1;
+  font-size: 62px;
+  line-height: 0.94;
   font-weight: 900;
+  letter-spacing: -2px;
 }
 
 .metric-value.compact {
-  font-size: 35px;
+  font-size: 52px;
 }
 
 .metric-note {
-  margin-top: 8px;
-  color: #52637a;
-  font-size: 13px;
-  line-height: 1.2;
-  font-weight: 650;
+  margin-top: 10px;
+  color: #395783;
+  font-size: 14px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.supply-value {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 52px;
+}
+
+.metric-unit {
+  font-size: 19px;
+  line-height: 1;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: lowercase;
+}
+
+.supply-empty {
+  color: #9aabc0;
 }
 
 .executive-strip {
   display: grid;
-  grid-template-columns: 0.82fr 1px 1.08fr 1px 1.55fr;
+  grid-template-columns: 1.05fr 1px 1fr 1px 1.65fr;
   align-items: center;
-  gap: 18px;
-  min-height: 137px;
-  padding: 18px 22px;
-  border-radius: 18px;
+  gap: 24px;
+  min-height: 154px;
+  padding: 20px 24px;
+  border-radius: 22px;
   color: white;
   background: linear-gradient(110deg, #062a63, #0b4a91 56%, #0a738b);
-  box-shadow: 0 12px 26px rgba(6, 42, 99, 0.18);
+  box-shadow: 0 13px 28px rgba(6, 42, 99, 0.22);
 }
 
 .strip-divider {
   width: 1px;
   height: 74px;
   background: rgba(255,255,255,0.24);
+}
+
+.strip-block {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 66px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+}
+
+.strip-icon {
+  width: 62px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(112, 213, 239, 0.35);
+  border-radius: 50%;
+  color: #79d5ef;
+  background: rgba(26, 154, 203, 0.14);
+}
+
+.strip-icon svg {
+  width: 38px;
+  height: 38px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .strip-block span,
@@ -597,20 +688,20 @@ p {
 }
 
 .strip-block span {
-  color: #aedadf;
-  font-size: 11px;
+  color: #9edcf1;
+  font-size: 12px;
   font-weight: 850;
-  letter-spacing: 0.9px;
+  letter-spacing: 1.1px;
 }
 
 .strip-block strong {
   margin-top: 8px;
-  font-size: 19px;
+  font-size: 22px;
   line-height: 1.18;
 }
 
 .strip-block.comparison strong {
-  font-size: 23px;
+  font-size: 24px;
 }
 
 .strip-block.comparison.good strong { color: #80edb7; }
@@ -620,7 +711,7 @@ p {
 .strip-block small {
   margin-top: 6px;
   color: #d2e2ef;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.3;
 }
 
