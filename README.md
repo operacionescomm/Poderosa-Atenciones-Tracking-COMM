@@ -31,6 +31,13 @@ Cada vista también cuenta con:
 - PNG de prueba: `/test-slideNN-png`
 - Producción: `POST /render/slideNN`
 
+## Integración con la plantilla
+
+- Los PNG se generan con fondo transparente para conservar los elementos existentes de la plantilla.
+- La esquina superior derecha reserva una zona de 420 × 125 px para el logotipo oficial de COMM.
+- El motor no dibuja ni sustituye el logotipo.
+- Apps Script debe insertar cada PNG a tamaño completo, conservando la transparencia.
+
 ## Regla dinámica de insumos
 
 - Si el mes tiene **10 insumos o menos**, la tabla y el gráfico muestran todos.

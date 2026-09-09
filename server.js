@@ -419,7 +419,7 @@ async function captureHtmlToPng(html) {
     const stylePath = path.join(__dirname, 'public', 'styles.css');
     if (fs.existsSync(stylePath)) await page.addStyleTag({ path: stylePath });
     await page.evaluate(() => document.fonts && document.fonts.ready);
-    return Buffer.from(await page.screenshot({ type: 'png', fullPage: false }));
+    return Buffer.from(await page.screenshot({ type: 'png', fullPage: false, omitBackground: true }));
   } finally {
     await page.close().catch(() => {});
   }
