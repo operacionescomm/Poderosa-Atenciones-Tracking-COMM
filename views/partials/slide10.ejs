@@ -1,57 +1,128 @@
 <section class="summary-kpis">
   <article class="metric-card blue">
-    <div class="metric-icon">01</div>
-    <div class="metric-label">ATENCIONES DEL MES</div>
-    <div class="metric-value"><%= formatNumber(metrics.totalAttentions) %></div>
-    <div class="metric-note">Servicios registrados en el periodo</div>
+    <div class="metric-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64">
+        <rect x="14" y="12" width="36" height="44" rx="5"/>
+        <path d="M25 12v-2a7 7 0 0 1 14 0v2M22 25l4 4 7-8M22 38l4 4 7-8M38 26h7M38 39h7"/>
+      </svg>
+    </div>
+    <div class="metric-copy">
+      <div class="metric-label">ATENCIONES DEL MES</div>
+      <div class="metric-value"><%= formatNumber(metrics.totalAttentions) %></div>
+      <div class="metric-note">Servicios registrados en el periodo</div>
+    </div>
   </article>
   <article class="metric-card teal">
-    <div class="metric-icon">02</div>
-    <div class="metric-label">VEHÍCULOS ÚNICOS</div>
-    <div class="metric-value"><%= formatNumber(metrics.uniqueVehicles) %></div>
-    <div class="metric-note">Unidades diferentes atendidas</div>
+    <div class="metric-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64">
+        <path d="m7 34 5-14a6 6 0 0 1 6-4h17a6 6 0 0 1 6 4l5 14"/>
+        <rect x="5" y="31" width="40" height="18" rx="5"/>
+        <circle cx="15" cy="42" r="3"/><circle cx="35" cy="42" r="3"/>
+        <path d="M25 49v5M9 49v5M39 49v5"/>
+        <path d="m35 37 3-8a4 4 0 0 1 4-3h9a4 4 0 0 1 4 3l3 8"/>
+        <rect x="33" y="35" width="27" height="15" rx="4"/>
+        <circle cx="41" cy="44" r="2.5"/><circle cx="53" cy="44" r="2.5"/>
+      </svg>
+    </div>
+    <div class="metric-copy">
+      <div class="metric-label">VEHÍCULOS ÚNICOS</div>
+      <div class="metric-value"><%= formatNumber(metrics.uniqueVehicles) %></div>
+      <div class="metric-note">Unidades diferentes atendidas</div>
+    </div>
   </article>
   <article class="metric-card orange">
-    <div class="metric-icon">03</div>
-    <div class="metric-label">DÍAS CON ACTIVIDAD</div>
-    <div class="metric-value"><%= formatNumber(metrics.activeDays) %></div>
-    <div class="metric-note">Días con al menos una atención</div>
+    <div class="metric-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64">
+        <rect x="9" y="13" width="46" height="42" rx="6"/>
+        <path d="M19 8v10M45 8v10M9 24h46"/>
+        <path d="M18 32h7v7h-7zM29 32h7v7h-7zM40 32h7v7h-7zM18 43h7v7h-7zM29 43h7v7h-7z"/>
+      </svg>
+    </div>
+    <div class="metric-copy">
+      <div class="metric-label">DÍAS CON ACTIVIDAD</div>
+      <div class="metric-value"><%= formatNumber(metrics.activeDays) %></div>
+      <div class="metric-note">Días con al menos una atención</div>
+    </div>
   </article>
   <article class="metric-card purple">
-    <div class="metric-icon">04</div>
-    <div class="metric-label">MÁXIMO DIARIO</div>
-    <div class="metric-value"><%= formatNumber(metrics.peakValue) %></div>
-    <div class="metric-note">Día(s): <%= metrics.peakDay || 'Sin registro' %></div>
+    <div class="metric-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64">
+        <path d="M10 51h44M16 47V35M28 47V27M40 47V19M52 47V11"/>
+        <path d="m14 30 13-9 10 3 17-15M45 9h9v9"/>
+      </svg>
+    </div>
+    <div class="metric-copy">
+      <div class="metric-label">PICO DIARIO DE ATENCIONES</div>
+      <div class="metric-value"><%= formatNumber(metrics.peakValue) %></div>
+      <div class="metric-note">Día(s) con el máximo: <%= metrics.peakDay || 'Sin registro' %></div>
+    </div>
   </article>
   <article class="metric-card navy">
-    <div class="metric-icon">05</div>
-    <div class="metric-label">CATEGORÍA PRINCIPAL</div>
-    <div class="metric-value compact"><%= formatPct(topCategory.share) %></div>
-    <div class="metric-note"><%= truncate(topCategory.name, 44) %></div>
+    <div class="metric-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64">
+        <path d="M29 7a25 25 0 1 0 28 28H29Z"/>
+        <path d="M35 7v22h22A25 25 0 0 0 35 7Z"/>
+      </svg>
+    </div>
+    <div class="metric-copy">
+      <div class="metric-label">CATEGORÍA PRINCIPAL</div>
+      <div class="metric-value compact"><%= formatPct(topCategory.share) %></div>
+      <div class="metric-note"><%= truncate(topCategory.name, 44) %></div>
+    </div>
   </article>
   <article class="metric-card green">
-    <div class="metric-icon">06</div>
-    <div class="metric-label">INSUMOS DIFERENTES</div>
-    <div class="metric-value"><%= formatNumber(metrics.distinctSupplies) %></div>
-    <div class="metric-note">Tipos consumidos durante el mes</div>
+    <div class="metric-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64">
+        <path d="m9 20 23-12 23 12-23 12Z"/>
+        <path d="M9 20v25l23 12 23-12V20M32 32v25M20 14l23 12"/>
+      </svg>
+    </div>
+    <div class="metric-copy">
+      <div class="metric-label">INSUMO MÁS UTILIZADO</div>
+      <% if (topSupply.quantity > 0) { %>
+        <div class="metric-value supply-value">
+          <%= formatNumber(topSupply.quantity, Number.isInteger(topSupply.quantity) ? 0 : 2) %>
+          <% if (topSupply.unit) { %><span class="metric-unit"><%= topSupply.unit %></span><% } %>
+        </div>
+        <div class="metric-note"><%= truncate(topSupply.name, 46) %></div>
+      <% } else { %>
+        <div class="metric-value supply-empty">—</div>
+        <div class="metric-note">Sin insumos registrados en el periodo</div>
+      <% } %>
+    </div>
   </article>
 </section>
 
 <section class="executive-strip">
   <div class="strip-block comparison <%= comparison.tone %>">
-    <span>VARIACIÓN VS. <%= comparison.previousPeriod.toUpperCase() %></span>
-    <strong><%= comparison.label %></strong>
+    <div class="strip-icon" aria-hidden="true">
+      <svg viewBox="0 0 40 40"><path d="M7 31V20M17 31V14M27 31V8M5 31h30"/></svg>
+    </div>
+    <div>
+      <span>VARIACIÓN VS. <%= comparison.previousPeriod.toUpperCase() %></span>
+      <strong><%= comparison.label %></strong>
+    </div>
   </div>
   <div class="strip-divider"></div>
   <div class="strip-block">
-    <span>MAYOR DEMANDA</span>
-    <strong><%= truncate(topCompany.name, 42) %></strong>
-    <small><%= formatNumber(topCompany.count) %> atenciones · <%= formatPct(topCompany.share) %></small>
+    <div class="strip-icon" aria-hidden="true">
+      <svg viewBox="0 0 40 40"><path d="M13 8h14v6a7 7 0 0 1-14 0ZM13 11H7v3a6 6 0 0 0 7 6M27 11h6v3a6 6 0 0 1-7 6M20 21v7M14 33h12M16 28h8v5"/></svg>
+    </div>
+    <div>
+      <span>MAYOR DEMANDA</span>
+      <strong><%= truncate(topCompany.name, 42) %></strong>
+      <small><%= formatNumber(topCompany.count) %> atenciones · <%= formatPct(topCompany.share) %></small>
+    </div>
   </div>
   <div class="strip-divider"></div>
   <div class="strip-block">
-    <span>LECTURA EJECUTIVA</span>
-    <strong>Demanda concentrada en <%= truncate(topCategory.name, 34) %></strong>
-    <small>Requiere seguimiento preventivo y disponibilidad de insumos.</small>
+    <div class="strip-icon" aria-hidden="true">
+      <svg viewBox="0 0 40 40"><path d="M9 6h18l5 5v23H9ZM27 6v6h5M14 18h13M14 23h13M14 28h8"/></svg>
+    </div>
+    <div>
+      <span>LECTURA EJECUTIVA</span>
+      <strong>Demanda concentrada en <%= truncate(topCategory.name, 34) %></strong>
+      <small>Requiere seguimiento preventivo y disponibilidad de insumos.</small>
+    </div>
   </div>
 </section>
