@@ -11,7 +11,7 @@ services:
       - key: NODE_VERSION
         value: 20.18.0
       - key: APP_NAME
-        value: Poderosa Atenciones Tracking - Visual Engine
+        value: Poderosa Tracking - Motor Trimestral
       - key: OPERATION_NAME
         value: Poderosa Tracking
       - key: PUPPETEER_CACHE_DIR
