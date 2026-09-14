@@ -1,14 +1,589 @@
 <style>
-.slide10-trim{height:100%;font-family:Arial,Helvetica,sans-serif;color:#12305c}.s10-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}.s10-title{font-size:34px;font-weight:800;color:#12356b}.s10-kicker{font-size:13px;letter-spacing:2px;color:#1464c8;font-weight:800}.s10-sub{font-size:18px;color:#285ca8;margin-top:6px}.s10-period{background:#eaf3ff;padding:14px 22px;border-radius:18px;font-weight:800;color:#12356b}.s10-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}.s10-card{height:150px;border-radius:18px;background:#fff;border:1px solid #dbe8f8;padding:20px;box-shadow:0 8px 18px #dfeaf5;position:relative;overflow:hidden}.s10-card:after{content:'';position:absolute;bottom:0;left:0;right:0;height:7px;background:#1464c8}.s10-card.teal:after{background:#18a7b8}.s10-card.orange:after{background:#ff7a00}.s10-card.purple:after{background:#703cff}.s10-card.blue2:after{background:#1394c8}.s10-card strong{display:block;font-size:38px;color:#1261c9;margin-top:12px}.s10-card h3{font-size:16px;color:#123b82}.s10-desc{font-size:14px;color:#48678f;margin-top:8px}.s10-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:18px}.s10-panel{height:160px;border-radius:18px;padding:24px;background:#f7fbff;border:1px solid #dceaf8}.s10-panel h3{font-size:18px;color:#12498f}.s10-percent{font-size:38px;font-weight:800;color:#1596a5;margin-top:15px}.s10-banner{margin-top:18px;height:120px;border-radius:20px;background:linear-gradient(100deg,#063b8d,#087d9c);color:white;padding:25px 40px}.s10-banner h2{font-size:28px;margin-top:8px}.s10-banner p{font-size:17px}</style>
-<div class="slide10-trim">
-<div class="s10-header"><div><div class="s10-kicker">INFORME TRIMESTRAL · TRACKING PODEROSA</div><div class="s10-title">Resumen ejecutivo del trimestre</div><div class="s10-sub">Panorama operativo y puntos de atención gerencial</div></div><div class="s10-period">📅 <%= period || 'MAYO-JUNIO-JULIO 2026' %></div></div>
-<div class="s10-cards">
-<div class="s10-card"><h3>ATENCIONES</h3><strong><%= metrics.totalAttentions %></strong><div class="s10-desc">Servicios registrados en el trimestre</div></div>
-<div class="s10-card teal"><h3>PROMEDIO SEMANAL</h3><strong><%= metrics.weeklyAverage || '13.9' %></strong><div class="s10-desc">Atenciones por semana</div></div>
-<div class="s10-card orange"><h3>COMPAÑÍAS</h3><strong><%= metrics.uniqueCompanies || topCompany.count %></strong><div class="s10-desc">Empresas atendidas</div></div>
-<div class="s10-card blue2"><h3>DISPOSITIVOS</h3><strong><%= metrics.uniqueVehicles %></strong><div class="s10-desc">Unidades únicas atendidas</div></div>
-<div class="s10-card purple"><h3>REINCIDENCIA</h3><strong><%= metrics.reincidence || 0 %></strong><div class="s10-desc">Vehículos con 3 o más atenciones</div></div>
-</div>
-<div class="s10-row"><div class="s10-panel"><h3>EVOLUCIÓN MAYO → JULIO</h3><div class="s10-percent"><%= comparison.label || '+73.9%' %></div><p>Las atenciones muestran evolución durante el trimestre.</p></div><div class="s10-panel"><h3>CONCENTRACIÓN POR CATEGORÍA</h3><div class="s10-percent"><%= formatPct(topCategory.share) %></div><p><%= topCategory.name %></p></div><div class="s10-panel"><h3>CONCENTRACIÓN DE DEMANDA</h3><div class="s10-percent">53.6%</div><p>Principales compañías atendidas.</p></div></div>
-<div class="s10-banner"><div>LECTURA EJECUTIVA</div><h2>La demanda creció mes a mes y se concentró en mantenimiento preventivo.</h2><p>Resumen automático generado desde registros de atención Tracking Poderosa.</p></div>
+  .tri10 {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    height: 100%;
+    color: #17408b;
+  }
+  .tri10 * { box-sizing: border-box; }
+  .tri10-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .tri10-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .tri10-rule {
+    width: 16px;
+    height: 120px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #1fc4d6 0%, #179bd1 100%);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.35);
+  }
+  .tri10-eyebrow {
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: 0.2px;
+    color: #2450b8;
+    margin-bottom: 10px;
+  }
+  .tri10 h1 {
+    margin: 0;
+    font-size: 67px;
+    line-height: .95;
+    font-weight: 900;
+    letter-spacing: -1.7px;
+    color: #112f80;
+  }
+  .tri10-subtitle {
+    margin-top: 10px;
+    font-size: 23px;
+    color: #2450b8;
+    line-height: 1.1;
+  }
+  .tri10-period {
+    flex: 0 0 auto;
+    min-width: 430px;
+    height: 82px;
+    padding: 0 28px;
+    border-radius: 26px;
+    background: #edf5ff;
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    color: #1f46af;
+    font-size: 28px;
+    font-weight: 800;
+    margin-top: 30px;
+  }
+  .tri10-period svg {
+    width: 40px;
+    height: 40px;
+    fill: none;
+    stroke: #2162f3;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .tri10-kpis {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+  }
+  .tri10-kpi {
+    position: relative;
+    min-height: 220px;
+    padding: 28px 24px 24px;
+    background: #fff;
+    border: 2px solid #dfeaf7;
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(77, 112, 165, .08);
+    overflow: hidden;
+  }
+  .tri10-kpi::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 6px;
+    background: var(--accent);
+  }
+  .tri10-kpi-body {
+    display: flex;
+    gap: 22px;
+    align-items: flex-start;
+    position: relative;
+    z-index: 2;
+  }
+  .tri10-iconbox {
+    width: 82px;
+    height: 82px;
+    border-radius: 18px;
+    background: var(--accent);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 10px 18px rgba(24, 96, 215, .20);
+    flex: 0 0 auto;
+  }
+  .tri10-iconbox svg {
+    width: 44px;
+    height: 44px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .tri10-kpi-copy { min-width: 0; }
+  .tri10-kpi-label {
+    font-size: 19px;
+    font-weight: 800;
+    color: #1740a3;
+    line-height: 1.12;
+    text-transform: uppercase;
+    min-height: 44px;
+  }
+  .tri10-kpi-value {
+    margin-top: 14px;
+    font-size: 64px;
+    line-height: 0.94;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: -1px;
+  }
+  .tri10-kpi-note {
+    margin-top: 14px;
+    font-size: 17px;
+    line-height: 1.16;
+    color: #244bb0;
+    max-width: 185px;
+  }
+  .tri10-kpi-art {
+    position: absolute;
+    right: 12px;
+    bottom: 10px;
+    opacity: .17;
+    color: var(--accent);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .tri10-kpi-art svg {
+    width: 92px;
+    height: 92px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .tri10-kpi-art.fill svg { fill: currentColor; stroke: none; }
+  .tri10-analysis {
+    display: grid;
+    grid-template-columns: 1.12fr 1.12fr 1.08fr;
+    gap: 18px;
+  }
+  .tri10-panel {
+    background: #fbfeff;
+    border: 2px solid #dfeaf7;
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(77,112,165,.08);
+    min-height: 208px;
+    padding: 24px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .tri10-panel.warm { background: #fffdfb; }
+  .tri10-panel.cool { background: #fafdff; }
+  .tri10-panel-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 19px;
+    font-weight: 800;
+    color: #1640a1;
+    text-transform: uppercase;
+  }
+  .tri10-panel-head svg {
+    width: 36px;
+    height: 36px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .tri10-panel-head .fill-icon {
+    width: 36px; height: 36px; display: block;
+  }
+  .tri10-panel-grid {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 18px;
+    align-items: center;
+    margin-top: 16px;
+  }
+  .tri10-panel-grid.two-col {
+    grid-template-columns: 1.18fr .82fr;
+  }
+  .tri10-panel-value {
+    font-size: 62px;
+    line-height: .95;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: -1px;
+  }
+  .tri10-panel-note {
+    margin-top: 16px;
+    font-size: 18px;
+    line-height: 1.24;
+    color: #2550b6;
+    max-width: 360px;
+  }
+  .tri10-illus {
+    height: 142px;
+    border-radius: 18px;
+    background: #eef4fb;
+    display: grid;
+    place-items: center;
+  }
+  .tri10-illus svg {
+    width: 118px;
+    height: 118px;
+    fill: none;
+    stroke: #59a0ff;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .tri10-donut {
+    width: 176px;
+    height: 176px;
+    margin-left: auto;
+    display: block;
+  }
+  .tri10-donut text {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 19px;
+    font-weight: 800;
+    fill: #173fa1;
+  }
+  .tri10-donut .track { stroke: #d8e2ef; stroke-width: 24; fill: none; }
+  .tri10-donut .arc { stroke: var(--accent); stroke-width: 24; fill: none; stroke-linecap: butt; transform: rotate(-90deg); transform-origin: 88px 88px; }
+  .tri10-banner {
+    min-height: 260px;
+    border-radius: 24px;
+    background:
+      linear-gradient(90deg, rgba(8,52,141,.98) 0%, rgba(3,83,190,.96) 56%, rgba(13,103,216,.90) 100%),
+      radial-gradient(circle at 82% 56%, rgba(255,255,255,.16) 0, rgba(255,255,255,0) 36%);
+    display: grid;
+    grid-template-columns: 184px 3px 1fr 470px;
+    align-items: center;
+    gap: 28px;
+    padding: 24px 34px 24px 28px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .tri10-banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+    pointer-events: none;
+  }
+  .tri10-banner-icon {
+    width: 126px;
+    height: 126px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #2e82ff 0%, #154eb8 58%, #0c378d 100%);
+    border: 3px solid rgba(122, 188, 255, .65);
+    display: grid;
+    place-items: center;
+    box-shadow: inset 0 10px 20px rgba(255,255,255,.14), 0 0 0 6px rgba(255,255,255,.06);
+    z-index: 1;
+  }
+  .tri10-banner-icon svg {
+    width: 60px;
+    height: 60px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .tri10-banner-sep {
+    width: 3px;
+    height: 170px;
+    background: rgba(255,255,255,.5);
+    border-radius: 20px;
+    z-index: 1;
+  }
+  .tri10-banner-copy { z-index: 1; }
+  .tri10-banner-eyebrow {
+    font-size: 22px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: .4px;
+    color: rgba(255,255,255,.84);
+    text-transform: uppercase;
+  }
+  .tri10-banner-title {
+    margin-top: 12px;
+    font-size: 36px;
+    line-height: 1.06;
+    font-weight: 900;
+    letter-spacing: -.5px;
+    max-width: 830px;
+  }
+  .tri10-banner-note {
+    margin-top: 18px;
+    font-size: 19px;
+    line-height: 1.26;
+    color: rgba(255,255,255,.93);
+    max-width: 860px;
+  }
+  .tri10-banner-art {
+    position: relative;
+    align-self: stretch;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .tri10-banner-brand {
+    position: absolute;
+    right: 12px;
+    top: 10px;
+    text-align: right;
+    font-size: 18px;
+    line-height: 1.04;
+    letter-spacing: .3px;
+    color: rgba(255,255,255,.9);
+  }
+  .tri10-banner-mine {
+    position: absolute;
+    inset: 0;
+  }
+  .tri10-banner-mine svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .tri10-footer {
+    margin-top: -2px;
+    padding: 14px 8px 0;
+    border-top: 2px solid #dfeaf7;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    font-size: 14px;
+    color: #2450b8;
+  }
+  .tri10-footer > div:last-child {
+    text-align: center;
+  }
+</style>
+
+<%
+  const __metrics = typeof metrics !== 'undefined' && metrics ? metrics : {};
+  const __comparison = typeof comparison !== 'undefined' && comparison ? comparison : {};
+  const __topCategory = typeof topCategory !== 'undefined' && topCategory ? topCategory : {};
+  const __companies = typeof companies !== 'undefined' && Array.isArray(companies) ? companies : [];
+  const __monthlySeries = (typeof data !== 'undefined' && data && Array.isArray(data.monthlySeries) ? data.monthlySeries : (typeof monthlySeries !== 'undefined' && Array.isArray(monthlySeries) ? monthlySeries : []));
+  const monthStart = __monthlySeries[0] || {};
+  const monthEnd = __monthlySeries[__monthlySeries.length - 1] || {};
+  const attTotal = __metrics.totalAttentions ?? 183;
+  const avgWeekly = __metrics.weeklyAverage ?? __metrics.averagePerWeek ?? __metrics.promedioSemanal ?? 13.9;
+  const companiesCount = __metrics.companiesCount ?? __metrics.companyCount ?? (__companies.length || 44);
+  const devicesCount = __metrics.uniqueDevices ?? __metrics.devicesCount ?? __metrics.uniqueVehicles ?? 128;
+  const reincidenceCount = __metrics.reincidenceCount ?? __metrics.reincidencia ?? 10;
+  const comparisonPct = __comparison.variationPct ?? __metrics.variationPct ?? __metrics.evolutionPct ?? 73.9;
+  const comparisonStart = __comparison.previousTotal ?? monthStart.value ?? 46;
+  const comparisonEnd = __comparison.currentTotal ?? monthEnd.value ?? attTotal ?? 80;
+  const topCategoryLabel = (__topCategory.name && __topCategory.name !== 'Sin registro') ? __topCategory.name : (__metrics.topCategoryLabel || 'Mantenimiento básico y cambio de USB-C.');
+  const topCategoryShare = __topCategory.share ?? __metrics.topCategoryShare ?? 64.5;
+  const demandShare = __metrics.demandShare ?? __metrics.topCompaniesShare ?? 53.6;
+  const demandTopCount = __metrics.topCompaniesTopN ?? 10;
+  const demandTopAttentions = __metrics.topCompaniesAttentions ?? 98;
+  const periodLabel = (typeof period !== 'undefined' && period) || (typeof periodo !== 'undefined' && periodo) || __metrics.periodLabel || 'MAYO-JUNIO-JULIO 2026';
+  const executiveTitle = __metrics.executiveTitle || 'La demanda creció mes a mes y se concentró en mantenimiento preventivo y alimentación USB-C.';
+  const executiveBody = __metrics.executiveBody || 'Julio fue el mes de mayor actividad (80). La participación de casos USB-C descendió a 20.0%, mientras que 10 vehículos requieren seguimiento focalizado por recurrencia.';
+  const footerLeft = __metrics.sourceLabel || 'Fuente: Reporte Trimestral y Registros - SOPORTE DE TRACKING_PODEROSA';
+  const footerCenter = __metrics.footerCenter || 'Poderosa - Atenciones de Tracking';
+  const donut = (value) => {
+    const safe = Math.max(0, Math.min(100, Number(value) || 0));
+    const radius = 58;
+    const circumference = 2 * Math.PI * radius;
+    const dash = (safe / 100) * circumference;
+    return { safe, radius, circumference, dash };
+  };
+  const catDonut = donut(topCategoryShare);
+  const demDonut = donut(demandShare);
+%>
+
+<div class="tri10">
+  <div class="tri10-header">
+    <div class="tri10-title">
+      <div class="tri10-rule"></div>
+      <div>
+        <div class="tri10-eyebrow">INFORME TRIMESTRAL · TRACKING PODEROSA</div>
+        <h1>Resumen ejecutivo del trimestre</h1>
+        <div class="tri10-subtitle">Panorama operativo y puntos de atención gerencial</div>
+      </div>
+    </div>
+    <div class="tri10-period">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+        <path d="M16 3v4M8 3v4M3 10h18"></path>
+        <path d="M7 13h3M12 13h3M17 13h.01M7 17h3M12 17h3M17 17h.01"></path>
+      </svg>
+      <span><%= String(periodLabel).toUpperCase() %></span>
+    </div>
+  </div>
+
+  <div class="tri10-kpis">
+    <div class="tri10-kpi" style="--accent:#2162f3;">
+      <div class="tri10-kpi-body">
+        <div class="tri10-iconbox">
+          <svg viewBox="0 0 24 24"><path d="M3 19h18"></path><path d="m6 14 4-4 3 3 5-6"></path><path d="M18 7h3v3"></path></svg>
+        </div>
+        <div class="tri10-kpi-copy">
+          <div class="tri10-kpi-label">ATENCIONES</div>
+          <div class="tri10-kpi-value"><%= typeof formatNumber === 'function' ? formatNumber(attTotal) : attTotal %></div>
+          <div class="tri10-kpi-note">Servicios registrados<br>en el trimestre</div>
+        </div>
+      </div>
+      <div class="tri10-kpi-art fill" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M17 86c11-2 19-9 24-20 5-12 15-18 28-18 6 0 12-3 17-8v46H17z" opacity=".9"></path></svg></div>
+    </div>
+
+    <div class="tri10-kpi" style="--accent:#18b8c7;">
+      <div class="tri10-kpi-body">
+        <div class="tri10-iconbox"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4M8 3v4M3 10h18"></path><path d="M8 14h3M13 14h3M8 17h3"></path></svg></div>
+        <div class="tri10-kpi-copy">
+          <div class="tri10-kpi-label">PROMEDIO<br>SEMANAL</div>
+          <div class="tri10-kpi-value"><%= typeof avgWeekly === 'number' ? avgWeekly.toFixed(1) : avgWeekly %></div>
+          <div class="tri10-kpi-note">Atenciones por<br>semana</div>
+        </div>
+      </div>
+      <div class="tri10-kpi-art fill" aria-hidden="true"><svg viewBox="0 0 100 100"><rect x="64" y="48" width="10" height="36" rx="2"></rect><rect x="79" y="34" width="10" height="50" rx="2"></rect></svg></div>
+    </div>
+
+    <div class="tri10-kpi" style="--accent:#ff6d13;">
+      <div class="tri10-kpi-body">
+        <div class="tri10-iconbox"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M4 18c0-3 2.5-5 5-5s5 2 5 5"></path><circle cx="17" cy="10" r="2"></circle><path d="M14.5 18c.2-2 1.8-3.5 4-3.5 1.3 0 2.5.5 3.3 1.5"></path></svg></div>
+        <div class="tri10-kpi-copy">
+          <div class="tri10-kpi-label">COMPAÑÍAS</div>
+          <div class="tri10-kpi-value"><%= typeof formatNumber === 'function' ? formatNumber(companiesCount) : companiesCount %></div>
+          <div class="tri10-kpi-note">Empresas atendidas</div>
+        </div>
+      </div>
+      <div class="tri10-kpi-art fill" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M42 82V44h18v38H42zm-18 0V55h14v27H24zm40 0V35h15v47H64zm19 0V50h9v32h-9z"></path></svg></div>
+    </div>
+
+    <div class="tri10-kpi" style="--accent:#15a9c8;">
+      <div class="tri10-kpi-body">
+        <div class="tri10-iconbox"><svg viewBox="0 0 24 24"><path d="m5 12 2-5a2.4 2.4 0 0 1 2.3-1.5h5.4A2.4 2.4 0 0 1 17 7l2 5"></path><rect x="4" y="12" width="16" height="7" rx="2"></rect><circle cx="8" cy="15.5" r="1"></circle><circle cx="16" cy="15.5" r="1"></circle><path d="M7 19v2M17 19v2"></path></svg></div>
+        <div class="tri10-kpi-copy">
+          <div class="tri10-kpi-label">DISPOSITIVOS</div>
+          <div class="tri10-kpi-value"><%= typeof formatNumber === 'function' ? formatNumber(devicesCount) : devicesCount %></div>
+          <div class="tri10-kpi-note">Unidades únicas<br>atendidas</div>
+        </div>
+      </div>
+      <div class="tri10-kpi-art" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="m18 60 7-18a9 9 0 0 1 8-6h23a9 9 0 0 1 8 6l7 18"></path><rect x="14" y="58" width="58" height="20" rx="8"></rect><circle cx="27" cy="68" r="3"></circle><circle cx="59" cy="68" r="3"></circle></svg></div>
+    </div>
+
+    <div class="tri10-kpi" style="--accent:#7a2df4;">
+      <div class="tri10-kpi-body">
+        <div class="tri10-iconbox"><svg viewBox="0 0 24 24"><path d="m12 3 9 16a2 2 0 0 1-1.7 3H4.7A2 2 0 0 1 3 19L12 3z"></path><path d="M12 9v5"></path><path d="M12 17h.01"></path></svg></div>
+        <div class="tri10-kpi-copy">
+          <div class="tri10-kpi-label">REINCIDENCIA</div>
+          <div class="tri10-kpi-value"><%= typeof formatNumber === 'function' ? formatNumber(reincidenceCount) : reincidenceCount %></div>
+          <div class="tri10-kpi-note">Vehículos con 3 o<br>más atenciones</div>
+        </div>
+      </div>
+      <div class="tri10-kpi-art" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="m76 72 12-22a4 4 0 0 0-3.5-6H61a4 4 0 0 0-3.5 6l12 22"></path><path d="M73 56v8"></path><circle cx="73" cy="68" r="1.6" fill="currentColor" stroke="none"></circle></svg></div>
+    </div>
+  </div>
+
+  <div class="tri10-analysis">
+    <div class="tri10-panel cool" style="--accent:#2162f3;">
+      <div class="tri10-panel-head"><svg viewBox="0 0 24 24"><path d="M4 20V9"></path><path d="M10 20V4"></path><path d="M16 20v-8"></path></svg><span>EVOLUCIÓN MAYO → JULIO</span></div>
+      <div class="tri10-panel-grid">
+        <div>
+          <div class="tri10-panel-value">+<%= typeof comparisonPct === 'number' ? comparisonPct.toFixed(1) : comparisonPct %>%</div>
+          <div class="tri10-panel-note">Las atenciones pasaron de <%= typeof formatNumber === 'function' ? formatNumber(comparisonStart) : comparisonStart %> a <%= typeof formatNumber === 'function' ? formatNumber(comparisonEnd) : comparisonEnd %>.</div>
+        </div>
+        <div class="tri10-illus" aria-hidden="true"><svg viewBox="0 0 120 120"><path d="M20 86V66"></path><path d="M44 86V50"></path><path d="M68 86V38"></path><path d="M92 86V24"></path><path d="m18 56 18-4 18-10 18-14 18-10"></path><path d="M82 18h18v18"></path><path d="m100 18-1 1"></path></svg></div>
+      </div>
+    </div>
+
+    <div class="tri10-panel cool" style="--accent:#12b7c9;">
+      <div class="tri10-panel-head"><svg viewBox="0 0 24 24" class="fill-icon"><path fill="#099fb6" d="M12 2a10 10 0 1 0 10 10H12z"></path><path fill="#fff" d="M12 12 8 3.5A10 10 0 0 1 22 12z"></path></svg><span>CONCENTRACIÓN POR CATEGORÍA</span></div>
+      <div class="tri10-panel-grid two-col">
+        <div>
+          <div class="tri10-panel-value"><%= typeof topCategoryShare === 'number' ? topCategoryShare.toFixed(1) : topCategoryShare %>%</div>
+          <div class="tri10-panel-note"><%= topCategoryLabel %></div>
+        </div>
+        <div>
+          <svg class="tri10-donut" viewBox="0 0 176 176" aria-hidden="true">
+            <circle class="track" cx="88" cy="88" r="58"></circle>
+            <circle class="arc" cx="88" cy="88" r="58" stroke-dasharray="<%= catDonut.dash %> <%= catDonut.circumference %>"></circle>
+            <text x="88" y="95" text-anchor="middle"><%= typeof topCategoryShare === 'number' ? topCategoryShare.toFixed(1) : topCategoryShare %>%</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="tri10-panel warm" style="--accent:#ff7a00;">
+      <div class="tri10-panel-head" style="color:#1740a3;"><svg viewBox="0 0 24 24" style="color:#ff7a00;"><circle cx="12" cy="12" r="7"></circle><path d="m12 12 4-3"></path><path d="M12 5V3M19 12h2"></path><circle cx="12" cy="12" r="1.4" fill="#ff7a00" stroke="none"></circle></svg><span>CONCENTRACIÓN DE DEMANDA</span></div>
+      <div class="tri10-panel-grid two-col">
+        <div>
+          <div class="tri10-panel-value"><%= typeof demandShare === 'number' ? demandShare.toFixed(1) : demandShare %>%</div>
+          <div class="tri10-panel-note">Las <%= demandTopCount %> compañías principales<br>suman <%= typeof formatNumber === 'function' ? formatNumber(demandTopAttentions) : demandTopAttentions %> atenciones.</div>
+        </div>
+        <div>
+          <svg class="tri10-donut" viewBox="0 0 176 176" aria-hidden="true">
+            <circle class="track" cx="88" cy="88" r="58"></circle>
+            <circle class="arc" cx="88" cy="88" r="58" stroke-dasharray="<%= demDonut.dash %> <%= demDonut.circumference %>"></circle>
+            <text x="88" y="95" text-anchor="middle"><%= typeof demandShare === 'number' ? demandShare.toFixed(1) : demandShare %>%</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tri10-banner">
+    <div class="tri10-banner-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 19h18"></path><path d="M7 15V11"></path><path d="M12 15V8"></path><path d="M17 15V5"></path><path d="m5 13 4-3 4 2 6-6"></path><path d="M18 6h3v3"></path></svg></div>
+    <div class="tri10-banner-sep"></div>
+    <div class="tri10-banner-copy">
+      <div class="tri10-banner-eyebrow">LECTURA EJECUTIVA</div>
+      <div class="tri10-banner-title"><%= executiveTitle %></div>
+      <div class="tri10-banner-note"><%= executiveBody %></div>
+    </div>
+    <div class="tri10-banner-art" aria-hidden="true">
+      <div class="tri10-banner-brand">TRACKING<br>PODEROSA</div>
+      <div class="tri10-banner-mine">
+        <svg viewBox="0 0 470 220" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="tri10pinGlow" cx="50%" cy="55%" r="55%">
+              <stop offset="0%" stop-color="#79d4ff" stop-opacity=".55"/>
+              <stop offset="100%" stop-color="#79d4ff" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <path d="M0 150 C55 110 95 96 145 102 C205 110 232 130 270 126 C322 121 354 92 401 92 C430 92 448 100 470 116 V220 H0 Z" fill="#113f97" opacity=".55"></path>
+          <path d="M0 162 C58 128 103 118 152 123 C213 129 255 158 306 154 C360 150 409 128 470 134 V220 H0 Z" fill="#0d316f" opacity=".55"></path>
+          <path d="M34 194 C102 164 170 146 228 139 C297 131 358 136 458 176" stroke="#5faeff" stroke-opacity=".22" stroke-width="3" fill="none"></path>
+          <path d="M65 192 C143 173 224 165 313 169 C369 171 413 177 461 189" stroke="#5faeff" stroke-opacity=".14" stroke-width="2" fill="none"></path>
+          <circle cx="292" cy="130" r="16" fill="url(#tri10pinGlow)"></circle>
+          <circle cx="292" cy="130" r="31" fill="none" stroke="#7fe2ff" stroke-opacity=".45" stroke-width="2"></circle>
+          <circle cx="292" cy="130" r="49" fill="none" stroke="#7fe2ff" stroke-opacity=".27" stroke-width="2"></circle>
+          <circle cx="292" cy="130" r="67" fill="none" stroke="#7fe2ff" stroke-opacity=".18" stroke-width="2"></circle>
+          <path d="M292 73c-18 0-32 14-32 31 0 23 32 52 32 52s32-29 32-52c0-17-14-31-32-31zm0 41a11 11 0 1 1 0-22 11 11 0 0 1 0 22z" fill="#e8f7ff" opacity=".96"></path>
+          <g opacity=".55" fill="#d7eeff">
+            <path d="M190 117c0-9 7-16 16-16s16 7 16 16c0 12-16 28-16 28s-16-16-16-28zm16 8a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z"></path>
+            <path d="M134 142c0-7 5-13 13-13s13 6 13 13c0 9-13 23-13 23s-13-14-13-23zm13 6a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9z"></path>
+          </g>
+          <g transform="translate(362 138) scale(1.02)" opacity=".85">
+            <rect x="16" y="20" width="60" height="26" rx="6" fill="#0b1f4e"></rect>
+            <rect x="24" y="9" width="32" height="14" rx="3" fill="#0b1f4e"></rect>
+            <rect x="12" y="16" width="16" height="14" rx="3" fill="#0b1f4e"></rect>
+            <rect x="60" y="16" width="20" height="14" rx="3" fill="#0b1f4e"></rect>
+            <rect x="30" y="13" width="12" height="7" rx="1.5" fill="#77c8ff"></rect>
+            <circle cx="28" cy="48" r="6" fill="#12214a"></circle>
+            <circle cx="65" cy="48" r="6" fill="#12214a"></circle>
+            <circle cx="28" cy="48" r="2.7" fill="#7fd6ff"></circle>
+            <circle cx="65" cy="48" r="2.7" fill="#7fd6ff"></circle>
+            <path d="M8 43h8M76 43h8" stroke="#7fd6ff" stroke-width="2" fill="none"></path>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="tri10-footer">
+    <div><%= footerLeft %></div>
+    <div><%= footerCenter %></div>
+  </div>
 </div>
