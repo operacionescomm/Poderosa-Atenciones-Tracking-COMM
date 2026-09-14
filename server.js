@@ -130,13 +130,23 @@ function normalizeReportData(raw) {
     }))
     .sort((a, b) => b.count - a.count);
 
-  const companies = array(raw.companies || raw.companias)
-    .map(item => ({
-      name: text(item.name || item.nombre || item.compania || 'SIN COMPAÑÍA'),
-      count: number(item.count ?? item.atenciones ?? item.cantidad)
-    }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 5);
+  const allCompanies = array(raw.companies || raw.companias)
+  .map(item => ({
+    name: text(
+      item.name ||
+      item.nombre ||
+      item.compania ||
+      'SIN COMPAÑÍA'
+    ),
+    count: number(
+      item.count ??
+      item.atenciones ??
+      item.cantidad
+    )
+  }))
+  .sort((a, b) => b.count - a.count);
+
+const companies = allCompanies.slice(0, 5);
 
   const vehicleTypes = array(raw.vehicleTypes || raw.tiposVehiculo)
     .map(item => ({
@@ -163,12 +173,106 @@ function normalizeReportData(raw) {
   const peakValue = number(metricsRaw.peakValue ?? metricsRaw.maximoDiario ?? Math.max(0, ...daily.map(x => x.value)));
   const peakDay = text(metricsRaw.peakDay || metricsRaw.diaPico || daily.filter(x => x.value === peakValue).map(x => x.day).join(', '));
   const distinctSupplies = number(metricsRaw.distinctSupplies ?? metricsRaw.insumosDistintos ?? allSupplies.length);
+  /* ========================================================
+   KPIs TRIMESTRALES · SLIDE 10
+   ======================================================== */
+
+const weeklyAverage = number(
+  metricsRaw.weeklyAverage ??
+  metricsRaw.averagePerWeek ??
+  metricsRaw.promedioSemanal
+);
+
+const companiesCount = number(
+  metricsRaw.companiesCount ??
+  metricsRaw.companyCount ??
+  metricsRaw.companiasAtendidas ??
+  allCompanies.length
+);
+
+const uniqueDevices = number(
+  metricsRaw.uniqueDevices ??
+  metricsRaw.devicesCount ??
+  metricsRaw.dispositivosUnicos ??
+  uniqueVehicles
+);
+
+const reincidenceCount = number(
+  metricsRaw.reincidenceCount ??
+  metricsRaw.reincidencia ??
+  metricsRaw.vehiculosReincidentes
+);
+
+const categoryConcentrationShare = number(
+  metricsRaw.categoryConcentrationShare ??
+  metricsRaw.concentracionCategoria ??
+  metricsRaw.topCategoryShare
+);
+
+const categoryConcentrationLabel = text(
+  metricsRaw.categoryConcentrationLabel ??
+  metricsRaw.etiquetaConcentracionCategoria ??
+  metricsRaw.topCategoryLabel
+);
+
+const demandShare = number(
+  metricsRaw.demandShare ??
+  metricsRaw.topCompaniesShare ??
+  metricsRaw.concentracionDemanda
+);
+
+const topCompaniesTopN = number(
+  metricsRaw.topCompaniesTopN ??
+  metricsRaw.topCompaniasN ??
+  10
+);
+
+const topCompaniesAttentions = number(
+  metricsRaw.topCompaniesAttentions ??
+  metricsRaw.atencionesTopCompanias
+);
+
+const periodLabel = text(
+  metricsRaw.periodLabel ??
+  metricsRaw.periodoTrimestral ??
+  period
+);
+
+const executiveTitle = text(
+  metricsRaw.executiveTitle ??
+  metricsRaw.tituloEjecutivo
+);
+
+const executiveBody = text(
+  metricsRaw.executiveBody ??
+  metricsRaw.lecturaEjecutiva
+);
+
+const sourceLabel = text(
+  metricsRaw.sourceLabel ??
+  metricsRaw.fuente
+);
+
+const footerCenter = text(
+  metricsRaw.footerCenter ??
+  metricsRaw.pieCentro
+);
 
   const comparisonRaw = raw.comparison || raw.comparacion || {};
   const previousTotalValue = comparisonRaw.previousTotal ?? comparisonRaw.totalAnterior;
   const previousTotal = previousTotalValue === null || previousTotalValue === undefined || previousTotalValue === ''
     ? null
     : number(previousTotalValue);
+  const currentTotalValue =
+  comparisonRaw.currentTotal ??
+  comparisonRaw.totalActual;
+
+const currentTotal =
+  currentTotalValue === null ||
+  currentTotalValue === undefined ||
+  currentTotalValue === ''
+    ? null
+    : number(currentTotalValue);
   let variationPct = comparisonRaw.variationPct ?? comparisonRaw.variacionPct;
   if (variationPct === null || variationPct === undefined || variationPct === '') {
     variationPct = previousTotal > 0 ? ((totalAttentions - previousTotal) / previousTotal) * 100 : null;
@@ -254,11 +358,62 @@ function normalizeReportData(raw) {
     operation,
     reportName,
     generatedAt: text(raw.generatedAt || raw.fechaGeneracion || ''),
-    metrics: { totalAttentions, uniqueVehicles, activeDays, peakDay, peakValue, distinctSupplies },
+    metrics: {
+
+  totalAttentions,
+
+  uniqueVehicles,
+
+  uniqueDevices,
+
+  activeDays,
+
+  peakDay,
+
+  peakValue,
+
+  distinctSupplies,
+
+  weeklyAverage,
+
+  companiesCount,
+
+  reincidenceCount,
+
+  categoryConcentrationShare,
+
+  categoryConcentrationLabel,
+
+  demandShare,
+
+  topCompaniesTopN,
+
+  topCompaniesAttentions,
+
+  periodLabel,
+
+  executiveTitle,
+
+  executiveBody,
+
+  sourceLabel,
+
+  footerCenter
+
+},
     comparison: {
-      previousPeriod: text(comparisonRaw.previousPeriod || comparisonRaw.periodoAnterior || 'Mes anterior'),
-      previousTotal,
-      variationPct,
+
+  previousPeriod: text(
+    comparisonRaw.previousPeriod ||
+    comparisonRaw.periodoAnterior ||
+    'Periodo anterior'
+  ),
+
+  previousTotal,
+
+  currentTotal,
+
+  variationPct,
       label: variationPct === null ? 'Sin base de comparación' : `${variationPct >= 0 ? '+' : ''}${formatPct(variationPct)}`,
       tone: variationPct === null ? 'neutral' : variationPct <= 0 ? 'good' : 'alert'
     },
