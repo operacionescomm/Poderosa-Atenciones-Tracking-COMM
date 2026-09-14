@@ -1,20 +1,66 @@
 {
-  "period": "Mayo 2026",
+  "period": "MAYO-JUNIO-JULIO 2026",
+
   "operation": "Poderosa",
+
   "reportName": "Atenciones de Tracking",
-  "generatedAt": "08/09/2026",
+
+  "generatedAt": "14/09/2026",
+
   "comparison": {
-    "previousPeriod": "Abril 2026",
-    "previousTotal": null,
-    "variationPct": null
+
+    "previousPeriod": "Mayo 2026",
+
+    "previousTotal": 46,
+
+    "currentTotal": 80,
+
+    "variationPct": 73.9
+
   },
+
   "metrics": {
-    "totalAttentions": 46,
-    "uniqueVehicles": 42,
-    "activeDays": 14,
-    "peakDay": "04, 05, 06 y 12",
-    "peakValue": 5,
-    "distinctSupplies": 8
+
+    "totalAttentions": 183,
+
+    "weeklyAverage": 13.9,
+
+    "companiesCount": 44,
+
+    "uniqueVehicles": 128,
+
+    "uniqueDevices": 128,
+
+    "reincidenceCount": 10,
+
+    "categoryConcentrationShare": 64.5,
+
+    "categoryConcentrationLabel": "Mantenimiento básico y cambio de USB-C.",
+
+    "demandShare": 53.6,
+
+    "topCompaniesTopN": 10,
+
+    "topCompaniesAttentions": 98,
+
+    "periodLabel": "MAYO-JUNIO-JULIO 2026",
+
+    "executiveTitle": "La demanda creció mes a mes y se concentró en mantenimiento preventivo y alimentación USB-C.",
+
+    "executiveBody": "Julio fue el mes de mayor actividad (80). La participación de casos USB-C descendió a 20.0%, mientras que 10 vehículos requieren seguimiento focalizado por recurrencia.",
+
+    "sourceLabel": "Fuente: Reporte Trimestral y Registros - SOPORTE DE TRACKING_PODEROSA",
+
+    "footerCenter": "Poderosa - Atenciones de Tracking",
+
+    "activeDays": 0,
+
+    "peakDay": "",
+
+    "peakValue": 0,
+
+    "distinctSupplies": 0
+
   },
   "daily": [
     { "day": "01", "value": 0 },
