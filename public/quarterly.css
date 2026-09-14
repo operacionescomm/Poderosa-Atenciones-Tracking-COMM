@@ -1,0 +1,220 @@
+:root {
+  --q-navy: #102f78;
+  --q-blue: #1764ed;
+  --q-teal: #14b3c3;
+  --q-orange: #ff7200;
+  --q-purple: #7929ef;
+  --q-line: #dbe7f4;
+  --q-text: #173d98;
+  --q-muted: #6f82a4;
+  --q-bg: #ffffff;
+}
+
+html,
+body,
+body.slide-body {
+  margin: 0 !important;
+  width: 1600px !important;
+  height: 900px !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+body.slide-body .canvas {
+  position: relative !important;
+  width: 1600px !important;
+  height: 900px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+}
+
+body.slide-body .quarterly-slide {
+  width: 1600px !important;
+  height: 900px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+}
+
+body.slide-body .quarterly-slide--standalone {
+  display: block !important;
+}
+
+.q-page {
+  display: grid !important;
+  grid-template-rows: 112px minmax(0, 1fr) 44px !important;
+  background: #ffffff !important;
+}
+
+.q-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 38px 12px;
+  background: #ffffff;
+  border-bottom: 1px solid #edf2f8;
+}
+
+.q-header__title-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  min-width: 0;
+}
+
+.q-header__rule {
+  width: 11px;
+  height: 75px;
+  flex: 0 0 auto;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #1cc4d2 0%, #10a9c6 100%);
+}
+
+.q-header__eyebrow {
+  margin-bottom: 7px;
+  color: #174cad;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.q-header__title {
+  margin: 0;
+  max-width: 930px;
+  color: var(--q-navy);
+  font-size: 36px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.7px;
+}
+
+.q-header__subtitle {
+  margin-top: 7px;
+  color: #2452b7;
+  font-size: 17px;
+  line-height: 1.1;
+}
+
+.q-period-chip {
+  min-width: 282px;
+  height: 56px;
+  margin-top: 12px;
+  padding: 0 20px;
+  border-radius: 19px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 13px;
+  background: #eaf4ff;
+  color: #193e9c;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.q-period-chip svg {
+  width: 27px;
+  height: 27px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: #1265ef;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.q-content {
+  min-height: 0;
+  overflow: hidden;
+  padding: 20px 38px 14px;
+  background: #ffffff;
+}
+
+.q-content > section,
+.q-content > div {
+  min-height: 0;
+}
+
+.q-footer {
+  margin: 0 38px;
+  padding-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  border-top: 1px solid var(--q-line);
+  color: #2450ad;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.q-footer__right {
+  text-align: right;
+  padding-right: 4px;
+}
+
+.q-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: 1.5px dashed #c7d8ec;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  color: var(--q-navy);
+  text-align: center;
+}
+
+.q-placeholder__inner {
+  max-width: 680px;
+  padding: 36px;
+}
+
+.q-placeholder__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  height: 34px;
+  padding: 0 14px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  background: #eaf4ff;
+  color: #1764ed;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+
+.q-placeholder h2 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.05;
+  font-weight: 800;
+}
+
+.q-placeholder p {
+  margin: 14px 0 0;
+  color: #62789d;
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+.q-content .two-column,
+.q-content .daily-layout,
+.q-content .supplies-layout {
+  height: 100%;
+}
+
+.q-content .panel {
+  max-height: 100%;
+}
+
+body.slide-body .slide-frame {
+  clip-path: none !important;
+}
