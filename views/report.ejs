@@ -6,41 +6,108 @@
   <title><%= slideTitle %></title>
   <link rel="stylesheet" href="/public/styles.css">
 </head>
-<body>
-  <div class="canvas">
-    <section class="slide-frame">
-      <header class="report-header">
-        <div class="header-title">
-          <span class="title-rule"></span>
-          <div>
-            <div class="eyebrow">INFORME MENSUAL · TRACKING PODEROSA</div>
-            <h1><%= slideTitle %></h1>
-            <% if (viewClass === 'summary') { %>
-              <div class="header-subtitle">VISIBILIDAD HOY. OPERACIONES MÁS EFICIENTES MAÑANA.</div>
-            <% } %>
+
+<%
+  const isSlide10 = String(slideNumber) === '10';
+%>
+
+<body class="<%= isSlide10 ? 'slide10-body' : '' %>">
+
+  <div class="canvas <%= isSlide10 ? 'canvas--slide10' : '' %>">
+
+    <section class="slide-frame <%= isSlide10 ? 'slide-frame--slide10' : '' %>">
+
+      <% if (isSlide10) { %>
+
+        <!--
+          SLIDE 10
+          El slide trimestral ya contiene su propio:
+          - encabezado
+          - periodo
+          - KPIs
+          - lectura ejecutiva
+          - footer
+
+          Por eso NO usamos aquí el header/footer mensual.
+        -->
+        <main class="slide-content slide-content--slide10">
+          <%- include('partials/' + viewName) %>
+        </main>
+
+      <% } else { %>
+
+        <!-- HEADER GENERAL PARA LOS DEMÁS SLIDES -->
+        <header class="report-header">
+
+          <div class="header-title">
+
+            <span class="title-rule"></span>
+
+            <div>
+
+              <div class="eyebrow">
+                INFORME TRIMESTRAL · TRACKING PODEROSA
+              </div>
+
+              <h1>
+                <%= slideTitle %>
+              </h1>
+
+            </div>
+
           </div>
-        </div>
-        <div class="header-meta">
-          <span class="period-chip">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
-              <path d="M8 13h3v3H8zM13 13h3v3h-3z"/>
-            </svg>
-            <%= period.toUpperCase() %>
+
+          <div class="header-meta">
+
+            <span class="period-chip">
+
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                <path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
+
+                <path d="M8 13h3v3H8zM13 13h3v3h-3z"/>
+
+              </svg>
+
+              <%= period.toUpperCase() %>
+
+            </span>
+
+          </div>
+
+        </header>
+
+
+        <!-- CONTENIDO DEL SLIDE -->
+        <main class="slide-content <%= viewClass %>">
+
+          <%- include('partials/' + viewName) %>
+
+        </main>
+
+
+        <!-- FOOTER GENERAL -->
+        <footer class="report-footer">
+
+          <span>
+            COMM · Digitalizamos la minería peruana
           </span>
-        </div>
-      </header>
 
-      <main class="slide-content <%= viewClass %>">
-        <%- include('partials/' + viewName) %>
-      </main>
+          <span>
+            <%= operation %> · <%= reportName %>
+          </span>
 
-      <footer class="report-footer">
-        <span>COMM · Digitalizamos la minería peruana</span>
-        <span><%= operation %> · <%= reportName %></span>
-        <span><%= slideNumber %></span>
-      </footer>
+          <!--
+            SE ELIMINA EL NÚMERO DE PÁGINA
+          -->
+
+        </footer>
+
+      <% } %>
+
     </section>
+
   </div>
+
 </body>
 </html>
