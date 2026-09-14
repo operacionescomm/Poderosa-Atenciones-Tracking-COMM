@@ -1,8 +1,8 @@
 {
   "name": "poderosa-atenciones-tracking-comm",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "Motor visual para informes mensuales de atenciones de Tracking Poderosa",
+  "description": "Motor visual para el reporte trimestral de Soporte Técnico de Tracking Poderosa",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
