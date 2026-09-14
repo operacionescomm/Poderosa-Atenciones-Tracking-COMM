@@ -18,8 +18,8 @@ const SLIDES = [
   { number: '14', view: 'slide14', style: 'quarterly', standalone: false, title: 'Indicadores trimestrales', subtitle: 'Vista consolidada del servicio' },
   { number: '15', view: 'slide15', style: 'supplies', standalone: false, title: 'Análisis complementario', subtitle: 'Detalle operativo del trimestre' },
   { number: '16', view: 'slide16', style: 'quarterly', standalone: false, title: 'Seguimiento del servicio', subtitle: 'Indicadores y evolución trimestral' },
-  { number: '18', view: 'slide18', style: 'supplies', standalone: false, title: 'Suministros', subtitle: 'Consumo y disponibilidad de insumos' },
-  { number: '20', view: 'slide20', style: 'insights', standalone: false, title: 'Hallazgos', subtitle: 'Puntos de atención y acciones prioritarias' }
+  { number: '18', view: 'slide18', style: 'quarterly', standalone: false, title: 'Suministros', subtitle: 'Consumo y disponibilidad de insumos' },
+  { number: '20', view: 'slide20', style: 'quarterly', standalone: false, title: 'Hallazgos', subtitle: 'Puntos de atención y acciones prioritarias' }
 ];
 
 app.use(express.json({ limit: '10mb' }));
@@ -170,12 +170,14 @@ function normalizeReportData(raw = {}) {
     value: number(item.value ?? item.atenciones ?? item.cantidad)
   }));
 
+  const totalAttentionsFallback = categories.length
+    ? sum(categories, 'count')
+    : sum(monthlySeries, 'value');
   const totalAttentions = number(
     metricsRaw.totalAttentions ??
     metricsRaw.totalAtenciones ??
     raw.totalAtenciones ??
-    sum(categories, 'count') ??
-    sum(monthlySeries, 'value')
+    totalAttentionsFallback
   );
 
   const uniqueVehicles = number(
@@ -536,6 +538,17 @@ async function captureHtmlToPng(html) {
   try {
     await page.setViewport({ width: 1600, height: 900, deviceScaleFactor: 2 });
     await page.setContent(html, { waitUntil: 'domcontentloaded', timeout: 120000 });
+
+    const legacyStylePath = path.join(__dirname, 'public', 'styles.css');
+    if (fs.existsSync(legacyStylePath)) {
+      await page.addStyleTag({ path: legacyStylePath });
+    }
+
+    const quarterlyStylePath = path.join(__dirname, 'public', 'quarterly.css');
+    if (fs.existsSync(quarterlyStylePath)) {
+      await page.addStyleTag({ path: quarterlyStylePath });
+    }
+
     await page.evaluate(() => document.fonts && document.fonts.ready);
     return Buffer.from(await page.screenshot({ type: 'png', fullPage: false, omitBackground: false }));
   } finally {
