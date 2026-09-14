@@ -5,18 +5,21 @@ const puppeteer = require('puppeteer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const APP_NAME = process.env.APP_NAME || 'Poderosa Atenciones Tracking - Visual Engine';
+const APP_NAME = process.env.APP_NAME || 'Poderosa Tracking - Motor Trimestral';
 const OPERATION_NAME = process.env.OPERATION_NAME || 'Poderosa Tracking';
 const API_KEY = String(process.env.RENDER_API_KEY || '').trim();
-const sampleReport = require('./data/sample-report.json');
+const sampleReport = require('./data/sample-quarterly-report.json');
 
 const SLIDES = [
-  { number: '10', view: 'slide10', style: 'summary', title: 'RESUMEN EJECUTIVO DEL PERIODO' },
-  { number: '11', view: 'slide11', style: 'daily', title: 'EVOLUCIÓN DIARIA DE ATENCIONES' },
-  { number: '12', view: 'slide12', style: 'categories', title: 'DISTRIBUCIÓN POR CATEGORÍA DE ATENCIÓN' },
-  { number: '13', view: 'slide13', style: 'demand', title: 'CONCENTRACIÓN DE LA DEMANDA OPERATIVA' },
-  { number: '15', view: 'slide15', style: 'supplies', title: 'INSUMOS UTILIZADOS' },
-  { number: '17', view: 'slide17', style: 'insights', title: 'HALLAZGOS Y ACCIONES PRIORITARIAS' }
+  { number: '10', view: 'slide10', style: 'summary', standalone: true, title: 'Resumen ejecutivo del trimestre', subtitle: 'Panorama operativo y puntos de atención gerencial' },
+  { number: '11', view: 'slide11', style: 'daily', standalone: false, title: 'Atenciones por tipo y evolución', subtitle: 'Comportamiento operativo del trimestre' },
+  { number: '12', view: 'slide12', style: 'categories', standalone: false, title: 'Distribución por categoría de atención', subtitle: 'Concentración y composición del servicio' },
+  { number: '13', view: 'slide13', style: 'demand', standalone: false, title: 'Concentración de la demanda operativa', subtitle: 'Compañías y unidades atendidas' },
+  { number: '14', view: 'slide14', style: 'quarterly', standalone: false, title: 'Indicadores trimestrales', subtitle: 'Vista consolidada del servicio' },
+  { number: '15', view: 'slide15', style: 'supplies', standalone: false, title: 'Análisis complementario', subtitle: 'Detalle operativo del trimestre' },
+  { number: '16', view: 'slide16', style: 'quarterly', standalone: false, title: 'Seguimiento del servicio', subtitle: 'Indicadores y evolución trimestral' },
+  { number: '18', view: 'slide18', style: 'supplies', standalone: false, title: 'Suministros', subtitle: 'Consumo y disponibilidad de insumos' },
+  { number: '20', view: 'slide20', style: 'insights', standalone: false, title: 'Hallazgos', subtitle: 'Puntos de atención y acciones prioritarias' }
 ];
 
 app.use(express.json({ limit: '10mb' }));
@@ -30,8 +33,9 @@ app.get('/', (req, res) => {
     ok: true,
     service: APP_NAME,
     operation: OPERATION_NAME,
+    reportType: 'quarterly',
     resolution: '1600x900',
-    slides: SLIDES,
+    slides: SLIDES.map(({ number, view, title, subtitle, standalone }) => ({ number, view, title, subtitle, standalone })),
     endpoints: {
       health: '/health',
       preview: SLIDES.map(slide => `/test-slide${slide.number}`),
@@ -46,7 +50,7 @@ app.get('/health', (req, res) => {
     ok: true,
     service: APP_NAME,
     operation: OPERATION_NAME,
-    message: 'Motor visual de Tracking Poderosa activo',
+    reportType: 'quarterly',
     timestamp: new Date().toISOString()
   });
 });
@@ -61,7 +65,7 @@ function requireApiKey(req, res, next) {
 for (const slide of SLIDES) registerSlide(slide);
 
 function registerSlide(slide) {
-  app.get(`/test-slide${slide.number}`, async (req, res) => {
+  app.get(`/test-slide${slide.number}`, (req, res) => {
     try {
       res.render('report', buildSlideData(sampleReport, slide));
     } catch (error) {
@@ -99,21 +103,22 @@ function registerSlide(slide) {
 
 function buildSlideData(raw, slide) {
   const report = normalizeReportData(raw);
-
   return {
     ...report,
     viewName: slide.view,
     viewClass: slide.style,
+    standalone: Boolean(slide.standalone),
     slideNumber: slide.number,
-    slideTitle: slide.number === '15' ? report.supplyHeading : slide.title,
+    slideTitle: slide.number === '18' ? report.supplyHeading : slide.title,
+    slideSubtitle: slide.subtitle || '',
     formatNumber,
     formatPct,
     truncate
   };
 }
 
-function normalizeReportData(raw) {
-  const period = text(raw.period || raw.periodo || 'Periodo no indicado');
+function normalizeReportData(raw = {}) {
+  const period = text(raw.period || raw.periodo || 'MAYO-JUNIO-JULIO 2026');
   const operation = text(raw.operation || raw.operacion || 'Poderosa');
   const reportName = text(raw.reportName || raw.nombreInforme || 'Atenciones de Tracking');
   const metricsRaw = raw.metrics || raw.indicadores || {};
@@ -131,22 +136,12 @@ function normalizeReportData(raw) {
     .sort((a, b) => b.count - a.count);
 
   const allCompanies = array(raw.companies || raw.companias)
-  .map(item => ({
-    name: text(
-      item.name ||
-      item.nombre ||
-      item.compania ||
-      'SIN COMPAÑÍA'
-    ),
-    count: number(
-      item.count ??
-      item.atenciones ??
-      item.cantidad
-    )
-  }))
-  .sort((a, b) => b.count - a.count);
-
-const companies = allCompanies.slice(0, 5);
+    .map(item => ({
+      name: text(item.name || item.nombre || item.compania || 'SIN COMPAÑÍA'),
+      count: number(item.count ?? item.atenciones ?? item.cantidad)
+    }))
+    .sort((a, b) => b.count - a.count);
+  const companies = allCompanies.slice(0, 10);
 
   const vehicleTypes = array(raw.vehicleTypes || raw.tiposVehiculo)
     .map(item => ({
@@ -165,127 +160,110 @@ const companies = allCompanies.slice(0, 5);
     .sort((a, b) => b.quantity - a.quantity);
   const supplies = allSupplies.slice(0, 10);
 
+  const monthlySeries = array(raw.monthlySeries || raw.serieMensual || raw.meses).map(item => ({
+    month: text(item.month || item.mes || item.name || item.nombre),
+    value: number(item.value ?? item.atenciones ?? item.cantidad)
+  }));
+
+  const weeklySeries = array(raw.weeklySeries || raw.serieSemanal || raw.semanas).map(item => ({
+    week: text(item.week || item.semana || item.name || item.nombre),
+    value: number(item.value ?? item.atenciones ?? item.cantidad)
+  }));
+
   const totalAttentions = number(
-    metricsRaw.totalAttentions ?? metricsRaw.totalAtenciones ?? raw.totalAtenciones ?? sum(categories, 'count')
+    metricsRaw.totalAttentions ??
+    metricsRaw.totalAtenciones ??
+    raw.totalAtenciones ??
+    sum(categories, 'count') ??
+    sum(monthlySeries, 'value')
   );
-  const uniqueVehicles = number(metricsRaw.uniqueVehicles ?? metricsRaw.vehiculosUnicos ?? raw.vehiculosUnicos);
-  const activeDays = number(metricsRaw.activeDays ?? metricsRaw.diasConAtencion ?? daily.filter(x => x.value > 0).length);
-  const peakValue = number(metricsRaw.peakValue ?? metricsRaw.maximoDiario ?? Math.max(0, ...daily.map(x => x.value)));
-  const peakDay = text(metricsRaw.peakDay || metricsRaw.diaPico || daily.filter(x => x.value === peakValue).map(x => x.day).join(', '));
-  const distinctSupplies = number(metricsRaw.distinctSupplies ?? metricsRaw.insumosDistintos ?? allSupplies.length);
-  /* ========================================================
-   KPIs TRIMESTRALES · SLIDE 10
-   ======================================================== */
 
-const weeklyAverage = number(
-  metricsRaw.weeklyAverage ??
-  metricsRaw.averagePerWeek ??
-  metricsRaw.promedioSemanal
-);
+  const uniqueVehicles = number(
+    metricsRaw.uniqueVehicles ??
+    metricsRaw.vehiculosUnicos ??
+    metricsRaw.uniqueDevices ??
+    metricsRaw.dispositivosUnicos ??
+    raw.vehiculosUnicos
+  );
 
-const companiesCount = number(
-  metricsRaw.companiesCount ??
-  metricsRaw.companyCount ??
-  metricsRaw.companiasAtendidas ??
-  allCompanies.length
-);
+  const uniqueDevices = number(
+    metricsRaw.uniqueDevices ??
+    metricsRaw.devicesCount ??
+    metricsRaw.dispositivosUnicos ??
+    uniqueVehicles
+  );
 
-const uniqueDevices = number(
-  metricsRaw.uniqueDevices ??
-  metricsRaw.devicesCount ??
-  metricsRaw.dispositivosUnicos ??
-  uniqueVehicles
-);
+  const weeklyAverageFallback = weeklySeries.length
+    ? sum(weeklySeries, 'value') / weeklySeries.length
+    : (totalAttentions ? totalAttentions / 13.142857 : 0);
+  const weeklyAverage = number(
+    metricsRaw.weeklyAverage ??
+    metricsRaw.averagePerWeek ??
+    metricsRaw.promedioSemanal ??
+    weeklyAverageFallback
+  );
 
-const reincidenceCount = number(
-  metricsRaw.reincidenceCount ??
-  metricsRaw.reincidencia ??
-  metricsRaw.vehiculosReincidentes
-);
+  const companiesCount = number(
+    metricsRaw.companiesCount ??
+    metricsRaw.companyCount ??
+    metricsRaw.companiasAtendidas ??
+    raw.companiesCount ??
+    allCompanies.length
+  );
 
-const categoryConcentrationShare = number(
-  metricsRaw.categoryConcentrationShare ??
-  metricsRaw.concentracionCategoria ??
-  metricsRaw.topCategoryShare
-);
+  const reincidenceCount = number(
+    metricsRaw.reincidenceCount ??
+    metricsRaw.reincidencia ??
+    metricsRaw.vehiculosReincidentes ??
+    raw.reincidenceCount
+  );
 
-const categoryConcentrationLabel = text(
-  metricsRaw.categoryConcentrationLabel ??
-  metricsRaw.etiquetaConcentracionCategoria ??
-  metricsRaw.topCategoryLabel
-);
-
-const demandShare = number(
-  metricsRaw.demandShare ??
-  metricsRaw.topCompaniesShare ??
-  metricsRaw.concentracionDemanda
-);
-
-const topCompaniesTopN = number(
-  metricsRaw.topCompaniesTopN ??
-  metricsRaw.topCompaniasN ??
-  10
-);
-
-const topCompaniesAttentions = number(
-  metricsRaw.topCompaniesAttentions ??
-  metricsRaw.atencionesTopCompanias
-);
-
-const periodLabel = text(
-  metricsRaw.periodLabel ??
-  metricsRaw.periodoTrimestral ??
-  period
-);
-
-const executiveTitle = text(
-  metricsRaw.executiveTitle ??
-  metricsRaw.tituloEjecutivo
-);
-
-const executiveBody = text(
-  metricsRaw.executiveBody ??
-  metricsRaw.lecturaEjecutiva
-);
-
-const sourceLabel = text(
-  metricsRaw.sourceLabel ??
-  metricsRaw.fuente
-);
-
-const footerCenter = text(
-  metricsRaw.footerCenter ??
-  metricsRaw.pieCentro
-);
+  const activeDays = number(
+    metricsRaw.activeDays ??
+    metricsRaw.diasConAtencion ??
+    daily.filter(x => x.value > 0).length
+  );
+  const peakValue = number(
+    metricsRaw.peakValue ??
+    metricsRaw.maximoDiario ??
+    Math.max(0, ...daily.map(x => x.value))
+  );
+  const peakDay = text(
+    metricsRaw.peakDay ||
+    metricsRaw.diaPico ||
+    daily.filter(x => x.value === peakValue && peakValue > 0).map(x => x.day).join(', ')
+  );
+  const distinctSupplies = number(
+    metricsRaw.distinctSupplies ??
+    metricsRaw.insumosDistintos ??
+    allSupplies.length
+  );
 
   const comparisonRaw = raw.comparison || raw.comparacion || {};
   const previousTotalValue = comparisonRaw.previousTotal ?? comparisonRaw.totalAnterior;
   const previousTotal = previousTotalValue === null || previousTotalValue === undefined || previousTotalValue === ''
     ? null
     : number(previousTotalValue);
-  const currentTotalValue =
-  comparisonRaw.currentTotal ??
-  comparisonRaw.totalActual;
-
-const currentTotal =
-  currentTotalValue === null ||
-  currentTotalValue === undefined ||
-  currentTotalValue === ''
+  const currentTotalValue = comparisonRaw.currentTotal ?? comparisonRaw.totalActual;
+  const currentTotal = currentTotalValue === null || currentTotalValue === undefined || currentTotalValue === ''
     ? null
     : number(currentTotalValue);
+
   let variationPct = comparisonRaw.variationPct ?? comparisonRaw.variacionPct;
   if (variationPct === null || variationPct === undefined || variationPct === '') {
-    variationPct = previousTotal > 0 ? ((totalAttentions - previousTotal) / previousTotal) * 100 : null;
+    variationPct = previousTotal > 0 && currentTotal !== null
+      ? ((currentTotal - previousTotal) / previousTotal) * 100
+      : null;
   }
   variationPct = variationPct === null ? null : number(variationPct);
 
   const dailyMax = Math.max(1, ...daily.map(x => x.value));
-  const dailyAverage = daily.length ? totalAttentions / daily.length : 0;
+  const dailyAverage = daily.length ? sum(daily, 'value') / daily.length : 0;
   const categoryMax = Math.max(1, ...categories.map(x => x.count));
   const companyMax = Math.max(1, ...companies.map(x => x.count));
   const supplyMax = Math.max(1, ...supplies.map(x => x.quantity));
   const vehicleTotal = sum(vehicleTypes, 'count');
-  const palette = ['#0b63ce', '#12a6b1', '#ff7a00', '#7c3aed', '#2f8f61', '#e5484d', '#6b7a90'];
+  const palette = ['#0b63ce', '#12a6b1', '#ff7a00', '#7c3aed', '#2f8f61', '#e5484d', '#6b7a90', '#0ea5e9', '#f59e0b', '#14b8a6'];
 
   categories.forEach((item, index) => {
     item.share = totalAttentions ? (item.count / totalAttentions) * 100 : 0;
@@ -313,45 +291,58 @@ const currentTotal =
   const topCategory = categories[0] || { name: 'Sin datos', count: 0, share: 0 };
   const topCompany = companies[0] || { name: 'Sin datos', count: 0, share: 0 };
   const topSupply = supplies[0] || { name: 'Sin datos', quantity: 0, unit: '' };
-  const repeatedVisits = Math.max(0, totalAttentions - uniqueVehicles);
-  const top3Companies = companies.slice(0, 3).reduce((acc, item) => acc + item.count, 0);
+  const top2CategoryCount = categories.slice(0, 2).reduce((acc, item) => acc + item.count, 0);
+  const top10CompaniesCount = companies.slice(0, 10).reduce((acc, item) => acc + item.count, 0);
+
+  const categoryConcentrationShare = number(
+    metricsRaw.categoryConcentrationShare ??
+    metricsRaw.concentracionCategoria ??
+    metricsRaw.topCategoryShare ??
+    (totalAttentions ? (top2CategoryCount / totalAttentions) * 100 : 0)
+  );
+
+  const categoryConcentrationLabel = text(
+    metricsRaw.categoryConcentrationLabel ??
+    metricsRaw.etiquetaConcentracionCategoria ??
+    metricsRaw.topCategoryLabel ??
+    (categories.length >= 2 ? `${categories[0].name} y ${categories[1].name}` : topCategory.name)
+  );
+
+  const demandShare = number(
+    metricsRaw.demandShare ??
+    metricsRaw.topCompaniesShare ??
+    metricsRaw.concentracionDemanda ??
+    (totalAttentions ? (top10CompaniesCount / totalAttentions) * 100 : 0)
+  );
+
+  const topCompaniesTopN = number(
+    metricsRaw.topCompaniesTopN ?? metricsRaw.topCompaniasN ?? Math.min(10, companies.length)
+  );
+  const topCompaniesAttentions = number(
+    metricsRaw.topCompaniesAttentions ?? metricsRaw.atencionesTopCompanias ?? top10CompaniesCount
+  );
+
+  const periodLabel = text(
+    metricsRaw.periodLabel ?? metricsRaw.periodoTrimestral ?? raw.periodLabel ?? period
+  );
+  const executiveTitle = text(metricsRaw.executiveTitle ?? metricsRaw.tituloEjecutivo ?? raw.executiveTitle);
+  const executiveBody = text(metricsRaw.executiveBody ?? metricsRaw.lecturaEjecutiva ?? raw.executiveBody);
+  const sourceLabel = text(
+    metricsRaw.sourceLabel ?? metricsRaw.fuente ?? raw.sourceLabel ?? 'Fuente: Reporte Trimestral y Registros - SOPORTE DE TRACKING_PODEROSA'
+  );
+  const footerCenter = text(
+    metricsRaw.footerCenter ?? metricsRaw.pieCentro ?? raw.footerCenter ?? 'Poderosa - Atenciones de Tracking'
+  );
 
   const insights = array(raw.insights || raw.hallazgos);
   const normalizedInsights = insights.length ? insights.map(item => ({
     title: text(item.title || item.titulo),
     text: text(item.text || item.descripcion),
     tone: text(item.tone || item.tono || 'blue')
-  })) : [
-    {
-      title: 'Categoría predominante',
-      text: `${topCategory.name} concentra ${formatPct(topCategory.share)} de las atenciones del periodo.`,
-      tone: 'blue'
-    },
-    {
-      title: 'Concentración por compañía',
-      text: `Las tres compañías principales representan ${formatPct(totalAttentions ? top3Companies / totalAttentions * 100 : 0)} de la demanda mensual.`,
-      tone: 'teal'
-    },
-    {
-      title: 'Consumo principal',
-      text: `${topSupply.name} lidera el consumo con ${formatNumber(topSupply.quantity)} ${topSupply.unit}.`,
-      tone: 'orange'
-    },
-    {
-      title: 'Recurrencia operativa',
-      text: repeatedVisits > 0
-        ? `Se observan ${formatNumber(repeatedVisits)} atenciones adicionales sobre el total de vehículos únicos.`
-        : 'No se observan atenciones repetidas sobre los vehículos registrados.',
-      tone: 'purple'
-    }
-  ];
+  })) : [];
 
   const actions = array(raw.actions || raw.acciones);
-  const normalizedActions = actions.length ? actions.map(item => text(item.text || item.descripcion || item)) : [
-    `Priorizar revisión preventiva para reducir la participación de ${topCategory.name}.`,
-    `Coordinar programación con ${topCompany.name}, principal fuente de demanda del periodo.`,
-    `Asegurar disponibilidad de ${topSupply.name} según el consumo mensual observado.`
-  ];
+  const normalizedActions = actions.map(item => text(item.text || item.descripcion || item));
 
   return {
     period,
@@ -359,69 +350,43 @@ const currentTotal =
     reportName,
     generatedAt: text(raw.generatedAt || raw.fechaGeneracion || ''),
     metrics: {
-
-  totalAttentions,
-
-  uniqueVehicles,
-
-  uniqueDevices,
-
-  activeDays,
-
-  peakDay,
-
-  peakValue,
-
-  distinctSupplies,
-
-  weeklyAverage,
-
-  companiesCount,
-
-  reincidenceCount,
-
-  categoryConcentrationShare,
-
-  categoryConcentrationLabel,
-
-  demandShare,
-
-  topCompaniesTopN,
-
-  topCompaniesAttentions,
-
-  periodLabel,
-
-  executiveTitle,
-
-  executiveBody,
-
-  sourceLabel,
-
-  footerCenter
-
-},
+      totalAttentions,
+      uniqueVehicles,
+      uniqueDevices,
+      weeklyAverage,
+      companiesCount,
+      reincidenceCount,
+      activeDays,
+      peakDay,
+      peakValue,
+      distinctSupplies,
+      categoryConcentrationShare,
+      categoryConcentrationLabel,
+      demandShare,
+      topCompaniesTopN,
+      topCompaniesAttentions,
+      periodLabel,
+      executiveTitle,
+      executiveBody,
+      sourceLabel,
+      footerCenter
+    },
     comparison: {
-
-  previousPeriod: text(
-    comparisonRaw.previousPeriod ||
-    comparisonRaw.periodoAnterior ||
-    'Periodo anterior'
-  ),
-
-  previousTotal,
-
-  currentTotal,
-
-  variationPct,
+      previousPeriod: text(comparisonRaw.previousPeriod || comparisonRaw.periodoAnterior || 'Periodo anterior'),
+      previousTotal,
+      currentTotal,
+      variationPct,
       label: variationPct === null ? 'Sin base de comparación' : `${variationPct >= 0 ? '+' : ''}${formatPct(variationPct)}`,
       tone: variationPct === null ? 'neutral' : variationPct <= 0 ? 'good' : 'alert'
     },
+    monthlySeries,
+    weeklySeries,
     daily,
     dailyAverage,
     dailyAverageHeight: Math.min(100, (dailyAverage / dailyMax) * 100),
     categories,
     companies,
+    allCompanies,
     vehicleTypes,
     vehicleTotal,
     vehicleGradient: conicGradient(vehicleTypes),
@@ -434,7 +399,8 @@ const currentTotal =
     topCompany,
     topSupply,
     insights: normalizedInsights,
-    actions: normalizedActions
+    actions: normalizedActions,
+    quarterly: raw.quarterly || raw.trimestral || {}
   };
 }
 
@@ -460,7 +426,11 @@ function text(value) {
 
 function number(value) {
   if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
-  const normalized = String(value ?? '').trim().replace(/\s/g, '').replace(/\.(?=\d{3}(?:\D|$))/g, '').replace(',', '.');
+  const normalized = String(value ?? '')
+    .trim()
+    .replace(/\s/g, '')
+    .replace(/\.(?=\d{3}(?:\D|$))/g, '')
+    .replace(',', '.');
   const parsed = Number(normalized.replace('%', ''));
   return Number.isFinite(parsed) ? parsed : 0;
 }
@@ -477,7 +447,10 @@ function formatNumber(value, decimals = 0) {
 }
 
 function formatPct(value) {
-  return `${new Intl.NumberFormat('es-PE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(number(value))}%`;
+  return `${new Intl.NumberFormat('es-PE', {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1
+  }).format(number(value))}%`;
 }
 
 function truncate(value, max = 38) {
@@ -535,15 +508,9 @@ function findHeadlessShellPath() {
   const cacheRoot = process.env.PUPPETEER_CACHE_DIR || '/opt/render/.cache/puppeteer';
   const shellRoot = path.join(cacheRoot, 'chrome-headless-shell');
   if (!fs.existsSync(shellRoot)) return null;
-
   const versions = fs.readdirSync(shellRoot).sort().reverse();
   for (const version of versions) {
-    const candidate = path.join(
-      shellRoot,
-      version,
-      'chrome-headless-shell-linux64',
-      'chrome-headless-shell'
-    );
+    const candidate = path.join(shellRoot, version, 'chrome-headless-shell-linux64', 'chrome-headless-shell');
     if (fs.existsSync(candidate)) return candidate;
   }
   return null;
@@ -551,7 +518,6 @@ function findHeadlessShellPath() {
 
 async function htmlToPng(html) {
   let lastError;
-
   for (let attempt = 1; attempt <= 2; attempt += 1) {
     try {
       return await captureHtmlToPng(html);
@@ -561,7 +527,6 @@ async function htmlToPng(html) {
       await resetBrowser();
     }
   }
-
   throw lastError;
 }
 
@@ -571,10 +536,8 @@ async function captureHtmlToPng(html) {
   try {
     await page.setViewport({ width: 1600, height: 900, deviceScaleFactor: 2 });
     await page.setContent(html, { waitUntil: 'domcontentloaded', timeout: 120000 });
-    const stylePath = path.join(__dirname, 'public', 'styles.css');
-    if (fs.existsSync(stylePath)) await page.addStyleTag({ path: stylePath });
     await page.evaluate(() => document.fonts && document.fonts.ready);
-    return Buffer.from(await page.screenshot({ type: 'png', fullPage: false, omitBackground: true }));
+    return Buffer.from(await page.screenshot({ type: 'png', fullPage: false, omitBackground: false }));
   } finally {
     await page.close().catch(() => {});
   }
@@ -584,7 +547,6 @@ async function resetBrowser() {
   const currentBrowser = browserPromise;
   browserPromise = null;
   if (!currentBrowser) return;
-
   try {
     const browser = await currentBrowser;
     await browser.close();
@@ -610,4 +572,4 @@ if (require.main === module) {
   app.listen(PORT, () => console.log(`${APP_NAME} activo en puerto ${PORT}`));
 }
 
-module.exports = { app, normalizeReportData };
+module.exports = { app, normalizeReportData, SLIDES };
