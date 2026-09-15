@@ -1,36 +1,92 @@
 <!doctype html>
+
 <html lang="es">
+
 <head>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><%= slideTitle %></title>
-  <link rel="stylesheet" href="/public/styles.css">
-  <link rel="stylesheet" href="/public/quarterly.css">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>
+    <%= slideTitle %>
+  </title>
+
+
+  <link
+    rel="stylesheet"
+    href="/public/styles.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="/public/quarterly.css"
+  >
+
 </head>
+
+
 <body class="slide-body slide<%= slideNumber %>-body">
+
+
   <div class="canvas">
-    <% if (standalone) { %>
-      <main class="quarterly-slide quarterly-slide--standalone slide<%= slideNumber %>-root">
+
+
+    <main class="quarterly-slide q-page slide<%= slideNumber %>-root">
+
+
+      <!-- HEADER COMÚN PARA LOS 9 SLIDES -->
+
+      <%- include('components/quarterly-header', {
+
+        eyebrow:
+          slideEyebrow,
+
+        title:
+          slideTitle,
+
+        subtitle:
+          slideSubtitle,
+
+        periodLabel:
+          metrics.periodLabel || period
+
+      }) %>
+
+
+
+      <!-- CONTENIDO PROPIO DE CADA SLIDE -->
+
+      <section class="q-content <%= viewClass %>">
+
         <%- include('partials/' + viewName) %>
-      </main>
-    <% } else { %>
-      <main class="quarterly-slide q-page slide<%= slideNumber %>-root">
-        <%- include('components/quarterly-header', {
-          title: slideTitle,
-          subtitle: slideSubtitle,
-          periodLabel: metrics.periodLabel || period
-        }) %>
 
-        <section class="q-content <%= viewClass %>">
-          <%- include('partials/' + viewName) %>
-        </section>
+      </section>
 
-        <%- include('components/quarterly-footer', {
-          sourceLabel: metrics.sourceLabel,
-          footerCenter: metrics.footerCenter
-        }) %>
-      </main>
-    <% } %>
+
+
+      <!-- FOOTER COMÚN -->
+
+      <%- include('components/quarterly-footer', {
+
+        sourceLabel:
+          metrics.sourceLabel,
+
+        footerCenter:
+          metrics.footerCenter
+
+      }) %>
+
+
+    </main>
+
+
   </div>
+
+
 </body>
+
 </html>
