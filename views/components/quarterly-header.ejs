@@ -1,38 +1,97 @@
 <header class="q-header">
+
   <div class="q-header__main">
+
     <div class="q-header__title-wrap">
+
       <span class="q-header__rule"></span>
 
+
       <div class="q-header__copy">
+
         <div class="q-header__topline">
+
+
           <div class="q-header__titles">
-            <div class="q-header__eyebrow">
-              INFORME TRIMESTRAL · TRACKING PODEROSA
-            </div>
+
+            <% if (eyebrow) { %>
+
+              <div class="q-header__eyebrow">
+                <%= eyebrow %>
+              </div>
+
+            <% } %>
+
 
             <h1 class="q-header__title">
               <%= title %>
             </h1>
+
           </div>
+
 
           <div class="q-period-chip">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3" y="5" width="18" height="16" rx="2"></rect>
-              <path d="M16 3v4M8 3v4M3 10h18"></path>
-              <path d="M7 13h3M12 13h3M17 13h.01M7 17h3M12 17h3M17 17h.01"></path>
+
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+
+              <rect
+                x="3"
+                y="5"
+                width="18"
+                height="16"
+                rx="2"
+              ></rect>
+
+              <path
+                d="M16 3v4M8 3v4M3 10h18"
+              ></path>
+
+              <path
+                d="
+                  M7 13h3
+                  M12 13h3
+                  M17 13h.01
+                  M7 17h3
+                  M12 17h3
+                  M17 17h.01
+                "
+              ></path>
+
             </svg>
-            <span><%= String(periodLabel || '').toUpperCase() %></span>
+
+
+            <span>
+              <%= String(periodLabel || '').toUpperCase() %>
+            </span>
+
           </div>
+
         </div>
 
+
         <% if (subtitle) { %>
+
           <div class="q-header__subtitle">
             <%= subtitle %>
           </div>
+
         <% } %>
+
       </div>
+
     </div>
+
   </div>
 
+
+  <!--
+      ESPACIO RESERVADO PARA EL LOGO COMM.
+      NO SE DIBUJA NADA.
+  -->
+
   <div class="q-header__logo-space"></div>
+
 </header>
