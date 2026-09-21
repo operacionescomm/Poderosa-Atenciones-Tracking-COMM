@@ -75,13 +75,13 @@ const SLIDES = [
 
     style: 'daily',
 
-    eyebrow: '',
+    eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
-      'Atenciones por tipo y evolución',
+      'Distribución por categoría de atención',
 
     subtitle:
-      'Comportamiento operativo del trimestre'
+      'Ocho categorías explican las atenciones del trimestre'
   },
 
 
