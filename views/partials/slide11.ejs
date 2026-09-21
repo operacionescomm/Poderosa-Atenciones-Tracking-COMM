@@ -1,45 +1,1665 @@
-<section class="daily-layout">
-  <article class="panel chart-panel">
-    <div class="panel-heading">
-      <div>
-        <span class="panel-kicker">COMPORTAMIENTO DEL MES</span>
-        <h2>Atenciones por día</h2>
-      </div>
-      <div class="panel-badge">Promedio: <strong><%= formatNumber(dailyAverage, 1) %></strong></div>
-    </div>
-    <div class="daily-chart">
-      <div class="grid-line line-25"></div>
-      <div class="grid-line line-50"></div>
-      <div class="grid-line line-75"></div>
-      <div class="average-line" style="bottom: calc(42px + <%= dailyAverageHeight * 0.78 %>%)">
-        <span>Promedio</span>
-      </div>
-      <div class="daily-bars">
-        <% daily.forEach(function(item) { %>
-          <div class="day-column">
-            <div class="bar-value"><%= item.value > 0 ? formatNumber(item.value) : '' %></div>
-            <div class="day-bar <%= item.isPeak ? 'peak' : '' %> <%= item.value === 0 ? 'zero' : '' %>" style="height:<%= Math.max(item.value > 0 ? 7 : 1.5, item.height * 0.78) %>%"></div>
-            <div class="day-label"><%= item.day %></div>
-          </div>
-        <% }) %>
-      </div>
-    </div>
-  </article>
+<style>
 
-  <aside class="daily-side">
-    <article class="side-card primary">
-      <span class="side-label">PICO DEL MES</span>
-      <strong><%= formatNumber(metrics.peakValue) %></strong>
-      <p>atenciones en los días <%= metrics.peakDay %></p>
-    </article>
-    <article class="side-card">
-      <span class="side-label">DÍAS ACTIVOS</span>
-      <strong><%= formatNumber(metrics.activeDays) %></strong>
-      <p>de <%= daily.length %> días del periodo</p>
-    </article>
-    <article class="side-insight">
-      <span>LECTURA OPERATIVA</span>
-      <p>La visualización incluye todos los días del mes, incluso aquellos sin atenciones, para evitar cortes o interpretaciones incompletas.</p>
-    </article>
-  </aside>
-</section>
+/* =========================================================
+   SLIDE 11 · DISTRIBUCIÓN POR CATEGORÍA DE ATENCIÓN
+   Header y footer compartidos desde report.ejs
+   ========================================================= */
+
+
+/* =========================================================
+   AJUSTE DEL ÁREA DE CONTENIDO
+   ========================================================= */
+
+body.slide11-body .q-content {
+  padding:
+    18px
+    34px
+    14px
+    34px !important;
+}
+
+
+/* =========================================================
+   CONTENEDOR GENERAL
+   ========================================================= */
+
+.tri11 {
+  width: 100%;
+  height: 100%;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color: #133681;
+}
+
+
+.tri11 *,
+.tri11 *::before,
+.tri11 *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   LAYOUT PRINCIPAL
+   ========================================================= */
+
+.tri11-layout {
+  width: 100%;
+  height: 620px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    455px;
+
+  column-gap: 20px;
+
+  align-items: stretch;
+}
+
+
+/* =========================================================
+   PANEL IZQUIERDO
+   ========================================================= */
+
+.tri11-main-panel {
+  height: 620px;
+
+  padding:
+    20px
+    24px
+    20px
+    24px;
+
+  border:
+    1.5px solid
+    #d8e8f6;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 5px 18px
+    rgba(39, 83, 132, 0.08);
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   TÍTULO DEL PANEL
+   ========================================================= */
+
+.tri11-panel-heading {
+  height: 60px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+
+.tri11-panel-heading-icon {
+  width: 54px;
+  height: 54px;
+
+  flex: 0 0 54px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #eaf4ff;
+
+  color: #1764ed;
+}
+
+
+.tri11-panel-heading-icon svg {
+  width: 29px;
+  height: 29px;
+
+  display: block;
+}
+
+
+.tri11-panel-title {
+  margin: 0;
+
+  color: #08256e;
+
+  font-size: 27px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.5px;
+}
+
+
+/* =========================================================
+   GRÁFICO
+   ========================================================= */
+
+.tri11-chart {
+  height: 510px;
+
+  margin-top: 8px;
+
+  display: grid;
+
+  grid-template-columns:
+    250px
+    minmax(0, 1fr);
+
+  column-gap: 14px;
+}
+
+
+/* =========================================================
+   ETIQUETAS IZQUIERDAS
+   ========================================================= */
+
+.tri11-labels {
+  height: 510px;
+
+  display: grid;
+
+  grid-template-rows:
+    repeat(8, 1fr)
+    35px;
+}
+
+
+.tri11-label {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  padding-right: 0;
+
+  color: #345da6;
+
+  font-size: 14px;
+
+  line-height: 1.08;
+
+  font-weight: 500;
+
+  text-align: right;
+
+  text-transform: uppercase;
+}
+
+
+.tri11-label-axis {
+  height: 35px;
+}
+
+
+/* =========================================================
+   ZONA DE BARRAS
+   ========================================================= */
+
+.tri11-plot {
+  position: relative;
+
+  height: 510px;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   CUADRÍCULA VERTICAL
+   ========================================================= */
+
+.tri11-grid {
+  position: absolute;
+
+  z-index: 0;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  bottom: 35px;
+}
+
+
+.tri11-grid-line {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+
+  width: 1px;
+
+  border-left:
+    1px dashed
+    #d5e4f2;
+}
+
+
+.tri11-grid-line:first-child {
+  border-left:
+    1.5px solid
+    #9fb9dc;
+}
+
+
+/* =========================================================
+   LÍNEA HORIZONTAL INFERIOR
+   ========================================================= */
+
+.tri11-axis-line {
+  position: absolute;
+
+  z-index: 1;
+
+  left: 0;
+  right: 0;
+
+  bottom: 35px;
+
+  height: 1.5px;
+
+  background: #9fb9dc;
+}
+
+
+/* =========================================================
+   FILAS DEL GRÁFICO
+   ========================================================= */
+
+.tri11-bar-rows {
+  position: relative;
+
+  z-index: 2;
+
+  height: 475px;
+
+  display: grid;
+
+  grid-template-rows:
+    repeat(8, 1fr);
+}
+
+
+.tri11-bar-row {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   BARRA
+   ========================================================= */
+
+.tri11-bar {
+  position: relative;
+
+  height: 40px;
+
+  min-width: 4px;
+
+  border-radius:
+    0
+    2px
+    2px
+    0;
+
+  background:
+    linear-gradient(
+      90deg,
+      #20b6bc 0%,
+      #18aab5 100%
+    );
+
+  box-shadow:
+    inset 0 -1px 0
+    rgba(0, 84, 112, 0.08);
+}
+
+
+/* =========================================================
+   VALOR AL FINAL DE LA BARRA
+   ========================================================= */
+
+.tri11-bar-value {
+  flex: 0 0 auto;
+
+  margin-left: 11px;
+
+  color: #061f69;
+
+  font-size: 16px;
+
+  line-height: 1;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   EJE X
+   ========================================================= */
+
+.tri11-axis-labels {
+  position: absolute;
+
+  z-index: 3;
+
+  left: 0;
+  right: 0;
+
+  bottom: 0;
+
+  height: 35px;
+}
+
+
+.tri11-axis-label {
+  position: absolute;
+
+  top: 10px;
+
+  transform:
+    translateX(-50%);
+
+  color: #436ab2;
+
+  font-size: 13px;
+
+  line-height: 1;
+
+  font-weight: 500;
+}
+
+
+.tri11-axis-label.first {
+  transform: none;
+}
+
+
+/* =========================================================
+   COLUMNA DERECHA
+   ========================================================= */
+
+.tri11-side {
+  height: 620px;
+
+  display: grid;
+
+  grid-template-rows:
+    repeat(3, 1fr);
+
+  row-gap: 22px;
+}
+
+
+/* =========================================================
+   TARJETAS DERECHAS
+   ========================================================= */
+
+.tri11-side-card {
+  position: relative;
+
+  min-height: 0;
+
+  overflow: hidden;
+
+  display: grid;
+
+  grid-template-columns:
+    78px
+    minmax(0, 1fr)
+    90px;
+
+  column-gap: 18px;
+
+  align-items: center;
+
+  padding:
+    20px
+    14px
+    20px
+    26px;
+
+  border:
+    1.5px solid
+    #d8e8f6;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #fafdff 100%
+    );
+
+  box-shadow:
+    0 5px 18px
+    rgba(39, 83, 132, 0.07);
+}
+
+
+/* Barra lateral de color */
+
+.tri11-side-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  width: 10px;
+
+  background:
+    var(--accent);
+}
+
+
+/* =========================================================
+   ICONO PRINCIPAL DE LA TARJETA
+   ========================================================= */
+
+.tri11-side-icon {
+  width: 70px;
+  height: 70px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color:
+    var(--accent);
+
+  background:
+    var(--soft);
+}
+
+
+.tri11-side-icon svg {
+  width: 40px;
+  height: 40px;
+
+  display: block;
+}
+
+
+/* =========================================================
+   TEXTO TARJETA
+   ========================================================= */
+
+.tri11-side-copy {
+  min-width: 0;
+}
+
+
+.tri11-side-label {
+  color: #284d96;
+
+  font-size: 15px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+
+.tri11-side-number {
+  margin-top: 14px;
+
+  color:
+    var(--accent);
+
+  font-size: 47px;
+
+  line-height: 0.92;
+
+  font-weight: 800;
+
+  letter-spacing: -1px;
+}
+
+
+.tri11-side-description {
+  margin-top: 13px;
+
+  color: #183a8d;
+
+  font-size: 15px;
+
+  line-height: 1.15;
+
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   DECORACIÓN DERECHA
+   ========================================================= */
+
+.tri11-side-decoration {
+  position: relative;
+
+  width: 90px;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color:
+    var(--accent);
+
+  opacity: 0.10;
+}
+
+
+.tri11-side-decoration svg {
+  width: 86px;
+  height: 86px;
+
+  display: block;
+}
+
+
+/* =========================================================
+   COLORES
+   ========================================================= */
+
+.tri11-side-card.blue {
+  --accent: #1764ed;
+  --soft: #eaf4ff;
+}
+
+
+.tri11-side-card.teal {
+  --accent: #0fa8b6;
+  --soft: #e4f8fa;
+}
+
+
+.tri11-side-card.orange {
+  --accent: #ff7200;
+  --soft: #fff0e4;
+}
+
+
+/* =========================================================
+   EVITAR INTERFERENCIA DE CSS LEGACY
+   ========================================================= */
+
+body.slide11-body .tri11-main-panel,
+body.slide11-body .tri11-side-card {
+  box-sizing: border-box !important;
+}
+
+</style>
+
+
+<%
+
+/* =========================================================
+   DATA DINÁMICA
+   ========================================================= */
+
+const m =
+  typeof metrics !== 'undefined' &&
+  metrics
+    ? metrics
+    : {};
+
+
+const allCategories =
+  typeof categories !== 'undefined' &&
+  Array.isArray(categories)
+    ? categories
+    : [];
+
+
+/*
+   Mostramos máximo 8 categorías,
+   como en el diseño de referencia.
+*/
+
+const chartCategories =
+  allCategories
+    .slice(0, 8);
+
+
+/*
+   Total de atenciones.
+*/
+
+const total =
+  Number(
+    m.totalAttentions ??
+    chartCategories.reduce(
+      (acc, item) =>
+        acc + Number(item.count || 0),
+      0
+    )
+  ) || 0;
+
+
+/* =========================================================
+   HELPERS LOCALES
+   ========================================================= */
+
+function tri11Number(value) {
+
+  const n =
+    Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+
+}
+
+
+function tri11Pct(value) {
+
+  return tri11Number(value)
+    .toFixed(1);
+
+}
+
+
+/*
+   Calcula una escala agradable para el eje.
+
+   Ejemplo:
+   máximo 69
+   → eje máximo 80
+
+   máximo 112
+   → eje máximo 140 aproximadamente,
+   dependiendo de la escala.
+*/
+
+function tri11NiceStep(value) {
+
+  if (
+    !Number.isFinite(value) ||
+    value <= 0
+  ) {
+    return 10;
+  }
+
+
+  const exponent =
+    Math.floor(
+      Math.log10(value)
+    );
+
+
+  const magnitude =
+    Math.pow(
+      10,
+      exponent
+    );
+
+
+  const normalized =
+    value /
+    magnitude;
+
+
+  let niceNormalized;
+
+
+  if (normalized <= 1) {
+
+    niceNormalized = 1;
+
+  } else if (normalized <= 2) {
+
+    niceNormalized = 2;
+
+  } else if (normalized <= 5) {
+
+    niceNormalized = 5;
+
+  } else {
+
+    niceNormalized = 10;
+
+  }
+
+
+  return (
+    niceNormalized *
+    magnitude
+  );
+
+}
+
+
+/*
+   Máximo real de categorías.
+*/
+
+const realMaximum =
+  Math.max(
+    0,
+    ...chartCategories.map(
+      item =>
+        tri11Number(
+          item.count
+        )
+    )
+  );
+
+
+/*
+   Agregamos margen visual para que
+   la barra más grande no llegue
+   completamente al borde derecho.
+*/
+
+const paddedMaximum =
+  realMaximum *
+  1.12;
+
+
+/*
+   Queremos aproximadamente
+   entre 7 y 9 divisiones.
+*/
+
+const rawStep =
+  paddedMaximum > 0
+    ? paddedMaximum / 8
+    : 10;
+
+
+const axisStep =
+  tri11NiceStep(
+    rawStep
+  );
+
+
+let axisMaximum =
+  Math.ceil(
+    paddedMaximum /
+    axisStep
+  ) *
+  axisStep;
+
+
+/*
+   Seguridad cuando no hay datos.
+*/
+
+if (
+  !axisMaximum ||
+  axisMaximum <= 0
+) {
+
+  axisMaximum = 80;
+
+}
+
+
+/*
+   Ejemplo 69:
+   step = 10
+   axisMaximum = 80
+*/
+
+const axisTicks = [];
+
+
+for (
+  let value = 0;
+  value <= axisMaximum + 0.0001;
+  value += axisStep
+) {
+
+  axisTicks.push(
+    Number(
+      value.toFixed(6)
+    )
+  );
+
+}
+
+
+/* =========================================================
+   COMPLETAR A 8 FILAS
+   =========================================================
+
+   Si un trimestre tiene menos categorías,
+   conservamos la geometría del diseño,
+   pero las filas sobrantes quedan vacías.
+*/
+
+const rows =
+  Array.from(
+    {
+      length: 8
+    },
+    (
+      _,
+      index
+    ) =>
+      chartCategories[index] || null
+  );
+
+
+/* =========================================================
+   TOP 1 / TOP 2
+   ========================================================= */
+
+const primary =
+  chartCategories[0] || {
+    name: 'Sin datos',
+    count: 0
+  };
+
+
+const secondary =
+  chartCategories[1] || {
+    name: 'Sin datos',
+    count: 0
+  };
+
+
+const primaryShare =
+  total > 0
+    ? (
+        tri11Number(
+          primary.count
+        ) /
+        total
+      ) * 100
+    : 0;
+
+
+const secondaryShare =
+  total > 0
+    ? (
+        tri11Number(
+          secondary.count
+        ) /
+        total
+      ) * 100
+    : 0;
+
+
+const top2Count =
+  tri11Number(
+    primary.count
+  ) +
+  tri11Number(
+    secondary.count
+  );
+
+
+const top2Share =
+  total > 0
+    ? (
+        top2Count /
+        total
+      ) * 100
+    : 0;
+
+
+/* =========================================================
+   TEXTO SEGURO
+   ========================================================= */
+
+function tri11Name(value) {
+
+  return String(
+    value ?? ''
+  ).trim();
+
+}
+
+%>
+
+
+<div class="tri11">
+
+
+  <div class="tri11-layout">
+
+
+    <!-- ===================================================
+         PANEL PRINCIPAL
+         =================================================== -->
+
+    <section class="tri11-main-panel">
+
+
+      <!-- TÍTULO -->
+
+      <div class="tri11-panel-heading">
+
+        <div class="tri11-panel-heading-icon">
+
+          <svg
+            viewBox="0 0 32 32"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="5"
+              y="18"
+              width="5"
+              height="9"
+              rx="1.5"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="13.5"
+              y="12"
+              width="5"
+              height="15"
+              rx="1.5"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="22"
+              y="5"
+              width="5"
+              height="22"
+              rx="1.5"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+        <h2 class="tri11-panel-title">
+          Atenciones por categoría
+        </h2>
+
+      </div>
+
+
+      <!-- =================================================
+           GRÁFICO
+           ================================================= -->
+
+      <div class="tri11-chart">
+
+
+        <!-- ETIQUETAS -->
+
+        <div class="tri11-labels">
+
+          <% rows.forEach(function(item) { %>
+
+            <div class="tri11-label">
+
+              <% if (item) { %>
+
+                <%= tri11Name(item.name) %>
+
+              <% } %>
+
+            </div>
+
+          <% }); %>
+
+
+          <div class="tri11-label-axis"></div>
+
+        </div>
+
+
+        <!-- PLOT -->
+
+        <div class="tri11-plot">
+
+
+          <!-- GRID -->
+
+          <div class="tri11-grid">
+
+            <% axisTicks.forEach(function(tick) {
+
+              const left =
+                axisMaximum > 0
+                  ? (
+                      tick /
+                      axisMaximum
+                    ) * 100
+                  : 0;
+
+            %>
+
+              <div
+                class="tri11-grid-line"
+                style="
+                  left:
+                  <%= left %>%;
+                "
+              ></div>
+
+            <% }); %>
+
+          </div>
+
+
+          <!-- LÍNEA BASE -->
+
+          <div class="tri11-axis-line"></div>
+
+
+          <!-- BARRAS -->
+
+          <div class="tri11-bar-rows">
+
+            <% rows.forEach(function(item) {
+
+              const count =
+                item
+                  ? tri11Number(
+                      item.count
+                    )
+                  : 0;
+
+              const width =
+                axisMaximum > 0
+                  ? (
+                      count /
+                      axisMaximum
+                    ) * 100
+                  : 0;
+
+            %>
+
+              <div class="tri11-bar-row">
+
+                <% if (item) { %>
+
+                  <div
+                    class="tri11-bar"
+                    style="
+                      width:
+                      <%= Math.max(width, count > 0 ? 1.2 : 0) %>%;
+                    "
+                  ></div>
+
+
+                  <div class="tri11-bar-value">
+
+                    <%= typeof formatNumber === 'function'
+                      ? formatNumber(count)
+                      : count
+                    %>
+
+                  </div>
+
+                <% } %>
+
+              </div>
+
+            <% }); %>
+
+          </div>
+
+
+          <!-- EJE X -->
+
+          <div class="tri11-axis-labels">
+
+            <% axisTicks.forEach(function(tick, index) {
+
+              const left =
+                axisMaximum > 0
+                  ? (
+                      tick /
+                      axisMaximum
+                    ) * 100
+                  : 0;
+
+            %>
+
+              <div
+                class="
+                  tri11-axis-label
+                  <%= index === 0 ? 'first' : '' %>
+                "
+                style="
+                  left:
+                  <%= left %>%;
+                "
+              >
+
+                <%= tick %>
+
+              </div>
+
+            <% }); %>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         COLUMNA DERECHA
+         =================================================== -->
+
+    <aside class="tri11-side">
+
+
+      <!-- =================================================
+           CATEGORÍA PRINCIPAL
+           ================================================= -->
+
+      <article class="tri11-side-card blue">
+
+
+        <div class="tri11-side-icon">
+
+          <!-- TROFEO -->
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <path
+              d="
+                M16 8
+                H32
+                V16
+                C32 24
+                28 29
+                24 29
+                C20 29
+                16 24
+                16 16
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+            <path
+              d="
+                M16 12
+                H8
+                V16
+                C8 22
+                12 25
+                17 25
+              "
+              fill="none"
+              stroke="currentColor"
+              stroke-width="4"
+              stroke-linecap="round"
+            ></path>
+
+            <path
+              d="
+                M32 12
+                H40
+                V16
+                C40 22
+                36 25
+                31 25
+              "
+              fill="none"
+              stroke="currentColor"
+              stroke-width="4"
+              stroke-linecap="round"
+            ></path>
+
+            <rect
+              x="21"
+              y="29"
+              width="6"
+              height="7"
+              rx="1"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="15"
+              y="36"
+              width="18"
+              height="5"
+              rx="2"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri11-side-copy">
+
+          <div class="tri11-side-label">
+            CATEGORÍA PRINCIPAL
+          </div>
+
+
+          <div class="tri11-side-number">
+
+            <%= tri11Pct(primaryShare) %>%
+
+          </div>
+
+
+          <div class="tri11-side-description">
+
+            <%= tri11Name(primary.name) %>
+            &nbsp;·&nbsp;
+            <%= typeof formatNumber === 'function'
+              ? formatNumber(primary.count)
+              : primary.count
+            %>
+            casos
+
+          </div>
+
+        </div>
+
+
+        <div class="tri11-side-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <path
+              d="
+                M30 16
+                H70
+                V38
+                C70 59
+                60 72
+                50 72
+                C40 72
+                30 59
+                30 38
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+            <path
+              d="
+                M30 25
+                H12
+                V36
+                C12 52
+                22 59
+                34 59
+
+                M70 25
+                H88
+                V36
+                C88 52
+                78 59
+                66 59
+              "
+              fill="none"
+              stroke="currentColor"
+              stroke-width="8"
+              stroke-linecap="round"
+            ></path>
+
+            <rect
+              x="43"
+              y="70"
+              width="14"
+              height="12"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="32"
+              y="81"
+              width="36"
+              height="8"
+              rx="3"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           SEGUNDA CATEGORÍA
+           ================================================= -->
+
+      <article class="tri11-side-card teal">
+
+
+        <div class="tri11-side-icon">
+
+          <!-- MEDALLA -->
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <circle
+              cx="24"
+              cy="19"
+              r="11"
+              fill="currentColor"
+            ></circle>
+
+            <circle
+              cx="24"
+              cy="19"
+              r="5"
+              fill="#e4f8fa"
+            ></circle>
+
+            <path
+              d="
+                M18 29
+                L15 43
+                L24 38
+                L33 43
+                L30 29
+              "
+              fill="currentColor"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri11-side-copy">
+
+          <div class="tri11-side-label">
+            SEGUNDA CATEGORÍA
+          </div>
+
+
+          <div class="tri11-side-number">
+
+            <%= tri11Pct(secondaryShare) %>%
+
+          </div>
+
+
+          <div class="tri11-side-description">
+
+            <%= tri11Name(secondary.name) %>
+            &nbsp;·&nbsp;
+            <%= typeof formatNumber === 'function'
+              ? formatNumber(secondary.count)
+              : secondary.count
+            %>
+            casos
+
+          </div>
+
+        </div>
+
+
+        <div class="tri11-side-decoration">
+
+          <!-- BARRAS -->
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="18"
+              y="54"
+              width="19"
+              height="34"
+              rx="6"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="51"
+              y="30"
+              width="19"
+              height="58"
+              rx="6"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           CONCENTRACIÓN TOP 2
+           ================================================= -->
+
+      <article class="tri11-side-card orange">
+
+
+        <div class="tri11-side-icon">
+
+          <!-- PERSONAS -->
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <circle
+              cx="24"
+              cy="15"
+              r="6"
+              fill="currentColor"
+            ></circle>
+
+            <circle
+              cx="12"
+              cy="19"
+              r="5"
+              fill="currentColor"
+            ></circle>
+
+            <circle
+              cx="36"
+              cy="19"
+              r="5"
+              fill="currentColor"
+            ></circle>
+
+            <path
+              d="
+                M16 39
+                V31
+                C16 25
+                19 22
+                24 22
+                C29 22
+                32 25
+                32 31
+                V39
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+            <path
+              d="
+                M5 38
+                V31
+                C5 26
+                8 24
+                12 24
+                C14 24
+                16 25
+                17 26
+                C15 29
+                14 32
+                14 38
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+            <path
+              d="
+                M34 38
+                C34 32
+                33 29
+                31 26
+                C32 25
+                34 24
+                36 24
+                C40 24
+                43 26
+                43 31
+                V38
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri11-side-copy">
+
+          <div class="tri11-side-label">
+            CONCENTRACIÓN TOP 2
+          </div>
+
+
+          <div class="tri11-side-number">
+
+            <%= tri11Pct(top2Share) %>%
+
+          </div>
+
+
+          <div class="tri11-side-description">
+
+            <%= typeof formatNumber === 'function'
+              ? formatNumber(top2Count)
+              : top2Count
+            %>
+
+            de
+
+            <%= typeof formatNumber === 'function'
+              ? formatNumber(total)
+              : total
+            %>
+
+            atenciones
+
+          </div>
+
+        </div>
+
+
+        <div class="tri11-side-decoration">
+
+          <!-- PIE -->
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <circle
+              cx="50"
+              cy="50"
+              r="36"
+              fill="currentColor"
+              opacity=".40"
+            ></circle>
+
+            <path
+              d="
+                M50 50
+                V14
+                A36 36 0 0 1
+                84 62
+                Z
+              "
+              fill="#ffffff"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+    </aside>
+
+
+  </div>
+
+
+</div>
