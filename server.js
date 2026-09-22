@@ -95,10 +95,10 @@ const SLIDES = [
     eyebrow: '',
 
     title:
-      'Distribución por categoría de atención',
+      'Evolución mensual de atenciones',
 
     subtitle:
-      'Concentración y composición del servicio'
+      'Comparativo de atenciones durante los tres meses del periodo'
   },
 
 
