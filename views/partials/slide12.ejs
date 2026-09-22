@@ -712,6 +712,8 @@ body.slide12-body .q-content {
 
 
 .tri12-bottom-icon {
+  position: relative;
+
   width: 68px;
   height: 68px;
 
@@ -725,25 +727,53 @@ body.slide12-body .q-content {
 
   background:
     radial-gradient(
-      circle at 35% 30%,
-      #2690ff 0%,
-      #1764d9 52%,
-      #0c4098 100%
+      circle at 32% 25%,
+      #42a9ff 0%,
+      #1d7ce9 35%,
+      #0b5fc6 68%,
+      #064898 100%
     );
 
   border:
     2px solid
-    rgba(104, 184, 255, 0.72);
+    rgba(86, 177, 255, 0.82);
 
   box-shadow:
-    0 0 0 4px
-    rgba(255,255,255,0.035);
+    inset 0 2px 7px
+    rgba(255,255,255,0.17),
+
+    0 0 0 3px
+    rgba(255,255,255,0.035),
+
+    0 7px 14px
+    rgba(1, 38, 100, 0.28);
+}
+
+
+.tri12-bottom-icon::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 5px;
+
+  border-radius: 50%;
+
+  border:
+    1px solid
+    rgba(255,255,255,0.14);
+
+  pointer-events: none;
 }
 
 
 .tri12-bottom-icon svg {
-  width: 38px;
-  height: 38px;
+  position: relative;
+
+  z-index: 2;
+
+  width: 42px;
+  height: 42px;
 
   display: block;
 }
@@ -1783,65 +1813,85 @@ const operationalMessage =
         <div class="tri12-bottom-icon">
 
           <svg
-            viewBox="0 0 48 48"
-            aria-hidden="true"
-          >
+  viewBox="0 0 48 48"
+  aria-hidden="true"
+>
 
-            <rect
-              x="8"
-              y="29"
-              width="6"
-              height="11"
-              rx="1.5"
-              fill="#ffffff"
-            ></rect>
+  <!-- BARRAS -->
 
-            <rect
-              x="18"
-              y="24"
-              width="6"
-              height="16"
-              rx="1.5"
-              fill="#ffffff"
-            ></rect>
+  <rect
+    x="7"
+    y="31"
+    width="5"
+    height="9"
+    rx="1"
+    fill="#ffffff"
+  ></rect>
 
-            <rect
-              x="28"
-              y="17"
-              width="6"
-              height="23"
-              rx="1.5"
-              fill="#ffffff"
-            ></rect>
+  <rect
+    x="15"
+    y="27"
+    width="5"
+    height="13"
+    rx="1"
+    fill="#ffffff"
+  ></rect>
 
-            <path
-              d="
-                M7 25
-                L16 20
-                L23 22
-                L37 10
-              "
-              fill="none"
-              stroke="#ffffff"
-              stroke-width="3"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
+  <rect
+    x="23"
+    y="22"
+    width="5"
+    height="18"
+    rx="1"
+    fill="#ffffff"
+  ></rect>
 
-            <path
-              d="
-                M31 10
-                H38
-                V17
-              "
-              fill="none"
-              stroke="#ffffff"
-              stroke-width="3"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
+  <rect
+    x="31"
+    y="16"
+    width="5"
+    height="24"
+    rx="1"
+    fill="#ffffff"
+  ></rect>
 
-          </svg>
+
+  <!-- LÍNEA DE CRECIMIENTO -->
+
+  <path
+    d="
+      M7 24
+      C12 23
+      15 21
+      19 19
+      C24 17
+      29 13
+      37 8
+    "
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="2.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  ></path>
+
+
+  <!-- FLECHA -->
+
+  <path
+    d="
+      M31 8
+      H38
+      V15
+    "
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="2.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  ></path>
+
+</svg>
 
         </div>
 
