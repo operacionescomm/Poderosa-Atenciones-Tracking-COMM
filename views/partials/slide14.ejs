@@ -1,1 +1,1305 @@
-<%- include('../components/quarterly-placeholder') %>
+<style>
+
+/* =========================================================
+   SLIDE 14 · VEHÍCULOS CON 3 O MÁS ATENCIONES
+   Header y footer compartidos desde report.ejs
+   ========================================================= */
+
+
+/* =========================================================
+   ÁREA GENERAL
+   ========================================================= */
+
+body.slide14-body .q-content {
+  padding:
+    24px
+    32px
+    8px
+    32px !important;
+}
+
+
+.tri14 {
+  width: 100%;
+  height: 100%;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color: #123b8f;
+}
+
+
+.tri14 *,
+.tri14 *::before,
+.tri14 *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.tri14-layout {
+  width: 100%;
+  height: 646px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    532px;
+
+  column-gap: 18px;
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.tri14-table-card {
+  height: 646px;
+
+  overflow: hidden;
+
+  border:
+    1.5px solid
+    #cfe2f4;
+
+  border-radius: 13px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 15px
+    rgba(38, 82, 128, 0.06);
+}
+
+
+.tri14-table {
+  width: 100%;
+  height: 100%;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+}
+
+
+/* =========================================================
+   HEADER TABLA
+   ========================================================= */
+
+.tri14-table thead {
+  height: 61px;
+}
+
+
+.tri14-table th {
+  padding:
+    0
+    16px;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      180deg,
+      #0754a4 0%,
+      #073f84 100%
+    );
+
+  border-right:
+    1px solid
+    rgba(255,255,255,0.42);
+
+  font-size: 18px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  text-align: center;
+
+  vertical-align: middle;
+}
+
+
+.tri14-table th:last-child {
+  border-right: none;
+}
+
+
+/* =========================================================
+   ANCHOS
+   ========================================================= */
+
+.tri14-col-econ {
+  width: 110px;
+}
+
+
+.tri14-col-company {
+  width: 365px;
+}
+
+
+.tri14-col-type {
+  width: 232px;
+}
+
+
+.tri14-col-attentions {
+  width: 112px;
+}
+
+
+.tri14-col-date {
+  width: 196px;
+}
+
+
+/* =========================================================
+   FILAS
+   ========================================================= */
+
+.tri14-table tbody tr {
+  height: 58px;
+}
+
+
+.tri14-table tbody tr:nth-child(odd) {
+  background: #ffffff;
+}
+
+
+.tri14-table tbody tr:nth-child(even) {
+  background:
+    linear-gradient(
+      90deg,
+      #eef8ff 0%,
+      #e7f4fd 100%
+    );
+}
+
+
+.tri14-table td {
+  padding:
+    0
+    18px;
+
+  border-right:
+    1px solid
+    #c7dff3;
+
+  border-bottom:
+    1px solid
+    #c7dff3;
+
+  color: #123c94;
+
+  font-size: 16px;
+
+  line-height: 1.05;
+
+  font-weight: 500;
+
+  vertical-align: middle;
+}
+
+
+.tri14-table td:last-child {
+  border-right: none;
+}
+
+
+.tri14-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* =========================================================
+   CELDAS ESPECÍFICAS
+   ========================================================= */
+
+.tri14-econ {
+  text-align: center;
+
+  color: #061e6b !important;
+
+  font-size: 18px !important;
+
+  font-weight: 800 !important;
+}
+
+
+.tri14-company {
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+.tri14-type {
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+.tri14-attentions {
+  text-align: center;
+
+  font-size: 20px !important;
+
+  font-weight: 800 !important;
+}
+
+
+.tri14-attentions.high {
+  color: #ff7200 !important;
+}
+
+
+.tri14-attentions.normal {
+  color: #1764ed !important;
+}
+
+
+.tri14-date {
+  text-align: center;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   PANEL DERECHO
+   ========================================================= */
+
+.tri14-chart-card {
+  height: 646px;
+
+  padding:
+    20px
+    18px
+    10px
+    18px;
+
+  overflow: hidden;
+
+  border:
+    1.5px solid
+    #cfe2f4;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 15px
+    rgba(38, 82, 128, 0.06);
+}
+
+
+/* =========================================================
+   TÍTULO GRÁFICO
+   ========================================================= */
+
+.tri14-chart-title {
+  height: 79px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #071f6d;
+
+  font-size: 28px;
+
+  line-height: 1.08;
+
+  font-weight: 800;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   GRÁFICO
+   ========================================================= */
+
+.tri14-chart {
+  height: 451px;
+
+  display: grid;
+
+  grid-template-columns:
+    62px
+    minmax(0, 1fr);
+
+  column-gap: 9px;
+}
+
+
+/* =========================================================
+   LABELS Y
+   ========================================================= */
+
+.tri14-y-labels {
+  height: 421px;
+
+  display: grid;
+
+  grid-template-rows:
+    repeat(10, 1fr);
+
+  padding-bottom: 0;
+}
+
+
+.tri14-y-label {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  padding-right: 4px;
+
+  color: #2859a8;
+
+  font-size: 17px;
+
+  line-height: 1;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   PLOT
+   ========================================================= */
+
+.tri14-plot {
+  position: relative;
+
+  height: 451px;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   GRID VERTICAL
+   ========================================================= */
+
+.tri14-grid {
+  position: absolute;
+
+  z-index: 0;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  bottom: 30px;
+}
+
+
+.tri14-grid-line {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+
+  width: 1px;
+
+  border-left:
+    1px solid
+    #d9e7f4;
+}
+
+
+.tri14-grid-line:first-child {
+  border-left:
+    1.5px solid
+    #99b7da;
+}
+
+
+/* =========================================================
+   EJE X
+   ========================================================= */
+
+.tri14-axis-line {
+  position: absolute;
+
+  z-index: 1;
+
+  left: 0;
+  right: 0;
+
+  bottom: 30px;
+
+  height: 1.5px;
+
+  background: #a3bddc;
+}
+
+
+.tri14-axis-labels {
+  position: absolute;
+
+  z-index: 4;
+
+  left: 0;
+  right: 0;
+
+  bottom: 0;
+
+  height: 30px;
+}
+
+
+.tri14-axis-label {
+  position: absolute;
+
+  top: 8px;
+
+  transform:
+    translateX(-50%);
+
+  color: #2656a6;
+
+  font-size: 15px;
+
+  line-height: 1;
+
+  font-weight: 500;
+}
+
+
+.tri14-axis-label.first {
+  transform: none;
+}
+
+
+/* =========================================================
+   FILAS BARRAS
+   ========================================================= */
+
+.tri14-bar-rows {
+  position: relative;
+
+  z-index: 2;
+
+  height: 421px;
+
+  display: grid;
+
+  grid-template-rows:
+    repeat(10, 1fr);
+}
+
+
+.tri14-bar-row {
+  display: flex;
+
+  align-items: center;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   BARRAS
+   ========================================================= */
+
+.tri14-bar {
+  height: 31px;
+
+  min-width: 3px;
+
+  flex: 0 0 auto;
+
+  background:
+    linear-gradient(
+      90deg,
+      #16aebd 0%,
+      #0aa4b5 100%
+    );
+
+  border-radius:
+    0
+    1px
+    1px
+    0;
+}
+
+
+.tri14-bar-value {
+  margin-left: 10px;
+
+  color: #061d68;
+
+  font-size: 18px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   MENSAJE INFERIOR
+   ========================================================= */
+
+.tri14-summary {
+  height: 58px;
+
+  margin:
+    9px
+    0
+    0
+    0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    0
+    14px;
+
+  border:
+    1px solid
+    #d3e4f2;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f3f9fe 0%,
+      #edf6fc 100%
+    );
+
+  color: #0b2b7e;
+
+  font-size: 17px;
+
+  line-height: 1.1;
+
+  font-weight: 800;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   PROTECCIÓN LEGACY
+   ========================================================= */
+
+body.slide14-body .tri14-table-card,
+body.slide14-body .tri14-chart-card {
+  box-sizing: border-box !important;
+}
+
+</style>
+
+
+<%
+
+/* =========================================================
+   DATOS
+   ========================================================= */
+
+const q =
+  typeof quarterly !== 'undefined' &&
+  quarterly
+    ? quarterly
+    : {};
+
+
+/*
+   Más adelante Apps Script podrá enviar:
+
+   quarterly: {
+     recurrences: [
+       {
+         econ: "495",
+         company: "...",
+         type: "VOLQUETE",
+         attentions: 4,
+         lastAttention: "09/07/2026"
+       }
+     ]
+   }
+
+   También aceptamos nombres alternativos.
+*/
+
+const recurrenceInput =
+  Array.isArray(q.recurrences)
+    ? q.recurrences
+
+    : Array.isArray(q.reincidences)
+      ? q.reincidences
+
+      : Array.isArray(q.reincidencias)
+        ? q.reincidencias
+
+        : [];
+
+
+/* =========================================================
+   DATOS DE DISEÑO / FALLBACK
+   =========================================================
+
+   Se utilizan únicamente para que el test-slide14
+   reproduzca la imagen mientras aún no conectamos
+   Google Sheets / Apps Script.
+*/
+
+const fallbackRows = [
+
+  {
+    econ: '495',
+    company: 'TRANSP. Y SERV. EL PEZ',
+    type: 'VOLQUETE',
+    attentions: 4,
+    lastAttention: '09/07/2026'
+  },
+
+  {
+    econ: '61',
+    company: 'RODIL NIÑO P. PURISIMA',
+    type: 'CAMIONETA',
+    attentions: 4,
+    lastAttention: '17/07/2026'
+  },
+
+  {
+    econ: 'T-99',
+    company: 'SERV. MÚLTIPLES HOLLYDALEX',
+    type: 'CAMIONETA',
+    attentions: 4,
+    lastAttention: '21/07/2026'
+  },
+
+  {
+    econ: '400',
+    company: 'TRANSPORTES RCK',
+    type: 'VOLQUETE',
+    attentions: 3,
+    lastAttention: '14/07/2026'
+  },
+
+  {
+    econ: '404',
+    company: 'K & V MAQUINARIAS',
+    type: 'CAMIÓN GRÚA',
+    attentions: 3,
+    lastAttention: '17/07/2026'
+  },
+
+  {
+    econ: '456',
+    company: 'INGENIERÍA DE TRANSPORTES',
+    type: 'VOLQUETE',
+    attentions: 3,
+    lastAttention: '29/06/2026'
+  },
+
+  {
+    econ: '480',
+    company: 'TRANSP. Y SERV. BRAKI',
+    type: 'VOLQUETE',
+    attentions: 3,
+    lastAttention: '15/06/2026'
+  },
+
+  {
+    econ: 'B-22',
+    company: 'EL HORIZONTE',
+    type: 'BUS',
+    attentions: 3,
+    lastAttention: '18/07/2026'
+  },
+
+  {
+    econ: 'M04',
+    company: 'CORONEL TAMAYO DAVID',
+    type: 'CAMIONETA',
+    attentions: 3,
+    lastAttention: '10/07/2026'
+  },
+
+  {
+    econ: 'M05',
+    company: 'TRANSPORTES GOLDMAN',
+    type: 'CAMIONETA',
+    attentions: 3,
+    lastAttention: '06/07/2026'
+  }
+
+];
+
+
+/* =========================================================
+   NORMALIZACIÓN
+   ========================================================= */
+
+function tri14Text(value) {
+
+  return String(
+    value ?? ''
+  ).trim();
+
+}
+
+
+function tri14Number(value) {
+
+  const n =
+    Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+
+}
+
+
+function tri14Format(value) {
+
+  if (
+    typeof formatNumber ===
+    'function'
+  ) {
+
+    return formatNumber(value);
+
+  }
+
+  return tri14Number(value);
+
+}
+
+
+const sourceRows =
+  recurrenceInput.length
+    ? recurrenceInput
+    : fallbackRows;
+
+
+const recurrenceRows =
+  sourceRows
+    .map(
+      item => ({
+
+        econ:
+          tri14Text(
+            item.econ ??
+            item.numeroEconomico ??
+            item.nroEconomico ??
+            item.economicNumber ??
+            item.vehicle
+          ),
+
+        company:
+          tri14Text(
+            item.company ??
+            item.compania ??
+            item.empresa
+          ),
+
+        type:
+          tri14Text(
+            item.type ??
+            item.tipo ??
+            item.vehicleType ??
+            item.tipoVehiculo
+          ),
+
+        attentions:
+          tri14Number(
+            item.attentions ??
+            item.atenciones ??
+            item.count ??
+            item.cantidad
+          ),
+
+        lastAttention:
+          tri14Text(
+            item.lastAttention ??
+            item.ultimaAtencion ??
+            item.lastDate ??
+            item.fechaUltima
+          )
+
+      })
+    )
+    .filter(
+      item =>
+        item.attentions >= 3
+    )
+    .sort(
+      (
+        a,
+        b
+      ) =>
+
+        b.attentions -
+        a.attentions
+    )
+    .slice(
+      0,
+      10
+    );
+
+
+/* =========================================================
+   COMPLETAR FILAS SI FALTAN
+   ========================================================= */
+
+const rows =
+  Array.from(
+    {
+      length: 10
+    },
+    (
+      _,
+      index
+    ) =>
+      recurrenceRows[index] ||
+      null
+  );
+
+
+/* =========================================================
+   ESCALA DEL GRÁFICO
+   ========================================================= */
+
+const maximumAttentions =
+  Math.max(
+    3,
+    ...recurrenceRows.map(
+      item =>
+        item.attentions
+    )
+  );
+
+
+/*
+   Dejamos siempre una unidad adicional.
+
+   Ejemplo:
+   máximo 4
+   eje 0–5
+*/
+
+const axisMaximum =
+  maximumAttentions + 1;
+
+
+const axisTicks =
+  Array.from(
+    {
+      length:
+        axisMaximum + 1
+    },
+    (
+      _,
+      index
+    ) =>
+      index
+  );
+
+
+/* =========================================================
+   RESUMEN
+   ========================================================= */
+
+const countAtMaximum =
+  recurrenceRows.filter(
+    item =>
+      item.attentions ===
+      maximumAttentions
+  ).length;
+
+
+const countAtThree =
+  recurrenceRows.filter(
+    item =>
+      item.attentions === 3
+  ).length;
+
+
+let summaryText = '';
+
+
+if (
+  recurrenceRows.length
+) {
+
+  summaryText =
+    `${countAtMaximum} ` +
+    `${countAtMaximum === 1 ? 'unidad alcanzó' : 'unidades alcanzaron'} ` +
+    `${maximumAttentions} atenciones; ` +
+    `${countAtThree} ` +
+    `${countAtThree === 1 ? 'registró' : 'registraron'} 3.`;
+
+}
+
+%>
+
+
+<div class="tri14">
+
+
+  <div class="tri14-layout">
+
+
+    <!-- ===================================================
+         TABLA
+         =================================================== -->
+
+    <section class="tri14-table-card">
+
+
+      <table class="tri14-table">
+
+
+        <thead>
+
+          <tr>
+
+            <th class="tri14-col-econ">
+              N° econ.
+            </th>
+
+            <th class="tri14-col-company">
+              Compañía
+            </th>
+
+            <th class="tri14-col-type">
+              Tipo
+            </th>
+
+            <th class="tri14-col-attentions">
+              Atenc.
+            </th>
+
+            <th class="tri14-col-date">
+              Última atención
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+          <% rows.forEach(function(item) { %>
+
+
+            <tr>
+
+
+              <% if (item) { %>
+
+
+                <td class="tri14-econ">
+
+                  <%= item.econ %>
+
+                </td>
+
+
+                <td
+                  class="tri14-company"
+                  title="<%= item.company %>"
+                >
+
+                  <%= item.company %>
+
+                </td>
+
+
+                <td
+                  class="tri14-type"
+                  title="<%= item.type %>"
+                >
+
+                  <%= item.type %>
+
+                </td>
+
+
+                <td
+                  class="
+                    tri14-attentions
+                    <%= item.attentions >= 4 ? 'high' : 'normal' %>
+                  "
+                >
+
+                  <%= tri14Format(item.attentions) %>
+
+                </td>
+
+
+                <td class="tri14-date">
+
+                  <%= item.lastAttention %>
+
+                </td>
+
+
+              <% } else { %>
+
+
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+
+              <% } %>
+
+
+            </tr>
+
+
+          <% }); %>
+
+
+        </tbody>
+
+
+      </table>
+
+
+    </section>
+
+
+
+    <!-- ===================================================
+         GRÁFICO DERECHO
+         =================================================== -->
+
+    <aside class="tri14-chart-card">
+
+
+      <div class="tri14-chart-title">
+
+        Vehículos con 3 o más<br>
+        atenciones
+
+      </div>
+
+
+      <div class="tri14-chart">
+
+
+        <!-- LABELS -->
+
+        <div class="tri14-y-labels">
+
+
+          <% rows.forEach(function(item) { %>
+
+
+            <div class="tri14-y-label">
+
+              <% if (item) { %>
+
+                <%= item.econ %>
+
+              <% } %>
+
+            </div>
+
+
+          <% }); %>
+
+
+        </div>
+
+
+        <!-- PLOT -->
+
+        <div class="tri14-plot">
+
+
+          <!-- GRID -->
+
+          <div class="tri14-grid">
+
+
+            <% axisTicks.forEach(function(tick) {
+
+              const left =
+                (
+                  tick /
+                  axisMaximum
+                ) * 100;
+
+            %>
+
+
+              <div
+                class="tri14-grid-line"
+                style="
+                  left:
+                  <%= left %>%;
+                "
+              ></div>
+
+
+            <% }); %>
+
+
+          </div>
+
+
+          <!-- EJE -->
+
+          <div class="tri14-axis-line"></div>
+
+
+          <!-- BARRAS -->
+
+          <div class="tri14-bar-rows">
+
+
+            <% rows.forEach(function(item) {
+
+              const value =
+                item
+                  ? item.attentions
+                  : 0;
+
+              const width =
+                axisMaximum > 0
+                  ? (
+                      value /
+                      axisMaximum
+                    ) * 100
+                  : 0;
+
+            %>
+
+
+              <div class="tri14-bar-row">
+
+
+                <% if (item) { %>
+
+
+                  <div
+                    class="tri14-bar"
+                    style="
+                      width:
+                      <%= width %>%;
+                    "
+                  ></div>
+
+
+                  <div class="tri14-bar-value">
+
+                    <%= tri14Format(value) %>
+
+                  </div>
+
+
+                <% } %>
+
+
+              </div>
+
+
+            <% }); %>
+
+
+          </div>
+
+
+          <!-- ETIQUETAS X -->
+
+          <div class="tri14-axis-labels">
+
+
+            <% axisTicks.forEach(function(tick, index) {
+
+              const left =
+                (
+                  tick /
+                  axisMaximum
+                ) * 100;
+
+            %>
+
+
+              <div
+                class="
+                  tri14-axis-label
+                  <%= index === 0 ? 'first' : '' %>
+                "
+                style="
+                  left:
+                  <%= left %>%;
+                "
+              >
+
+                <%= tick %>
+
+              </div>
+
+
+            <% }); %>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- RESUMEN -->
+
+      <div class="tri14-summary">
+
+        <%= summaryText %>
+
+      </div>
+
+
+    </aside>
+
+
+  </div>
+
+
+</div>
