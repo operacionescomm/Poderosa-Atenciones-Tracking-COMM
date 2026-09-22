@@ -92,7 +92,7 @@ const SLIDES = [
 
     style: 'categories',
 
-    eyebrow: '',
+    eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
       'Evolución mensual de atenciones',
@@ -109,7 +109,7 @@ const SLIDES = [
 
     style: 'demand',
 
-    eyebrow: '',
+    eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
       'Concentración de la demanda operativa',
@@ -126,7 +126,7 @@ const SLIDES = [
 
     style: 'quarterly',
 
-    eyebrow: '',
+    eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
       'Indicadores trimestrales',
@@ -143,7 +143,7 @@ const SLIDES = [
 
     style: 'supplies',
 
-    eyebrow: '',
+    eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
       'Análisis complementario',
@@ -160,7 +160,7 @@ const SLIDES = [
 
     style: 'quarterly',
 
-    eyebrow: '',
+    eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
       'Seguimiento del servicio',
@@ -177,7 +177,7 @@ const SLIDES = [
 
     style: 'quarterly',
 
-    eyebrow: '',
+    eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
       'Suministros',
@@ -194,7 +194,7 @@ const SLIDES = [
 
     style: 'quarterly',
 
-    eyebrow: '',
+    eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
       'Hallazgos',
