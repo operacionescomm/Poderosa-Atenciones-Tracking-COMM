@@ -112,10 +112,10 @@ const SLIDES = [
     eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
-      'Concentración de la demanda operativa',
+      'Compañias con mayor demanda de atención',
 
     subtitle:
-      'Compañías y unidades atendidas'
+      'Ranking trimestral y concentración de la carga operativa'
   },
 
 
@@ -129,10 +129,10 @@ const SLIDES = [
     eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
-      'Indicadores trimestrales',
+      'Vehículos con 3 o más atenciones',
 
     subtitle:
-      'Vista consolidada del servicio'
+      'Unidades priorizadas para revisión de causa y seguimiento'
   },
 
 
@@ -146,10 +146,10 @@ const SLIDES = [
     eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
-      'Análisis complementario',
+      'Reincidencia de dispositivos',
 
     subtitle:
-      'Detalle operativo del trimestre'
+      'Distribución de las unidades únicas atendidas'
   },
 
 
@@ -163,10 +163,10 @@ const SLIDES = [
     eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
-      'Seguimiento del servicio',
+      'Cambio de cable USB-C: cantidad y participación',
 
     subtitle:
-      'Indicadores y evolución trimestral'
+      'El volumen evoluciono de forma distinta'
   },
 
 
@@ -180,10 +180,10 @@ const SLIDES = [
     eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
-      'Suministros',
+      'Consumo trimestral de insumos',
 
     subtitle:
-      'Consumo y disponibilidad de insumos'
+      'Se registraron diferentes tipos de insumos. El top 10 concentra la mayor cantidad acumulada.'
   },
 
 
@@ -197,10 +197,10 @@ const SLIDES = [
     eyebrow: 'INFORME TRIMESTRAL · TRACKING PODEROSA',
 
     title:
-      'Hallazgos',
+      'Conclusiones y acciones recomendadas',
 
     subtitle:
-      'Puntos de atención y acciones prioritarias'
+      'Prioridades propuestas para el siguiente ciclo de gestión'
   }
 
 ];
