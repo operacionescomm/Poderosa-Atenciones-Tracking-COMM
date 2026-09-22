@@ -1,46 +1,1739 @@
-<section class="two-column demand-layout">
-  <article class="panel">
-    <div class="panel-heading">
-      <div>
-        <span class="panel-kicker">CONCENTRACIÓN POR CLIENTE INTERNO</span>
-        <h2>Compañías con más atenciones</h2>
-      </div>
-      <div class="panel-badge">TOP <strong><%= companies.length %></strong></div>
-    </div>
-    <div class="horizontal-bars company-bars">
-      <% companies.forEach(function(item, index) { %>
-        <div class="company-row">
-          <div class="company-name"><span><%= index + 1 %></span><%= truncate(item.name, 45) %></div>
-          <div class="company-track"><i style="width:<%= Math.max(item.width, 4) %>%;background:<%= item.color %>"></i></div>
-          <div class="company-metric"><strong><%= formatNumber(item.count) %></strong><small><%= formatPct(item.share) %></small></div>
-        </div>
-      <% }) %>
-    </div>
-    <div class="panel-footnote">La concentración permite priorizar coordinaciones y acciones preventivas con las compañías de mayor demanda.</div>
-  </article>
+<style>
 
-  <article class="panel vehicle-panel">
-    <div class="panel-heading">
-      <div>
-        <span class="panel-kicker">PERFIL DE LAS UNIDADES ATENDIDAS</span>
-        <h2>Atenciones por tipo de vehículo</h2>
-      </div>
-    </div>
-    <div class="vehicle-content">
-      <div class="donut-wrap">
-        <div class="donut" style="background:<%= vehicleGradient %>">
-          <div class="donut-hole"><strong><%= formatNumber(vehicleTotal) %></strong><span>atenciones</span></div>
+/* =========================================================
+   SLIDE 13 · COMPAÑÍAS CON MAYOR DEMANDA
+   Header y footer compartidos desde report.ejs
+   ========================================================= */
+
+
+/* =========================================================
+   ÁREA GENERAL
+   ========================================================= */
+
+body.slide13-body .q-content {
+  padding:
+    24px
+    34px
+    8px
+    34px !important;
+}
+
+
+.tri13 {
+  width: 100%;
+  height: 100%;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color: #133681;
+}
+
+
+.tri13 *,
+.tri13 *::before,
+.tri13 *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   LAYOUT PRINCIPAL
+   ========================================================= */
+
+.tri13-layout {
+  width: 100%;
+  height: 664px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    445px;
+
+  column-gap: 20px;
+}
+
+
+/* =========================================================
+   PANEL PRINCIPAL
+   ========================================================= */
+
+.tri13-main-panel {
+  height: 664px;
+
+  padding:
+    20px
+    24px
+    18px
+    24px;
+
+  border:
+    1.5px solid
+    #d7e8f6;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 5px 18px
+    rgba(39, 83, 132, 0.08);
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   TÍTULO PANEL
+   ========================================================= */
+
+.tri13-panel-heading {
+  height: 64px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+
+.tri13-panel-icon {
+  width: 54px;
+  height: 54px;
+
+  flex: 0 0 54px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #eaf4ff;
+
+  color: #1764ed;
+}
+
+
+.tri13-panel-icon svg {
+  width: 31px;
+  height: 31px;
+
+  display: block;
+}
+
+
+.tri13-panel-title {
+  margin: 0;
+
+  color: #08256e;
+
+  font-size: 27px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.45px;
+}
+
+
+/* =========================================================
+   GRÁFICO
+   ========================================================= */
+
+.tri13-chart {
+  height: 548px;
+
+  margin-top: 8px;
+
+  display: grid;
+
+  grid-template-columns:
+    215px
+    minmax(0, 1fr);
+
+  column-gap: 14px;
+}
+
+
+/* =========================================================
+   ETIQUETAS DE EMPRESAS
+   ========================================================= */
+
+.tri13-company-labels {
+  height: 548px;
+
+  display: grid;
+
+  grid-template-rows:
+    repeat(10, 1fr)
+    34px;
+}
+
+
+.tri13-company-label {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  min-width: 0;
+
+  padding-right: 0;
+
+  color: #234983;
+
+  font-size: 14px;
+
+  line-height: 1.05;
+
+  font-weight: 500;
+
+  text-align: right;
+
+  text-transform: uppercase;
+}
+
+
+.tri13-company-label span {
+  max-width: 210px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   PLOT
+   ========================================================= */
+
+.tri13-plot {
+  position: relative;
+
+  height: 548px;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.tri13-grid {
+  position: absolute;
+
+  z-index: 0;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  bottom: 34px;
+}
+
+
+.tri13-grid-line {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+
+  width: 1px;
+
+  border-left:
+    1px dashed
+    #d6e4f2;
+}
+
+
+.tri13-grid-line:first-child {
+  border-left:
+    1.5px solid
+    #9fb9dc;
+}
+
+
+/* =========================================================
+   EJE X
+   ========================================================= */
+
+.tri13-axis-line {
+  position: absolute;
+
+  z-index: 1;
+
+  left: 0;
+  right: 0;
+
+  bottom: 34px;
+
+  height: 1.5px;
+
+  background: #9fb9dc;
+}
+
+
+.tri13-axis-labels {
+  position: absolute;
+
+  z-index: 4;
+
+  left: 0;
+  right: 0;
+
+  bottom: 0;
+
+  height: 34px;
+}
+
+
+.tri13-axis-label {
+  position: absolute;
+
+  top: 10px;
+
+  transform:
+    translateX(-50%);
+
+  color: #345da2;
+
+  font-size: 13px;
+
+  line-height: 1;
+
+  font-weight: 500;
+}
+
+
+.tri13-axis-label.first {
+  transform: none;
+}
+
+
+/* =========================================================
+   FILAS DE BARRAS
+   ========================================================= */
+
+.tri13-bar-rows {
+  position: relative;
+
+  z-index: 2;
+
+  height: 514px;
+
+  display: grid;
+
+  grid-template-rows:
+    repeat(10, 1fr);
+}
+
+
+.tri13-bar-row {
+  display: flex;
+
+  align-items: center;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   BARRAS
+   ========================================================= */
+
+.tri13-bar {
+  height: 34px;
+
+  min-width: 3px;
+
+  flex: 0 0 auto;
+
+  border-radius:
+    0
+    2px
+    2px
+    0;
+
+  background:
+    linear-gradient(
+      90deg,
+      #1477ee 0%,
+      #27aef4 100%
+    );
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255,255,255,0.18);
+}
+
+
+.tri13-bar-value {
+  margin-left: 11px;
+
+  color: #061e67;
+
+  font-size: 16px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   COLUMNA DERECHA
+   ========================================================= */
+
+.tri13-side {
+  height: 664px;
+
+  display: grid;
+
+  grid-template-rows:
+    164px
+    164px
+    164px
+    100px;
+
+  row-gap: 18px;
+}
+
+
+/* =========================================================
+   TARJETAS KPI
+   ========================================================= */
+
+.tri13-kpi-card {
+  position: relative;
+
+  overflow: hidden;
+
+  padding:
+    25px
+    28px
+    20px
+    46px;
+
+  border:
+    1.5px solid
+    #d7e8f6;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #fbfdff 100%
+    );
+
+  box-shadow:
+    0 5px 18px
+    rgba(39, 83, 132, 0.07);
+}
+
+
+/* Barra vertical */
+
+.tri13-kpi-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  width: 10px;
+
+  background:
+    var(--accent);
+}
+
+
+/* =========================================================
+   TEXTO KPI
+   ========================================================= */
+
+.tri13-kpi-copy {
+  position: relative;
+
+  z-index: 2;
+}
+
+
+.tri13-kpi-label {
+  color: #3b588f;
+
+  font-size: 16px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+
+.tri13-kpi-number {
+  margin-top: 17px;
+
+  color:
+    var(--accent);
+
+  font-size: 50px;
+
+  line-height: 0.86;
+
+  font-weight: 800;
+
+  letter-spacing: -1px;
+}
+
+
+.tri13-kpi-description {
+  margin-top: 15px;
+
+  color: #153879;
+
+  font-size: 17px;
+
+  line-height: 1;
+
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   ICONO DECORATIVO DERECHO
+   ========================================================= */
+
+.tri13-kpi-decoration {
+  position: absolute;
+
+  z-index: 1;
+
+  right: 20px;
+
+  top: 50%;
+
+  transform:
+    translateY(-50%);
+
+  width: 102px;
+  height: 102px;
+
+  color:
+    var(--accent);
+
+  opacity: 0.12;
+}
+
+
+.tri13-kpi-decoration svg {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+}
+
+
+/* =========================================================
+   COLORES KPI
+   ========================================================= */
+
+.tri13-kpi-card.blue {
+  --accent: #1764ed;
+}
+
+
+.tri13-kpi-card.teal {
+  --accent: #11afbd;
+
+  background:
+    linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #f1fcfd 100%
+    );
+}
+
+
+.tri13-kpi-card.orange {
+  --accent: #ff7200;
+
+  background:
+    linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #fff8f1 100%
+    );
+}
+
+
+/* =========================================================
+   BANNER INFERIOR
+   ========================================================= */
+
+.tri13-company-total {
+  position: relative;
+
+  height: 100px;
+
+  display: grid;
+
+  grid-template-columns:
+    78px
+    2px
+    minmax(0, 1fr);
+
+  column-gap: 20px;
+
+  align-items: center;
+
+  padding:
+    12px
+    24px
+    12px
+    24px;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      105deg,
+      #103d72 0%,
+      #062c5a 100%
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 5px 15px
+    rgba(5, 38, 79, 0.15);
+}
+
+
+.tri13-company-total-icon {
+  width: 64px;
+  height: 64px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+.tri13-company-total-icon svg {
+  width: 58px;
+  height: 58px;
+
+  display: block;
+}
+
+
+.tri13-company-total-divider {
+  width: 2px;
+  height: 62px;
+
+  border-radius: 10px;
+
+  background:
+    rgba(
+      104,
+      187,
+      255,
+      0.28
+    );
+}
+
+
+.tri13-company-total-text {
+  color: #ffffff;
+
+  font-size: 27px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   PROTECCIÓN LEGACY
+   ========================================================= */
+
+body.slide13-body .tri13-main-panel,
+body.slide13-body .tri13-kpi-card,
+body.slide13-body .tri13-company-total {
+  box-sizing: border-box !important;
+}
+
+</style>
+
+
+<%
+
+/* =========================================================
+   DATA DINÁMICA
+   ========================================================= */
+
+const m =
+  typeof metrics !== 'undefined' &&
+  metrics
+    ? metrics
+    : {};
+
+
+const companyData =
+  typeof companies !== 'undefined' &&
+  Array.isArray(companies)
+    ? companies.slice(0, 10)
+    : [];
+
+
+/*
+   Total general del trimestre.
+*/
+
+const totalAttentions =
+  Number(
+    m.totalAttentions ?? 0
+  ) || 0;
+
+
+/*
+   Total de compañías atendidas.
+   Este valor puede ser mayor a 10,
+   ya que el gráfico solo muestra el ranking.
+*/
+
+const totalCompanies =
+  Number(
+    m.companiesCount ??
+    (
+      typeof allCompanies !== 'undefined' &&
+      Array.isArray(allCompanies)
+        ? allCompanies.length
+        : companyData.length
+    )
+  ) || 0;
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function tri13Number(value) {
+
+  const n =
+    Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+
+}
+
+
+function tri13Format(value) {
+
+  if (
+    typeof formatNumber ===
+    'function'
+  ) {
+
+    return formatNumber(value);
+
+  }
+
+  return tri13Number(value);
+
+}
+
+
+function tri13Percent(value) {
+
+  const n =
+    tri13Number(value);
+
+  return n.toFixed(1);
+
+}
+
+
+function tri13Name(value) {
+
+  return String(
+    value ?? ''
+  ).trim();
+
+}
+
+
+/*
+   Escala horizontal agradable.
+
+   Ejemplo:
+
+   máximo = 16
+   step = 2
+   eje máximo = 18
+
+   como en la referencia.
+*/
+
+function tri13NiceStep(value) {
+
+  if (
+    !Number.isFinite(value) ||
+    value <= 0
+  ) {
+
+    return 2;
+
+  }
+
+
+  const exponent =
+    Math.floor(
+      Math.log10(value)
+    );
+
+
+  const magnitude =
+    Math.pow(
+      10,
+      exponent
+    );
+
+
+  const normalized =
+    value /
+    magnitude;
+
+
+  let nice;
+
+
+  if (
+    normalized <= 1
+  ) {
+
+    nice = 1;
+
+  } else if (
+    normalized <= 2
+  ) {
+
+    nice = 2;
+
+  } else if (
+    normalized <= 5
+  ) {
+
+    nice = 5;
+
+  } else {
+
+    nice = 10;
+
+  }
+
+
+  return (
+    nice *
+    magnitude
+  );
+
+}
+
+
+/* =========================================================
+   ESCALA
+   ========================================================= */
+
+const maximumCompanyValue =
+  Math.max(
+    0,
+    ...companyData.map(
+      item =>
+        tri13Number(
+          item.count
+        )
+    )
+  );
+
+
+const rawStep =
+  maximumCompanyValue > 0
+    ? maximumCompanyValue / 8
+    : 2;
+
+
+const axisStep =
+  tri13NiceStep(
+    rawStep
+  );
+
+
+let axisMaximum =
+  (
+    Math.ceil(
+      maximumCompanyValue /
+      axisStep
+    ) +
+    1
+  ) *
+  axisStep;
+
+
+if (
+  !axisMaximum ||
+  axisMaximum <= 0
+) {
+
+  axisMaximum = 18;
+
+}
+
+
+const axisTicks = [];
+
+
+for (
+  let tick = 0;
+  tick <= axisMaximum + 0.0001;
+  tick += axisStep
+) {
+
+  axisTicks.push(
+    Number(
+      tick.toFixed(6)
+    )
+  );
+
+}
+
+
+/* =========================================================
+   COMPLETAR HASTA 10 FILAS
+   ========================================================= */
+
+const rows =
+  Array.from(
+    {
+      length: 10
+    },
+    (
+      _,
+      index
+    ) =>
+      companyData[index] ||
+      null
+  );
+
+
+/* =========================================================
+   PRIMERA COMPAÑÍA
+   ========================================================= */
+
+const firstCompany =
+  companyData[0] || {
+    name:
+      'Sin datos',
+
+    count:
+      0
+  };
+
+
+const firstCompanyShare =
+  totalAttentions > 0
+
+    ? (
+        tri13Number(
+          firstCompany.count
+        ) /
+        totalAttentions
+      ) * 100
+
+    : 0;
+
+
+/* =========================================================
+   TOP 3
+   ========================================================= */
+
+const top3Count =
+  companyData
+    .slice(
+      0,
+      3
+    )
+    .reduce(
+      (
+        total,
+        item
+      ) =>
+        total +
+        tri13Number(
+          item.count
+        ),
+
+      0
+    );
+
+
+const top3Share =
+  totalAttentions > 0
+
+    ? (
+        top3Count /
+        totalAttentions
+      ) * 100
+
+    : 0;
+
+
+/* =========================================================
+   TOP 10
+   ========================================================= */
+
+const top10Count =
+  companyData
+    .slice(
+      0,
+      10
+    )
+    .reduce(
+      (
+        total,
+        item
+      ) =>
+        total +
+        tri13Number(
+          item.count
+        ),
+
+      0
+    );
+
+
+const top10Share =
+  totalAttentions > 0
+
+    ? (
+        top10Count /
+        totalAttentions
+      ) * 100
+
+    : 0;
+
+%>
+
+
+<div class="tri13">
+
+
+  <div class="tri13-layout">
+
+
+    <!-- ===================================================
+         PANEL IZQUIERDO
+         =================================================== -->
+
+    <section class="tri13-main-panel">
+
+
+      <!-- TÍTULO -->
+
+      <div class="tri13-panel-heading">
+
+
+        <div class="tri13-panel-icon">
+
+          <svg
+            viewBox="0 0 32 32"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="4"
+              y="19"
+              width="5"
+              height="9"
+              rx="1.2"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="11.5"
+              y="14"
+              width="5"
+              height="14"
+              rx="1.2"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="19"
+              y="8"
+              width="5"
+              height="20"
+              rx="1.2"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="26.5"
+              y="3"
+              width="3"
+              height="25"
+              rx="1"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
         </div>
+
+
+        <h2 class="tri13-panel-title">
+          Top 10 compañías por atenciones
+        </h2>
+
+
       </div>
-      <div class="vehicle-legend">
-        <% vehicleTypes.slice(0, 7).forEach(function(item) { %>
-          <div class="legend-row">
-            <i style="background:<%= item.color %>"></i>
-            <span><%= truncate(item.name, 23) %></span>
-            <strong><%= formatPct(item.share) %></strong>
+
+
+      <!-- =================================================
+           CHART
+           ================================================= -->
+
+      <div class="tri13-chart">
+
+
+        <!-- ETIQUETAS -->
+
+        <div class="tri13-company-labels">
+
+
+          <% rows.forEach(function(item) { %>
+
+            <div class="tri13-company-label">
+
+              <% if (item) { %>
+
+                <span
+                  title="<%= tri13Name(item.name) %>"
+                >
+
+                  <%= tri13Name(item.name) %>
+
+                </span>
+
+              <% } %>
+
+            </div>
+
+          <% }); %>
+
+
+          <div></div>
+
+
+        </div>
+
+
+        <!-- PLOT -->
+
+        <div class="tri13-plot">
+
+
+          <!-- GRID -->
+
+          <div class="tri13-grid">
+
+            <% axisTicks.forEach(function(tick) {
+
+              const left =
+                axisMaximum > 0
+                  ? (
+                      tick /
+                      axisMaximum
+                    ) * 100
+                  : 0;
+
+            %>
+
+              <div
+                class="tri13-grid-line"
+                style="
+                  left:
+                  <%= left %>%;
+                "
+              ></div>
+
+            <% }); %>
+
           </div>
-        <% }) %>
+
+
+          <!-- EJE BASE -->
+
+          <div class="tri13-axis-line"></div>
+
+
+          <!-- BARRAS -->
+
+          <div class="tri13-bar-rows">
+
+
+            <% rows.forEach(function(item) {
+
+              const value =
+                item
+                  ? tri13Number(
+                      item.count
+                    )
+                  : 0;
+
+
+              const width =
+                axisMaximum > 0
+                  ? (
+                      value /
+                      axisMaximum
+                    ) * 100
+                  : 0;
+
+            %>
+
+
+              <div class="tri13-bar-row">
+
+
+                <% if (item) { %>
+
+
+                  <div
+                    class="tri13-bar"
+                    style="
+                      width:
+                      <%= Math.max(
+                        width,
+                        value > 0
+                          ? 1
+                          : 0
+                      ) %>%;
+                    "
+                  ></div>
+
+
+                  <div class="tri13-bar-value">
+
+                    <%= tri13Format(value) %>
+
+                  </div>
+
+
+                <% } %>
+
+
+              </div>
+
+
+            <% }); %>
+
+
+          </div>
+
+
+          <!-- NÚMEROS EJE -->
+
+          <div class="tri13-axis-labels">
+
+
+            <% axisTicks.forEach(function(tick, index) {
+
+              const left =
+                axisMaximum > 0
+                  ? (
+                      tick /
+                      axisMaximum
+                    ) * 100
+                  : 0;
+
+            %>
+
+
+              <div
+                class="
+                  tri13-axis-label
+                  <%= index === 0 ? 'first' : '' %>
+                "
+                style="
+                  left:
+                  <%= left %>%;
+                "
+              >
+
+                <%= tri13Format(tick) %>
+
+              </div>
+
+
+            <% }); %>
+
+
+          </div>
+
+
+        </div>
+
+
       </div>
-    </div>
-  </article>
-</section>
+
+
+    </section>
+
+
+
+    <!-- ===================================================
+         COLUMNA DERECHA
+         =================================================== -->
+
+    <aside class="tri13-side">
+
+
+      <!-- =================================================
+           PRIMERA COMPAÑÍA
+           ================================================= -->
+
+      <article class="tri13-kpi-card blue">
+
+
+        <div class="tri13-kpi-copy">
+
+
+          <div class="tri13-kpi-label">
+            PRIMERA COMPAÑÍA
+          </div>
+
+
+          <div class="tri13-kpi-number">
+
+            <%= tri13Format(firstCompany.count) %>
+
+          </div>
+
+
+          <div class="tri13-kpi-description">
+
+            <%= tri13Name(firstCompany.name) %>
+
+            &nbsp;·&nbsp;
+
+            <%= tri13Percent(firstCompanyShare) %>%
+
+            del total
+
+          </div>
+
+
+        </div>
+
+
+        <!-- TROFEO -->
+
+        <div class="tri13-kpi-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <path
+              d="
+                M31 16
+                H69
+                V38
+                C69 58
+                60 69
+                50 69
+                C40 69
+                31 58
+                31 38
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+            <path
+              d="
+                M31 25
+                H13
+                V36
+                C13 52
+                22 59
+                34 59
+
+                M69 25
+                H87
+                V36
+                C87 52
+                78 59
+                66 59
+              "
+              fill="none"
+              stroke="currentColor"
+              stroke-width="8"
+              stroke-linecap="round"
+            ></path>
+
+            <rect
+              x="43"
+              y="68"
+              width="14"
+              height="13"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="32"
+              y="80"
+              width="36"
+              height="9"
+              rx="3"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           TOP 3
+           ================================================= -->
+
+      <article class="tri13-kpi-card teal">
+
+
+        <div class="tri13-kpi-copy">
+
+
+          <div class="tri13-kpi-label">
+            TOP 3
+          </div>
+
+
+          <div class="tri13-kpi-number">
+
+            <%= tri13Format(top3Count) %>
+
+          </div>
+
+
+          <div class="tri13-kpi-description">
+
+            <%= tri13Percent(top3Share) %>%
+
+            de las atenciones
+
+          </div>
+
+
+        </div>
+
+
+        <!-- PODIO -->
+
+        <div class="tri13-kpi-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="9"
+              y="58"
+              width="24"
+              height="31"
+              rx="5"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="39"
+              y="38"
+              width="24"
+              height="51"
+              rx="5"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="69"
+              y="58"
+              width="24"
+              height="31"
+              rx="5"
+              fill="currentColor"
+            ></rect>
+
+
+            <!-- estrella -->
+
+            <path
+              d="
+                M51 7
+                L55 17
+                L66 18
+                L58 25
+                L60 36
+                L51 30
+                L42 36
+                L44 25
+                L36 18
+                L47 17
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           TOP 10
+           ================================================= -->
+
+      <article class="tri13-kpi-card orange">
+
+
+        <div class="tri13-kpi-copy">
+
+
+          <div class="tri13-kpi-label">
+            TOP 10
+          </div>
+
+
+          <div class="tri13-kpi-number">
+
+            <%= tri13Format(top10Count) %>
+
+          </div>
+
+
+          <div class="tri13-kpi-description">
+
+            <%= tri13Percent(top10Share) %>%
+
+            de la demanda trimestral
+
+          </div>
+
+
+        </div>
+
+
+        <!-- PIE -->
+
+        <div class="tri13-kpi-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <path
+              d="
+                M48 13
+                A37 37 0 1 0
+                85 50
+                H48
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+            <path
+              d="
+                M54 7
+                V44
+                H91
+
+                A37 37 0 0 0
+                54 7
+                Z
+              "
+              fill="currentColor"
+              opacity=".72"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           TOTAL COMPAÑÍAS
+           ================================================= -->
+
+      <article class="tri13-company-total">
+
+
+        <div class="tri13-company-total-icon">
+
+          <svg
+            viewBox="0 0 64 64"
+            aria-hidden="true"
+          >
+
+            <!-- persona central -->
+
+            <circle
+              cx="32"
+              cy="19"
+              r="8"
+              fill="#ffffff"
+            ></circle>
+
+            <path
+              d="
+                M21 51
+                V38
+                C21 31
+                25 27
+                32 27
+                C39 27
+                43 31
+                43 38
+                V51
+                Z
+              "
+              fill="#ffffff"
+            ></path>
+
+
+            <!-- izquierda -->
+
+            <circle
+              cx="15"
+              cy="23"
+              r="6"
+              fill="#8bd6ff"
+            ></circle>
+
+            <path
+              d="
+                M7 48
+                V38
+                C7 32
+                10 29
+                15 29
+                C18 29
+                20 30
+                22 32
+                C19 36
+                18 41
+                18 48
+                Z
+              "
+              fill="#8bd6ff"
+            ></path>
+
+
+            <!-- derecha -->
+
+            <circle
+              cx="49"
+              cy="23"
+              r="6"
+              fill="#8bd6ff"
+            ></circle>
+
+            <path
+              d="
+                M46 48
+                C46 41
+                45 36
+                42 32
+                C44 30
+                46 29
+                49 29
+                C54 29
+                57 32
+                57 38
+                V48
+                Z
+              "
+              fill="#8bd6ff"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri13-company-total-divider"></div>
+
+
+        <div class="tri13-company-total-text">
+
+          <%= tri13Format(totalCompanies) %>
+          compañías atendidas
+
+        </div>
+
+
+      </article>
+
+
+    </aside>
+
+
+  </div>
+
+
+</div>
