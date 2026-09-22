@@ -1,43 +1,1868 @@
-<section class="two-column categories-layout">
-  <article class="panel">
-    <div class="panel-heading">
-      <div>
-        <span class="panel-kicker">DISTRIBUCIÓN DEL SERVICIO</span>
-        <h2>Atenciones por categoría</h2>
-      </div>
-      <div class="panel-badge"><strong><%= categories.length %></strong> categorías</div>
-    </div>
-    <div class="horizontal-bars category-bars">
-      <% categories.forEach(function(item, index) { %>
-        <div class="hbar-row">
-          <div class="hbar-rank"><%= String(index + 1).padStart(2, '0') %></div>
-          <div class="hbar-label" title="<%= item.name %>"><%= truncate(item.name, 43) %></div>
-          <div class="hbar-track"><span style="width:<%= Math.max(item.width, item.count > 0 ? 3 : 0) %>%;background:<%= item.color %>"></span></div>
-          <div class="hbar-value"><strong><%= formatNumber(item.count) %></strong><small><%= formatPct(item.share) %></small></div>
-        </div>
-      <% }) %>
-    </div>
-  </article>
+<style>
 
-  <aside class="category-side">
-    <article class="spotlight-card">
-      <span class="spotlight-kicker">PRINCIPAL MOTIVO</span>
-      <h3><%= topCategory.name %></h3>
-      <div class="spotlight-number"><%= formatNumber(topCategory.count) %></div>
-      <div class="spotlight-share"><%= formatPct(topCategory.share) %> del total mensual</div>
-    </article>
-    <article class="mini-ranking">
-      <div class="mini-title">CONCENTRACIÓN TOP 3</div>
-      <% categories.slice(0, 3).forEach(function(item, index) { %>
-        <div class="mini-row">
-          <span><b><%= index + 1 %></b><%= truncate(item.name, 28) %></span>
-          <strong><%= formatNumber(item.count) %></strong>
+/* =========================================================
+   SLIDE 12 · EVOLUCIÓN MENSUAL DE ATENCIONES
+   Header y footer compartidos desde report.ejs
+   ========================================================= */
+
+
+/* =========================================================
+   ÁREA GENERAL
+   ========================================================= */
+
+body.slide12-body .q-content {
+  padding:
+    24px
+    34px
+    8px
+    34px !important;
+}
+
+
+.tri12 {
+  width: 100%;
+  height: 100%;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color: #133681;
+}
+
+
+.tri12 *,
+.tri12 *::before,
+.tri12 *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   LAYOUT PRINCIPAL
+   ========================================================= */
+
+.tri12-layout {
+  width: 100%;
+  height: 664px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    548px;
+
+  column-gap: 20px;
+}
+
+
+/* =========================================================
+   PANEL IZQUIERDO
+   ========================================================= */
+
+.tri12-main-panel {
+  height: 664px;
+
+  padding:
+    20px
+    26px
+    20px
+    26px;
+
+  border:
+    1.5px solid
+    #d7e8f6;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 5px 18px
+    rgba(39, 83, 132, 0.08);
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   CABECERA PANEL
+   ========================================================= */
+
+.tri12-panel-heading {
+  height: 76px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+
+.tri12-panel-icon {
+  width: 70px;
+  height: 70px;
+
+  flex: 0 0 70px;
+
+  border-radius: 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #e7f4ff 0%,
+      #d9ecff 100%
+    );
+
+  color: #1764ed;
+}
+
+
+.tri12-panel-icon svg {
+  width: 43px;
+  height: 43px;
+
+  display: block;
+}
+
+
+.tri12-panel-title {
+  margin: 0;
+
+  color: #08256e;
+
+  font-size: 31px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.6px;
+}
+
+
+/* =========================================================
+   GRÁFICO
+   ========================================================= */
+
+.tri12-chart {
+  position: relative;
+
+  height: 535px;
+
+  margin-top: 8px;
+
+  padding:
+    20px
+    8px
+    44px
+    64px;
+}
+
+
+/* =========================================================
+   ÁREA DEL PLOT
+   ========================================================= */
+
+.tri12-plot {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: visible;
+}
+
+
+/* =========================================================
+   EJES Y GRID
+   ========================================================= */
+
+.tri12-y-grid {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 0;
+}
+
+
+.tri12-grid-row {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  height: 1px;
+
+  border-top:
+    1px dashed
+    #d5e4f2;
+}
+
+
+.tri12-grid-row:first-child {
+  border-top:
+    1.5px solid
+    #9fb9dc;
+}
+
+
+.tri12-y-label {
+  position: absolute;
+
+  right: calc(100% + 15px);
+
+  transform:
+    translateY(50%);
+
+  min-width: 36px;
+
+  text-align: right;
+
+  color: #355ca2;
+
+  font-size: 15px;
+
+  line-height: 1;
+
+  font-weight: 500;
+}
+
+
+/* Eje Y */
+
+.tri12-y-axis {
+  position: absolute;
+
+  z-index: 1;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  width: 1.5px;
+
+  background: #9fb9dc;
+}
+
+
+/* Eje X */
+
+.tri12-x-axis {
+  position: absolute;
+
+  z-index: 1;
+
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  height: 1.5px;
+
+  background: #9fb9dc;
+}
+
+
+/* =========================================================
+   BARRAS
+   ========================================================= */
+
+.tri12-bars {
+  position: absolute;
+
+  z-index: 2;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-around;
+
+  padding:
+    0
+    30px;
+}
+
+
+.tri12-bar-column {
+  position: relative;
+
+  width: 27%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: center;
+}
+
+
+/* Wrapper que recibe altura dinámica */
+
+.tri12-bar-wrapper {
+  position: relative;
+
+  width: 74%;
+
+  min-width: 130px;
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: center;
+}
+
+
+/* Barra */
+
+.tri12-bar {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 3px;
+
+  border-radius:
+    7px
+    7px
+    0
+    0;
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.28);
+}
+
+
+/* MAYO */
+
+.tri12-bar.bar-1 {
+  background:
+    linear-gradient(
+      180deg,
+      #79b4fa 0%,
+      #579ce9 100%
+    );
+}
+
+
+/* JUNIO */
+
+.tri12-bar.bar-2 {
+  background:
+    linear-gradient(
+      180deg,
+      #30c6d5 0%,
+      #08a9ba 100%
+    );
+}
+
+
+/* JULIO */
+
+.tri12-bar.bar-3 {
+  background:
+    linear-gradient(
+      180deg,
+      #2788f8 0%,
+      #0863dc 100%
+    );
+}
+
+
+/* Valor encima */
+
+.tri12-bar-value {
+  position: absolute;
+
+  left: 50%;
+  top: -37px;
+
+  transform:
+    translateX(-50%);
+
+  color: #071d66;
+
+  font-size: 23px;
+
+  line-height: 1;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   ETIQUETAS DE MES
+   ========================================================= */
+
+.tri12-month-labels {
+  position: absolute;
+
+  z-index: 4;
+
+  left: 0;
+  right: 0;
+
+  bottom: -39px;
+
+  height: 35px;
+
+  display: flex;
+
+  justify-content: space-around;
+
+  padding:
+    0
+    30px;
+}
+
+
+.tri12-month-label {
+  width: 27%;
+
+  text-align: center;
+
+  color: #123d91;
+
+  font-size: 18px;
+
+  line-height: 1;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   COLUMNA DERECHA
+   ========================================================= */
+
+.tri12-side {
+  height: 664px;
+
+  display: grid;
+
+  grid-template-rows:
+    174px
+    174px
+    174px
+    94px;
+
+  row-gap: 16px;
+}
+
+
+/* =========================================================
+   KPI CARD
+   ========================================================= */
+
+.tri12-kpi-card {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    96px
+    minmax(0, 1fr)
+    115px;
+
+  column-gap: 18px;
+
+  align-items: center;
+
+  min-height: 0;
+
+  padding:
+    20px
+    16px
+    20px
+    28px;
+
+  overflow: hidden;
+
+  border:
+    1.5px solid
+    #d7e8f6;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #fbfdff 100%
+    );
+
+  box-shadow:
+    0 5px 18px
+    rgba(39, 83, 132, 0.07);
+}
+
+
+.tri12-kpi-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  width: 10px;
+
+  background:
+    var(--accent);
+}
+
+
+/* =========================================================
+   ICONO KPI
+   ========================================================= */
+
+.tri12-kpi-icon {
+  width: 84px;
+  height: 84px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 15px;
+
+  color:
+    var(--accent);
+
+  background:
+    var(--soft);
+}
+
+
+.tri12-kpi-icon svg {
+  width: 48px;
+  height: 48px;
+
+  display: block;
+}
+
+
+/* =========================================================
+   CONTENIDO KPI
+   ========================================================= */
+
+.tri12-kpi-copy {
+  min-width: 0;
+}
+
+
+.tri12-kpi-label {
+  color: #294e92;
+
+  font-size: 16px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+
+.tri12-kpi-number {
+  margin-top: 14px;
+
+  color:
+    var(--accent);
+
+  font-size: 48px;
+
+  line-height: 0.9;
+
+  font-weight: 800;
+
+  letter-spacing: -1px;
+}
+
+
+.tri12-kpi-description {
+  margin-top: 14px;
+
+  color: #173a8a;
+
+  font-size: 15px;
+
+  line-height: 1.15;
+
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   DECORACIÓN KPI DERECHA
+   ========================================================= */
+
+.tri12-kpi-decoration {
+  width: 110px;
+  height: 110px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color:
+    var(--accent);
+
+  opacity: 0.11;
+}
+
+
+.tri12-kpi-decoration svg {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+}
+
+
+/* =========================================================
+   COLORES KPI
+   ========================================================= */
+
+.tri12-kpi-card.teal {
+  --accent: #10a9b8;
+  --soft: #dff8fb;
+}
+
+
+.tri12-kpi-card.blue {
+  --accent: #1764ed;
+  --soft: #e4f1ff;
+}
+
+
+.tri12-kpi-card.orange {
+  --accent: #ff7200;
+  --soft: #fff0e2;
+}
+
+
+/* =========================================================
+   BANNER INFERIOR
+   ========================================================= */
+
+.tri12-bottom-banner {
+  position: relative;
+
+  height: 94px;
+
+  display: grid;
+
+  grid-template-columns:
+    86px
+    2px
+    minmax(0, 1fr);
+
+  column-gap: 20px;
+
+  align-items: center;
+
+  padding:
+    12px
+    24px
+    12px
+    18px;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      100deg,
+      #073b82 0%,
+      #0752ab 48%,
+      #0b5fc2 100%
+    );
+
+  box-shadow:
+    0 5px 15px
+    rgba(7, 60, 130, 0.13);
+}
+
+
+.tri12-bottom-icon {
+  width: 68px;
+  height: 68px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #2690ff 0%,
+      #1764d9 52%,
+      #0c4098 100%
+    );
+
+  border:
+    2px solid
+    rgba(104, 184, 255, 0.72);
+
+  box-shadow:
+    0 0 0 4px
+    rgba(255,255,255,0.035);
+}
+
+
+.tri12-bottom-icon svg {
+  width: 38px;
+  height: 38px;
+
+  display: block;
+}
+
+
+.tri12-bottom-divider {
+  width: 2px;
+  height: 60px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.55
+    );
+}
+
+
+.tri12-bottom-text {
+  color: #ffffff;
+
+  font-size: 18px;
+
+  line-height: 1.12;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   PROTECCIÓN CONTRA CSS ANTIGUO
+   ========================================================= */
+
+body.slide12-body .tri12-main-panel,
+body.slide12-body .tri12-kpi-card,
+body.slide12-body .tri12-bottom-banner {
+  box-sizing: border-box !important;
+}
+
+</style>
+
+
+<%
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+const series =
+  typeof monthlySeries !== 'undefined' &&
+  Array.isArray(monthlySeries)
+    ? monthlySeries.slice(0, 3)
+    : [];
+
+
+/*
+   Siempre esperamos tres meses.
+   Si temporalmente faltara alguno,
+   completamos el espacio.
+*/
+
+const months =
+  Array.from(
+    {
+      length: 3
+    },
+    (
+      _,
+      index
+    ) =>
+      series[index] || {
+        month: `Mes ${index + 1}`,
+        value: 0
+      }
+  );
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function tri12Number(value) {
+
+  const n =
+    Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+
+}
+
+
+function tri12Format(value) {
+
+  if (
+    typeof formatNumber ===
+    'function'
+  ) {
+
+    return formatNumber(value);
+
+  }
+
+  return tri12Number(value);
+
+}
+
+
+function tri12Pct(
+  current,
+  previous
+) {
+
+  const currentValue =
+    tri12Number(current);
+
+  const previousValue =
+    tri12Number(previous);
+
+
+  if (
+    previousValue === 0
+  ) {
+
+    return null;
+
+  }
+
+
+  return (
+    (
+      currentValue -
+      previousValue
+    ) /
+    previousValue
+  ) * 100;
+
+}
+
+
+function tri12PctText(value) {
+
+  if (
+    value === null ||
+    !Number.isFinite(value)
+  ) {
+
+    return '—';
+
+  }
+
+
+  const sign =
+    value > 0
+      ? '+'
+      : '';
+
+
+  return (
+    sign +
+    value.toFixed(1) +
+    '%'
+  );
+
+}
+
+
+/*
+   Escala bonita con aproximadamente
+   cuatro intervalos.
+
+   80 -> 0,20,40,60,80
+*/
+
+function tri12Axis(value) {
+
+  const maxValue =
+    Math.max(
+      1,
+      tri12Number(value)
+    );
+
+
+  const roughStep =
+    maxValue /
+    4;
+
+
+  const magnitude =
+    Math.pow(
+      10,
+      Math.floor(
+        Math.log10(
+          roughStep
+        )
+      )
+    );
+
+
+  const normalized =
+    roughStep /
+    magnitude;
+
+
+  const choices =
+    [
+      1,
+      2,
+      2.5,
+      3,
+      4,
+      5,
+      10
+    ];
+
+
+  let selected =
+    choices[
+      choices.length - 1
+    ];
+
+
+  for (
+    const candidate
+    of choices
+  ) {
+
+    if (
+      candidate >=
+      normalized
+    ) {
+
+      selected =
+        candidate;
+
+      break;
+
+    }
+
+  }
+
+
+  const step =
+    selected *
+    magnitude;
+
+
+  const maximum =
+    Math.ceil(
+      maxValue /
+      step
+    ) *
+    step;
+
+
+  return {
+    step,
+    maximum
+  };
+
+}
+
+
+/* =========================================================
+   VALORES MENSUALES
+   ========================================================= */
+
+const first =
+  months[0];
+
+
+const second =
+  months[1];
+
+
+const third =
+  months[2];
+
+
+const firstValue =
+  tri12Number(
+    first.value
+  );
+
+
+const secondValue =
+  tri12Number(
+    second.value
+  );
+
+
+const thirdValue =
+  tri12Number(
+    third.value
+  );
+
+
+const maximumValue =
+  Math.max(
+    firstValue,
+    secondValue,
+    thirdValue
+  );
+
+
+const axis =
+  tri12Axis(
+    maximumValue
+  );
+
+
+const axisMaximum =
+  axis.maximum;
+
+
+const axisStep =
+  axis.step;
+
+
+const ticks = [];
+
+
+for (
+  let tick = 0;
+  tick <= axisMaximum + 0.0001;
+  tick += axisStep
+) {
+
+  ticks.push(
+    Number(
+      tick.toFixed(6)
+    )
+  );
+
+}
+
+
+/* =========================================================
+   COMPARACIONES
+   ========================================================= */
+
+const changeSecondVsFirst =
+  tri12Pct(
+    secondValue,
+    firstValue
+  );
+
+
+const changeThirdVsSecond =
+  tri12Pct(
+    thirdValue,
+    secondValue
+  );
+
+
+const accumulatedGrowth =
+  tri12Pct(
+    thirdValue,
+    firstValue
+  );
+
+
+const accumulatedDifference =
+  thirdValue -
+  firstValue;
+
+
+/* =========================================================
+   MENSAJE DE DIFERENCIA
+   ========================================================= */
+
+let accumulatedDescription;
+
+
+if (
+  accumulatedDifference > 0
+) {
+
+  accumulatedDescription =
+    `${third.month} registró ` +
+    `${tri12Format(accumulatedDifference)} atenciones más que ${first.month}.`;
+
+} else if (
+  accumulatedDifference < 0
+) {
+
+  accumulatedDescription =
+    `${third.month} registró ` +
+    `${tri12Format(Math.abs(accumulatedDifference))} atenciones menos que ${first.month}.`;
+
+} else {
+
+  accumulatedDescription =
+    `${third.month} registró la misma cantidad de atenciones que ${first.month}.`;
+
+}
+
+
+/* =========================================================
+   MENSAJE OPERATIVO INFERIOR
+   ========================================================= */
+
+const maxMonth =
+  months.reduce(
+    (
+      best,
+      item
+    ) =>
+      tri12Number(item.value) >
+      tri12Number(best.value)
+        ? item
+        : best,
+    months[0]
+  );
+
+
+const lastMonthIsMaximum =
+  maxMonth === third;
+
+
+const operationalMessage =
+  lastMonthIsMaximum
+    ? 'Mayor carga operativa al cierre del trimestre'
+    : `Mayor carga operativa registrada en ${maxMonth.month}`;
+
+%>
+
+
+<div class="tri12">
+
+
+  <div class="tri12-layout">
+
+
+    <!-- ===================================================
+         GRÁFICO PRINCIPAL
+         =================================================== -->
+
+    <section class="tri12-main-panel">
+
+
+      <div class="tri12-panel-heading">
+
+
+        <div class="tri12-panel-icon">
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="7"
+              y="28"
+              width="8"
+              height="13"
+              rx="2"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="20"
+              y="19"
+              width="8"
+              height="22"
+              rx="2"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="33"
+              y="9"
+              width="8"
+              height="32"
+              rx="2"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
         </div>
-      <% }) %>
-      <div class="mini-total">
-        <span>Participación conjunta</span>
-        <strong><%= formatPct((categories.slice(0,3).reduce((a,x)=>a+x.count,0) / Math.max(metrics.totalAttentions,1))*100) %></strong>
+
+
+        <h2 class="tri12-panel-title">
+          Tendencia mensual de atenciones
+        </h2>
+
+
       </div>
-    </article>
-  </aside>
-</section>
+
+
+      <!-- GRÁFICO -->
+
+      <div class="tri12-chart">
+
+
+        <div class="tri12-plot">
+
+
+          <!-- GRID Y -->
+
+          <div class="tri12-y-grid">
+
+            <% ticks.forEach(function(tick) {
+
+              const bottom =
+                axisMaximum > 0
+                  ? (
+                      tick /
+                      axisMaximum
+                    ) * 100
+                  : 0;
+
+            %>
+
+              <div
+                class="tri12-grid-row"
+                style="
+                  bottom:
+                  <%= bottom %>%;
+                "
+              >
+
+                <span
+                  class="tri12-y-label"
+                >
+                  <%= tri12Format(tick) %>
+                </span>
+
+              </div>
+
+            <% }); %>
+
+          </div>
+
+
+          <div class="tri12-y-axis"></div>
+
+          <div class="tri12-x-axis"></div>
+
+
+          <!-- BARRAS -->
+
+          <div class="tri12-bars">
+
+
+            <% months.forEach(function(item, index) {
+
+              const value =
+                tri12Number(
+                  item.value
+                );
+
+              const height =
+                axisMaximum > 0
+                  ? (
+                      value /
+                      axisMaximum
+                    ) * 100
+                  : 0;
+
+            %>
+
+
+              <div class="tri12-bar-column">
+
+
+                <div class="tri12-bar-wrapper">
+
+
+                  <div
+                    class="
+                      tri12-bar
+                      bar-<%= index + 1 %>
+                    "
+                    style="
+                      height:
+                      <%= Math.max(
+                        value > 0
+                          ? 1
+                          : 0,
+                        height
+                      ) %>%;
+                    "
+                  >
+
+
+                    <div class="tri12-bar-value">
+
+                      <%= tri12Format(value) %>
+
+                    </div>
+
+
+                  </div>
+
+
+                </div>
+
+
+              </div>
+
+
+            <% }); %>
+
+
+          </div>
+
+
+          <!-- MESES -->
+
+          <div class="tri12-month-labels">
+
+            <% months.forEach(function(item) { %>
+
+              <div class="tri12-month-label">
+
+                <%= item.month %>
+
+              </div>
+
+            <% }); %>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ===================================================
+         COLUMNA DERECHA
+         =================================================== -->
+
+    <aside class="tri12-side">
+
+
+      <!-- =================================================
+           SEGUNDO MES VS PRIMER MES
+           ================================================= -->
+
+      <article class="tri12-kpi-card teal">
+
+
+        <div class="tri12-kpi-icon">
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <path
+              d="
+                M7 35
+                L18 24
+                L26 30
+                L40 15
+              "
+              fill="none"
+              stroke="currentColor"
+              stroke-width="6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+
+            <path
+              d="
+                M31 15
+                H40
+                V24
+              "
+              fill="none"
+              stroke="currentColor"
+              stroke-width="6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri12-kpi-copy">
+
+
+          <div class="tri12-kpi-label">
+
+            <%= String(second.month).toUpperCase() %>
+            VS.
+            <%= String(first.month).toUpperCase() %>
+
+          </div>
+
+
+          <div class="tri12-kpi-number">
+
+            <%= tri12PctText(changeSecondVsFirst) %>
+
+          </div>
+
+
+          <div class="tri12-kpi-description">
+
+            <%= tri12Format(secondValue) %>
+            atenciones frente a
+            <%= tri12Format(firstValue) %>.
+
+          </div>
+
+
+        </div>
+
+
+        <div class="tri12-kpi-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="10"
+              y="53"
+              width="18"
+              height="35"
+              rx="6"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="41"
+              y="36"
+              width="18"
+              height="52"
+              rx="6"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="72"
+              y="12"
+              width="18"
+              height="76"
+              rx="6"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           TERCER MES VS SEGUNDO MES
+           ================================================= -->
+
+      <article class="tri12-kpi-card blue">
+
+
+        <div class="tri12-kpi-icon">
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="7"
+              y="29"
+              width="8"
+              height="13"
+              rx="2"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="20"
+              y="21"
+              width="8"
+              height="21"
+              rx="2"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="33"
+              y="10"
+              width="8"
+              height="32"
+              rx="2"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri12-kpi-copy">
+
+
+          <div class="tri12-kpi-label">
+
+            <%= String(third.month).toUpperCase() %>
+            VS.
+            <%= String(second.month).toUpperCase() %>
+
+          </div>
+
+
+          <div class="tri12-kpi-number">
+
+            <%= tri12PctText(changeThirdVsSecond) %>
+
+          </div>
+
+
+          <div class="tri12-kpi-description">
+
+            <%= tri12Format(thirdValue) %>
+            atenciones frente a
+            <%= tri12Format(secondValue) %>.
+
+          </div>
+
+
+        </div>
+
+
+        <div class="tri12-kpi-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <path
+              d="
+                M9 55
+                C30 54
+                47 45
+                61 33
+                C72 24
+                80 16
+                89 10
+              "
+              fill="none"
+              stroke="currentColor"
+              stroke-width="5"
+              stroke-linecap="round"
+            ></path>
+
+            <path
+              d="
+                M76 11
+                H89
+                V24
+              "
+              fill="none"
+              stroke="currentColor"
+              stroke-width="5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+
+
+            <rect
+              x="13"
+              y="64"
+              width="17"
+              height="25"
+              rx="5"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="42"
+              y="52"
+              width="17"
+              height="37"
+              rx="5"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="71"
+              y="34"
+              width="17"
+              height="55"
+              rx="5"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           CRECIMIENTO ACUMULADO
+           ================================================= -->
+
+      <article class="tri12-kpi-card orange">
+
+
+        <div class="tri12-kpi-icon">
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="7"
+              y="29"
+              width="8"
+              height="13"
+              rx="2"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="20"
+              y="21"
+              width="8"
+              height="21"
+              rx="2"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="33"
+              y="10"
+              width="8"
+              height="32"
+              rx="2"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri12-kpi-copy">
+
+
+          <div class="tri12-kpi-label">
+            CRECIMIENTO ACUMULADO
+          </div>
+
+
+          <div class="tri12-kpi-number">
+
+            <%= tri12PctText(accumulatedGrowth) %>
+
+          </div>
+
+
+          <div class="tri12-kpi-description">
+
+            <%= accumulatedDescription %>
+
+          </div>
+
+
+        </div>
+
+
+        <div class="tri12-kpi-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="10"
+              y="57"
+              width="18"
+              height="31"
+              rx="6"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="41"
+              y="35"
+              width="18"
+              height="53"
+              rx="6"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="72"
+              y="10"
+              width="18"
+              height="78"
+              rx="6"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           LECTURA OPERATIVA
+           ================================================= -->
+
+      <article class="tri12-bottom-banner">
+
+
+        <div class="tri12-bottom-icon">
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="8"
+              y="29"
+              width="6"
+              height="11"
+              rx="1.5"
+              fill="#ffffff"
+            ></rect>
+
+            <rect
+              x="18"
+              y="24"
+              width="6"
+              height="16"
+              rx="1.5"
+              fill="#ffffff"
+            ></rect>
+
+            <rect
+              x="28"
+              y="17"
+              width="6"
+              height="23"
+              rx="1.5"
+              fill="#ffffff"
+            ></rect>
+
+            <path
+              d="
+                M7 25
+                L16 20
+                L23 22
+                L37 10
+              "
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+
+            <path
+              d="
+                M31 10
+                H38
+                V17
+              "
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri12-bottom-divider"></div>
+
+
+        <div class="tri12-bottom-text">
+
+          <%= operationalMessage %>
+
+        </div>
+
+
+      </article>
+
+
+    </aside>
+
+
+  </div>
+
+
+</div>
