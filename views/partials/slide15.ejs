@@ -1,47 +1,1872 @@
-<section class="supplies-layout">
-  <article class="panel supplies-table-panel">
-    <div class="panel-heading compact-heading">
-      <div>
-        <span class="panel-kicker">DETALLE DEL PERIODO</span>
-        <h2><%= allSupplyCount > 10 ? 'Top 10 insumos' : 'Insumos utilizados' %></h2>
-      </div>
-      <div class="panel-badge"><strong><%= allSupplyCount %></strong> registrados</div>
-    </div>
-    <table class="executive-table">
-      <thead>
-        <tr><th>#</th><th>Insumo</th><th>Cantidad</th><th>Unidad</th></tr>
-      </thead>
-      <tbody>
-        <% supplies.forEach(function(item, index) { %>
-          <tr>
-            <td><span class="table-rank"><%= index + 1 %></span></td>
-            <td title="<%= item.name %>"><%= truncate(item.name, 32) %></td>
-            <td class="numeric"><%= formatNumber(item.quantity, Number.isInteger(item.quantity) ? 0 : 2) %></td>
-            <td><span class="unit-chip"><%= item.unit || 's/u' %></span></td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-  </article>
+<style>
 
-  <article class="panel supplies-chart-panel">
-    <div class="panel-heading compact-heading">
-      <div>
-        <span class="panel-kicker">RANKING POR CANTIDAD REGISTRADA</span>
-        <h2>Consumo mensual de insumos</h2>
-      </div>
-    </div>
-    <div class="supply-bars">
-      <% supplies.forEach(function(item, index) { %>
-        <div class="supply-row">
-          <div class="supply-label"><%= truncate(item.name, 37) %></div>
-          <div class="supply-track">
-            <span style="width:<%= Math.max(item.width, 3) %>%;background:<%= item.color %>"></span>
-          </div>
-          <b class="supply-metric"><%= formatNumber(item.quantity, Number.isInteger(item.quantity) ? 0 : 2) %> <%= item.unit %></b>
+/* =========================================================
+   SLIDE 15 · REINCIDENCIA DE DISPOSITIVOS
+   Header y footer compartidos desde report.ejs
+   ========================================================= */
+
+
+/* =========================================================
+   ÁREA GENERAL
+   ========================================================= */
+
+body.slide15-body .q-content {
+  padding:
+    24px
+    34px
+    8px
+    34px !important;
+}
+
+
+.tri15 {
+  width: 100%;
+  height: 100%;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color: #123b8f;
+}
+
+
+.tri15 *,
+.tri15 *::before,
+.tri15 *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   LAYOUT PRINCIPAL
+   ========================================================= */
+
+.tri15-layout {
+  width: 100%;
+  height: 646px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    640px;
+
+  column-gap: 20px;
+}
+
+
+/* =========================================================
+   PANEL IZQUIERDO
+   ========================================================= */
+
+.tri15-main-card {
+  height: 646px;
+
+  padding:
+    24px
+    28px
+    18px
+    28px;
+
+  border:
+    1.5px solid
+    #d3e5f5;
+
+  border-radius: 17px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 5px 18px
+    rgba(40, 84, 132, 0.07);
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   TÍTULO DEL PANEL
+   ========================================================= */
+
+.tri15-panel-heading {
+  height: 64px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+
+.tri15-panel-icon {
+  width: 58px;
+  height: 58px;
+
+  flex: 0 0 58px;
+
+  border-radius: 11px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #e8f3ff 0%,
+      #dcecff 100%
+    );
+
+  color: #1764ed;
+}
+
+
+.tri15-panel-icon svg {
+  width: 39px;
+  height: 39px;
+
+  display: block;
+}
+
+
+.tri15-panel-title {
+  margin: 0;
+
+  color: #08256e;
+
+  font-size: 28px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.5px;
+}
+
+
+/* =========================================================
+   DONUT
+   ========================================================= */
+
+.tri15-donut-area {
+  height: 472px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  position: relative;
+}
+
+
+.tri15-donut-svg {
+  width: 470px;
+  height: 470px;
+
+  display: block;
+
+  overflow: visible;
+}
+
+
+/* Segmentos */
+
+.tri15-donut-track {
+  fill: none;
+
+  stroke: #e8eef6;
+
+  stroke-width: 94;
+}
+
+
+.tri15-donut-segment {
+  fill: none;
+
+  stroke-width: 94;
+
+  stroke-linecap: butt;
+
+  transform:
+    rotate(-90deg);
+
+  transform-origin:
+    250px
+    250px;
+}
+
+
+.tri15-donut-segment.one {
+  stroke: #1764d9;
+}
+
+
+.tri15-donut-segment.two {
+  stroke: #10aebe;
+}
+
+
+.tri15-donut-segment.three {
+  stroke: #ff8a0b;
+}
+
+
+/* =========================================================
+   CENTRO DEL DONUT
+   ========================================================= */
+
+.tri15-center-value {
+  fill: #082e72;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 55px;
+
+  font-weight: 800;
+}
+
+
+.tri15-center-label {
+  fill: #52709f;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 19px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   PORCENTAJES SOBRE EL DONUT
+   ========================================================= */
+
+.tri15-donut-pct {
+  fill: #ffffff;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 23px;
+
+  font-weight: 800;
+
+  text-anchor: middle;
+
+  dominant-baseline: middle;
+}
+
+
+/* =========================================================
+   LEYENDA
+   ========================================================= */
+
+.tri15-legend {
+  height: 62px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 55px;
+}
+
+
+.tri15-legend-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: #173c82;
+
+  font-size: 18px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+.tri15-legend-box {
+  width: 23px;
+  height: 23px;
+
+  border-radius: 5px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #ffffff;
+
+  box-shadow:
+    0 2px 5px
+    rgba(20, 65, 120, 0.10);
+}
+
+
+.tri15-legend-box::after {
+  content: "";
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+}
+
+
+.tri15-legend-box.blue {
+  background: #1764d9;
+}
+
+
+.tri15-legend-box.teal {
+  background: #10aebe;
+}
+
+
+.tri15-legend-box.orange {
+  background: #ff8a0b;
+}
+
+
+/* =========================================================
+   COLUMNA DERECHA
+   ========================================================= */
+
+.tri15-side {
+  height: 646px;
+
+  display: grid;
+
+  grid-template-rows:
+    164px
+    164px
+    164px
+    100px;
+
+  row-gap: 18px;
+}
+
+
+/* =========================================================
+   KPI CARDS
+   ========================================================= */
+
+.tri15-kpi {
+  position: relative;
+
+  height: 164px;
+
+  display: grid;
+
+  grid-template-columns:
+    94px
+    minmax(0, 1fr)
+    100px;
+
+  column-gap: 18px;
+
+  align-items: center;
+
+  padding:
+    18px
+    15px
+    18px
+    35px;
+
+  overflow: hidden;
+
+  border:
+    1.5px solid
+    #d5e6f5;
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #fbfdff 100%
+    );
+
+  box-shadow:
+    0 5px 17px
+    rgba(39, 82, 129, 0.06);
+}
+
+
+/* Barra lateral */
+
+.tri15-kpi::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  width: 10px;
+
+  background:
+    var(--accent);
+}
+
+
+/* =========================================================
+   ICONO KPI
+   ========================================================= */
+
+.tri15-kpi-icon {
+  width: 78px;
+  height: 78px;
+
+  border-radius: 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #ffffff;
+
+  background:
+    var(--accent);
+
+  box-shadow:
+    0 6px 13px
+    rgba(26, 92, 170, 0.14);
+}
+
+
+.tri15-kpi-icon svg {
+  width: 49px;
+  height: 49px;
+
+  display: block;
+}
+
+
+/* =========================================================
+   TEXTO KPI
+   ========================================================= */
+
+.tri15-kpi-copy {
+  min-width: 0;
+}
+
+
+.tri15-kpi-label {
+  color: #47628c;
+
+  font-size: 16px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+
+.tri15-kpi-number {
+  margin-top: 15px;
+
+  color:
+    var(--accent);
+
+  font-size: 44px;
+
+  line-height: 0.9;
+
+  font-weight: 800;
+
+  letter-spacing: -0.8px;
+
+  white-space: nowrap;
+}
+
+
+.tri15-kpi-description {
+  margin-top: 15px;
+
+  color: #254a83;
+
+  font-size: 15px;
+
+  line-height: 1.15;
+
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   DECORACIÓN KPI
+   ========================================================= */
+
+.tri15-kpi-decoration {
+  width: 100px;
+  height: 100px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color:
+    var(--accent);
+
+  opacity: 0.10;
+}
+
+
+.tri15-kpi-decoration svg {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+}
+
+
+/* =========================================================
+   COLORES
+   ========================================================= */
+
+.tri15-kpi.blue {
+  --accent: #1764e8;
+}
+
+
+.tri15-kpi.teal {
+  --accent: #16b4c1;
+
+  background:
+    linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #f4fcfd 100%
+    );
+}
+
+
+.tri15-kpi.orange {
+  --accent: #ff8a0b;
+
+  background:
+    linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #fff9f2 100%
+    );
+}
+
+
+/* =========================================================
+   BANNER INFERIOR DERECHO
+   ========================================================= */
+
+.tri15-summary {
+  position: relative;
+
+  height: 100px;
+
+  display: grid;
+
+  grid-template-columns:
+    80px
+    2px
+    minmax(0, 1fr);
+
+  column-gap: 20px;
+
+  align-items: center;
+
+  padding:
+    12px
+    24px
+    12px
+    20px;
+
+  overflow: hidden;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #073a7c 0%,
+      #0753a9 52%,
+      #0860bd 100%
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 5px 16px
+    rgba(4, 48, 105, 0.14);
+}
+
+
+.tri15-summary-icon {
+  width: 64px;
+  height: 64px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at 34% 28%,
+      #2996ff 0%,
+      #1276e1 52%,
+      #0755b4 100%
+    );
+
+  border:
+    1px solid
+    rgba(92, 183, 255, 0.65);
+}
+
+
+.tri15-summary-icon svg {
+  width: 39px;
+  height: 39px;
+
+  display: block;
+}
+
+
+.tri15-summary-divider {
+  width: 2px;
+  height: 64px;
+
+  background:
+    rgba(
+      113,
+      198,
+      255,
+      0.28
+    );
+}
+
+
+.tri15-summary-text {
+  color: #ffffff;
+
+  font-size: 18px;
+
+  line-height: 1.12;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   PROTECCIÓN CONTRA CSS LEGACY
+   ========================================================= */
+
+body.slide15-body .tri15-main-card,
+body.slide15-body .tri15-kpi,
+body.slide15-body .tri15-summary {
+  box-sizing: border-box !important;
+}
+
+</style>
+
+
+<%
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+const m =
+  typeof metrics !== 'undefined' &&
+  metrics
+    ? metrics
+    : {};
+
+
+const q =
+  typeof quarterly !== 'undefined' &&
+  quarterly
+    ? quarterly
+    : {};
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function tri15Number(value) {
+
+  const n =
+    Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+
+}
+
+
+function tri15Format(value) {
+
+  if (
+    typeof formatNumber ===
+    'function'
+  ) {
+
+    return formatNumber(value);
+
+  }
+
+  return tri15Number(value);
+
+}
+
+
+function tri15Pct(value) {
+
+  return tri15Number(value)
+    .toFixed(1);
+
+}
+
+
+/* =========================================================
+   TOTAL DE DISPOSITIVOS
+   ========================================================= */
+
+const totalDevices =
+  tri15Number(
+    m.uniqueDevices ??
+    m.uniqueVehicles ??
+    q.totalDevices ??
+    128
+  );
+
+
+/* =========================================================
+   DISTRIBUCIÓN DE REINCIDENCIA
+   =========================================================
+
+   Más adelante Apps Script deberá enviar idealmente:
+
+   quarterly: {
+
+     recurrenceDistribution: {
+       oneAttention: 86,
+       twoAttentions: 32,
+       threeOrMore: 10
+     }
+
+   }
+
+   También aceptamos nombres alternativos.
+*/
+
+const distribution =
+  q.recurrenceDistribution ||
+  q.reincidenceDistribution ||
+  q.distribucionReincidencia ||
+  {};
+
+
+/* =========================================================
+   TRES O MÁS
+   =========================================================
+
+   Este valor también puede venir de:
+
+   metrics.reincidenceCount
+
+   para mantener consistencia con slide 10 y 14.
+*/
+
+const threePlus =
+  tri15Number(
+    distribution.threeOrMore ??
+    distribution.threePlus ??
+    distribution.tresOMas ??
+    m.reincidenceCount ??
+    10
+  );
+
+
+/* =========================================================
+   DOS ATENCIONES
+   ========================================================= */
+
+let twoAttentions =
+  distribution.twoAttentions ??
+  distribution.two ??
+  distribution.dosAtenciones;
+
+
+/*
+   Mientras Apps Script todavía no envíe este dato,
+   usamos el valor del diseño de referencia.
+*/
+
+if (
+  twoAttentions === undefined ||
+  twoAttentions === null ||
+  twoAttentions === ''
+) {
+
+  twoAttentions = 32;
+
+}
+
+
+twoAttentions =
+  tri15Number(
+    twoAttentions
+  );
+
+
+/* =========================================================
+   UNA ATENCIÓN
+   ========================================================= */
+
+let oneAttention =
+  distribution.oneAttention ??
+  distribution.one ??
+  distribution.unaAtencion;
+
+
+/*
+   Si no viene explícitamente,
+   la calculamos como residuo del total.
+*/
+
+if (
+  oneAttention === undefined ||
+  oneAttention === null ||
+  oneAttention === ''
+) {
+
+  oneAttention =
+    Math.max(
+      0,
+      totalDevices -
+      twoAttentions -
+      threePlus
+    );
+
+}
+
+
+oneAttention =
+  tri15Number(
+    oneAttention
+  );
+
+
+/* =========================================================
+   TOTAL UTILIZADO
+   ========================================================= */
+
+const distributionTotal =
+  oneAttention +
+  twoAttentions +
+  threePlus;
+
+
+/*
+   Si el total enviado por Apps Script fuera diferente
+   al total de la distribución, para los porcentajes
+   priorizamos el total oficial de dispositivos.
+*/
+
+const percentageBase =
+  totalDevices > 0
+    ? totalDevices
+    : distributionTotal;
+
+
+/* =========================================================
+   PORCENTAJES
+   ========================================================= */
+
+const onePct =
+  percentageBase > 0
+    ? (
+        oneAttention /
+        percentageBase
+      ) * 100
+    : 0;
+
+
+const twoPct =
+  percentageBase > 0
+    ? (
+        twoAttentions /
+        percentageBase
+      ) * 100
+    : 0;
+
+
+const threePct =
+  percentageBase > 0
+    ? (
+        threePlus /
+        percentageBase
+      ) * 100
+    : 0;
+
+
+/* =========================================================
+   DOS O MÁS
+   ========================================================= */
+
+const twoOrMore =
+  twoAttentions +
+  threePlus;
+
+
+const twoOrMorePct =
+  percentageBase > 0
+    ? (
+        twoOrMore /
+        percentageBase
+      ) * 100
+    : 0;
+
+
+/* =========================================================
+   DATOS DEL DONUT
+   ========================================================= */
+
+const radius = 170;
+
+
+const circumference =
+  2 *
+  Math.PI *
+  radius;
+
+
+const oneLength =
+  circumference *
+  onePct /
+  100;
+
+
+const twoLength =
+  circumference *
+  twoPct /
+  100;
+
+
+const threeLength =
+  circumference *
+  threePct /
+  100;
+
+
+/*
+   Offset acumulado para dibujar
+   un segmento después del otro.
+*/
+
+const oneOffset = 0;
+
+
+const twoOffset =
+  -oneLength;
+
+
+const threeOffset =
+  -(
+    oneLength +
+    twoLength
+  );
+
+
+/* =========================================================
+   POSICIÓN DE ETIQUETAS DEL DONUT
+   ========================================================= */
+
+function tri15LabelPosition(
+  startPct,
+  sharePct
+) {
+
+  /*
+    SVG:
+    -90 grados = parte superior.
+  */
+
+  const middlePct =
+    startPct +
+    sharePct / 2;
+
+
+  const angle =
+    (
+      -90 +
+      middlePct *
+      3.6
+    ) *
+    Math.PI /
+    180;
+
+
+  /*
+    Radio de etiqueta:
+    aproximadamente mitad
+    del grosor del anillo.
+  */
+
+  const labelRadius =
+    170;
+
+
+  return {
+
+    x:
+      250 +
+      Math.cos(angle) *
+      labelRadius,
+
+    y:
+      250 +
+      Math.sin(angle) *
+      labelRadius
+
+  };
+
+}
+
+
+const oneLabel =
+  tri15LabelPosition(
+    0,
+    onePct
+  );
+
+
+const twoLabel =
+  tri15LabelPosition(
+    onePct,
+    twoPct
+  );
+
+
+const threeLabel =
+  tri15LabelPosition(
+    onePct + twoPct,
+    threePct
+  );
+
+%>
+
+
+<div class="tri15">
+
+
+  <div class="tri15-layout">
+
+
+    <!-- ===================================================
+         PANEL IZQUIERDO
+         =================================================== -->
+
+    <section class="tri15-main-card">
+
+
+      <!-- TÍTULO INTERNO -->
+
+      <div class="tri15-panel-heading">
+
+
+        <div class="tri15-panel-icon">
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <circle
+              cx="24"
+              cy="24"
+              r="18"
+              fill="currentColor"
+              opacity=".12"
+            ></circle>
+
+            <path
+              d="
+                M24 6
+                A18 18 0 1 1
+                6 24
+                H24
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+            <path
+              d="
+                M27 4
+                V21
+                H44
+                A18 18 0 0 0
+                27 4
+                Z
+              "
+              fill="#ffffff"
+            ></path>
+
+          </svg>
+
         </div>
-      <% }) %>
-    </div>
-    <div class="unit-note">Las cantidades conservan su unidad original. No se suman ni se calculan porcentajes entre unidades incompatibles.</div>
-  </article>
-</section>
+
+
+        <h2 class="tri15-panel-title">
+          Reincidencia de dispositivos
+        </h2>
+
+
+      </div>
+
+
+
+      <!-- =================================================
+           DONUT
+           ================================================= -->
+
+      <div class="tri15-donut-area">
+
+
+        <svg
+          class="tri15-donut-svg"
+          viewBox="0 0 500 500"
+          aria-hidden="true"
+        >
+
+
+          <!-- BASE -->
+
+          <circle
+            class="tri15-donut-track"
+            cx="250"
+            cy="250"
+            r="<%= radius %>"
+          ></circle>
+
+
+          <!-- UNA ATENCIÓN -->
+
+          <circle
+            class="
+              tri15-donut-segment
+              one
+            "
+            cx="250"
+            cy="250"
+            r="<%= radius %>"
+
+            stroke-dasharray="
+              <%= oneLength %>
+              <%= circumference - oneLength %>
+            "
+
+            stroke-dashoffset="
+              <%= oneOffset %>
+            "
+          ></circle>
+
+
+          <!-- DOS ATENCIONES -->
+
+          <circle
+            class="
+              tri15-donut-segment
+              two
+            "
+            cx="250"
+            cy="250"
+            r="<%= radius %>"
+
+            stroke-dasharray="
+              <%= twoLength %>
+              <%= circumference - twoLength %>
+            "
+
+            stroke-dashoffset="
+              <%= twoOffset %>
+            "
+          ></circle>
+
+
+          <!-- TRES O MÁS -->
+
+          <circle
+            class="
+              tri15-donut-segment
+              three
+            "
+            cx="250"
+            cy="250"
+            r="<%= radius %>"
+
+            stroke-dasharray="
+              <%= threeLength %>
+              <%= circumference - threeLength %>
+            "
+
+            stroke-dashoffset="
+              <%= threeOffset %>
+            "
+          ></circle>
+
+
+
+          <!-- =================================================
+               CENTRO
+               ================================================= -->
+
+          <text
+            class="tri15-center-value"
+            x="250"
+            y="258"
+            text-anchor="middle"
+          >
+
+            <%= tri15Format(totalDevices) %>
+
+          </text>
+
+
+          <text
+            class="tri15-center-label"
+            x="250"
+            y="294"
+            text-anchor="middle"
+          >
+            DISPOSITIVOS
+          </text>
+
+
+
+          <!-- =================================================
+               PORCENTAJES
+               ================================================= -->
+
+          <% if (onePct >= 5) { %>
+
+            <text
+              class="tri15-donut-pct"
+              x="<%= oneLabel.x %>"
+              y="<%= oneLabel.y %>"
+            >
+
+              <%= Math.round(onePct) %>%
+
+            </text>
+
+          <% } %>
+
+
+          <% if (twoPct >= 5) { %>
+
+            <text
+              class="tri15-donut-pct"
+              x="<%= twoLabel.x %>"
+              y="<%= twoLabel.y %>"
+            >
+
+              <%= Math.round(twoPct) %>%
+
+            </text>
+
+          <% } %>
+
+
+          <% if (threePct >= 5) { %>
+
+            <text
+              class="tri15-donut-pct"
+              x="<%= threeLabel.x %>"
+              y="<%= threeLabel.y %>"
+            >
+
+              <%= Math.round(threePct) %>%
+
+            </text>
+
+          <% } %>
+
+
+        </svg>
+
+
+      </div>
+
+
+
+      <!-- =================================================
+           LEYENDA
+           ================================================= -->
+
+      <div class="tri15-legend">
+
+
+        <div class="tri15-legend-item">
+
+          <span
+            class="
+              tri15-legend-box
+              blue
+            "
+          ></span>
+
+          <span>
+            1 atención
+          </span>
+
+        </div>
+
+
+        <div class="tri15-legend-item">
+
+          <span
+            class="
+              tri15-legend-box
+              teal
+            "
+          ></span>
+
+          <span>
+            2 atenciones
+          </span>
+
+        </div>
+
+
+        <div class="tri15-legend-item">
+
+          <span
+            class="
+              tri15-legend-box
+              orange
+            "
+          ></span>
+
+          <span>
+            3 o más
+          </span>
+
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ===================================================
+         COLUMNA DERECHA
+         =================================================== -->
+
+    <aside class="tri15-side">
+
+
+      <!-- =================================================
+           UNA ATENCIÓN
+           ================================================= -->
+
+      <article class="tri15-kpi blue">
+
+
+        <div class="tri15-kpi-icon">
+
+          <!-- TELÉFONO / DISPOSITIVO -->
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="13"
+              y="5"
+              width="22"
+              height="38"
+              rx="3"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="3"
+            ></rect>
+
+            <path
+              d="
+                M18 9
+                H30
+              "
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="2"
+              stroke-linecap="round"
+            ></path>
+
+            <circle
+              cx="24"
+              cy="38"
+              r="1.6"
+              fill="#ffffff"
+            ></circle>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri15-kpi-copy">
+
+
+          <div class="tri15-kpi-label">
+            UNA ATENCIÓN
+          </div>
+
+
+          <div class="tri15-kpi-number">
+
+            <%= tri15Format(oneAttention) %>
+            ·
+            <%= tri15Pct(onePct) %>%
+
+          </div>
+
+
+          <div class="tri15-kpi-description">
+            Mayoría sin repetición durante el trimestre.
+          </div>
+
+
+        </div>
+
+
+        <div class="tri15-kpi-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="30"
+              y="10"
+              width="44"
+              height="80"
+              rx="8"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="8"
+            ></rect>
+
+            <circle
+              cx="52"
+              cy="78"
+              r="3"
+              fill="currentColor"
+            ></circle>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           DOS ATENCIONES
+           ================================================= -->
+
+      <article class="tri15-kpi teal">
+
+
+        <div class="tri15-kpi-icon">
+
+          <!-- DOS DISPOSITIVOS -->
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="20"
+              y="5"
+              width="20"
+              height="32"
+              rx="3"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="3"
+            ></rect>
+
+            <rect
+              x="7"
+              y="13"
+              width="20"
+              height="30"
+              rx="3"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="3"
+            ></rect>
+
+            <circle
+              cx="17"
+              cy="38"
+              r="1.4"
+              fill="#ffffff"
+            ></circle>
+
+            <circle
+              cx="30"
+              cy="32"
+              r="1.4"
+              fill="#ffffff"
+            ></circle>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri15-kpi-copy">
+
+
+          <div class="tri15-kpi-label">
+            DOS ATENCIONES
+          </div>
+
+
+          <div class="tri15-kpi-number">
+
+            <%= tri15Format(twoAttentions) %>
+            ·
+            <%= tri15Pct(twoPct) %>%
+
+          </div>
+
+
+          <div class="tri15-kpi-description">
+            Seguimiento preventivo recomendado.
+          </div>
+
+
+        </div>
+
+
+        <div class="tri15-kpi-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="36"
+              y="13"
+              width="43"
+              height="70"
+              rx="7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="8"
+            ></rect>
+
+            <rect
+              x="12"
+              y="33"
+              width="43"
+              height="57"
+              rx="7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="8"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           TRES O MÁS
+           ================================================= -->
+
+      <article class="tri15-kpi orange">
+
+
+        <div class="tri15-kpi-icon">
+
+          <!-- TRES DISPOSITIVOS -->
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="23"
+              y="5"
+              width="18"
+              height="30"
+              rx="3"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="3"
+            ></rect>
+
+            <rect
+              x="13"
+              y="10"
+              width="18"
+              height="32"
+              rx="3"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="3"
+            ></rect>
+
+            <rect
+              x="4"
+              y="17"
+              width="16"
+              height="25"
+              rx="3"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="3"
+            ></rect>
+
+            <circle
+              cx="12"
+              cy="38"
+              r="1.2"
+              fill="#ffffff"
+            ></circle>
+
+            <circle
+              cx="22"
+              cy="37"
+              r="1.2"
+              fill="#ffffff"
+            ></circle>
+
+            <circle
+              cx="32"
+              cy="30"
+              r="1.2"
+              fill="#ffffff"
+            ></circle>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri15-kpi-copy">
+
+
+          <div class="tri15-kpi-label">
+            TRES O MÁS
+          </div>
+
+
+          <div class="tri15-kpi-number">
+
+            <%= tri15Format(threePlus) %>
+            ·
+            <%= tri15Pct(threePct) %>%
+
+          </div>
+
+
+          <div class="tri15-kpi-description">
+            Grupo prioritario para análisis de causa.
+          </div>
+
+
+        </div>
+
+
+        <div class="tri15-kpi-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="49"
+              y="10"
+              width="36"
+              height="61"
+              rx="7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="8"
+            ></rect>
+
+            <rect
+              x="30"
+              y="27"
+              width="36"
+              height="62"
+              rx="7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="8"
+            ></rect>
+
+            <rect
+              x="10"
+              y="42"
+              width="35"
+              height="48"
+              rx="7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="8"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           RESUMEN
+           ================================================= -->
+
+      <article class="tri15-summary">
+
+
+        <div class="tri15-summary-icon">
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="8"
+              y="29"
+              width="6"
+              height="11"
+              rx="1.5"
+              fill="#ffffff"
+            ></rect>
+
+            <rect
+              x="18"
+              y="23"
+              width="6"
+              height="17"
+              rx="1.5"
+              fill="#ffffff"
+            ></rect>
+
+            <rect
+              x="28"
+              y="15"
+              width="6"
+              height="25"
+              rx="1.5"
+              fill="#ffffff"
+            ></rect>
+
+            <rect
+              x="38"
+              y="8"
+              width="4"
+              height="32"
+              rx="1.5"
+              fill="#ffffff"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri15-summary-divider"></div>
+
+
+        <div class="tri15-summary-text">
+
+          <%= tri15Format(twoOrMore) %>
+          dispositivos
+          (<%= tri15Pct(twoOrMorePct) %>%)
+          requirieron 2 o más atenciones
+
+        </div>
+
+
+      </article>
+
+
+    </aside>
+
+
+  </div>
+
+
+</div>
