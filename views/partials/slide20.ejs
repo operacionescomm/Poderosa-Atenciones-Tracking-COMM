@@ -1,1 +1,813 @@
-<%- include('../components/quarterly-placeholder') %>
+<style>
+
+/* =========================================================
+   SLIDE 20 · CONCLUSIONES Y ACCIONES RECOMENDADAS
+   Header y footer compartidos desde report.ejs
+   ========================================================= */
+
+
+/* =========================================================
+   ÁREA GENERAL
+   ========================================================= */
+
+body.slide20-body .q-content {
+  padding:
+    24px
+    34px
+    8px
+    34px !important;
+}
+
+
+.tri20 {
+  width: 100%;
+  height: 100%;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color: #123b8f;
+}
+
+
+.tri20 *,
+.tri20 *::before,
+.tri20 *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   LAYOUT PRINCIPAL
+   ========================================================= */
+
+.tri20-layout {
+  width: 100%;
+  height: 646px;
+
+  display: grid;
+
+  grid-template-rows:
+    1fr
+    104px;
+
+  row-gap: 18px;
+}
+
+
+/* =========================================================
+   GRID 2 × 2
+   ========================================================= */
+
+.tri20-priorities {
+  min-height: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  grid-template-rows:
+    repeat(2, minmax(0, 1fr));
+
+  gap:
+    22px
+    24px;
+}
+
+
+/* =========================================================
+   TARJETA
+   ========================================================= */
+
+.tri20-card {
+  position: relative;
+
+  min-height: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    92px
+    minmax(0, 1fr);
+
+  column-gap: 24px;
+
+  padding:
+    28px
+    36px
+    24px
+    28px;
+
+  overflow: hidden;
+
+  border:
+    1.5px solid
+    #d5e6f5;
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      115deg,
+      #ffffff 0%,
+      #ffffff 72%,
+      #fbfdff 100%
+    );
+
+  box-shadow:
+    0 5px 18px
+    rgba(39, 83, 132, 0.07);
+}
+
+
+/* =========================================================
+   NÚMERO
+   ========================================================= */
+
+.tri20-number {
+  width: 82px;
+  height: 82px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  align-self: start;
+
+  border-radius: 12px;
+
+  color: #ffffff;
+
+  background:
+    var(--accent);
+
+  box-shadow:
+    0 6px 14px
+    var(--shadow);
+
+  font-size: 37px;
+
+  line-height: 1;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   CONTENIDO DE TARJETA
+   ========================================================= */
+
+.tri20-card-content {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+.tri20-card-label {
+  margin-top: 8px;
+
+  color:
+    var(--accent);
+
+  font-size: 17px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+
+.tri20-card-action {
+  margin-top: 21px;
+
+  max-width: 550px;
+
+  color: #08266d;
+
+  font-size: 24px;
+
+  line-height: 1.18;
+
+  font-weight: 800;
+
+  letter-spacing: -0.35px;
+}
+
+
+/* =========================================================
+   DIVISOR
+   ========================================================= */
+
+.tri20-card-divider {
+  width: 100%;
+  height: 1.5px;
+
+  margin-top: auto;
+  margin-bottom: 19px;
+
+  background: #bed6eb;
+}
+
+
+/* =========================================================
+   BASE CUANTITATIVA
+   ========================================================= */
+
+.tri20-card-base {
+  color: #5573a4;
+
+  font-size: 16px;
+
+  line-height: 1.2;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   COLORES
+   ========================================================= */
+
+.tri20-card.blue {
+  --accent: #0c68e8;
+
+  --shadow:
+    rgba(
+      12,
+      104,
+      232,
+      .16
+    );
+}
+
+
+.tri20-card.teal {
+  --accent: #099fab;
+
+  --shadow:
+    rgba(
+      9,
+      159,
+      171,
+      .16
+    );
+}
+
+
+.tri20-card.orange {
+  --accent: #ff7a0a;
+
+  --shadow:
+    rgba(
+      255,
+      122,
+      10,
+      .16
+    );
+}
+
+
+.tri20-card.purple {
+  --accent: #7336e5;
+
+  --shadow:
+    rgba(
+      115,
+      54,
+      229,
+      .16
+    );
+}
+
+
+.tri20-card.cyan {
+  --accent: #0eaec1;
+
+  --shadow:
+    rgba(
+      14,
+      174,
+      193,
+      .16
+    );
+}
+
+
+.tri20-card.navy {
+  --accent: #164f9a;
+
+  --shadow:
+    rgba(
+      22,
+      79,
+      154,
+      .16
+    );
+}
+
+
+/* =========================================================
+   BANNER INFERIOR
+   ========================================================= */
+
+.tri20-focus {
+  position: relative;
+
+  height: 104px;
+
+  display: grid;
+
+  grid-template-columns:
+    340px
+    2px
+    minmax(0, 1fr);
+
+  column-gap: 30px;
+
+  align-items: center;
+
+  padding:
+    14px
+    34px
+    14px
+    24px;
+
+  overflow: hidden;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      105deg,
+      #073570 0%,
+      #0a3978 45%,
+      #123e7d 100%
+    );
+
+  box-shadow:
+    0 5px 15px
+    rgba(5, 42, 92, 0.14);
+}
+
+
+/* =========================================================
+   TÍTULO DEL BANNER
+   ========================================================= */
+
+.tri20-focus-title-wrap {
+  display: flex;
+
+  align-items: center;
+
+  gap: 25px;
+
+  min-width: 0;
+}
+
+
+.tri20-focus-rule {
+  width: 8px;
+  height: 53px;
+
+  flex: 0 0 8px;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #1ccbe1 0%,
+      #0db6d2 100%
+    );
+}
+
+
+.tri20-focus-title {
+  color: #1bcbe2;
+
+  font-size: 18px;
+
+  line-height: 1.05;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   DIVISOR BANNER
+   ========================================================= */
+
+.tri20-focus-divider {
+  width: 2px;
+  height: 58px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .72
+    );
+}
+
+
+/* =========================================================
+   TEXTO PRINCIPAL BANNER
+   ========================================================= */
+
+.tri20-focus-text {
+  min-width: 0;
+
+  color: #ffffff;
+
+  font-size: 20px;
+
+  line-height: 1.22;
+
+  font-weight: 700;
+
+  letter-spacing: -0.15px;
+}
+
+
+/* =========================================================
+   PROTECCIÓN CONTRA CSS LEGACY
+   ========================================================= */
+
+body.slide20-body .tri20-card,
+body.slide20-body .tri20-focus {
+  box-sizing: border-box !important;
+}
+
+</style>
+
+
+<%
+
+/* =========================================================
+   DATA DEL MOTOR GERENCIAL
+   ========================================================= */
+
+const managementData =
+  typeof management !== 'undefined' &&
+  management
+    ? management
+    : {};
+
+
+/* =========================================================
+   FALLBACK VISUAL
+   =========================================================
+
+   Solo se utiliza si por alguna razón
+   management todavía no existe.
+
+   Una vez que server.js esté actualizado,
+   estos textos dejan de utilizarse.
+*/
+
+const fallbackPriorities = [
+
+  {
+    number: 1,
+
+    label:
+      'CAPACIDAD OPERATIVA',
+
+    action:
+      'Ajustar la programación al mayor nivel observado.',
+
+    base:
+      'Base: Julio cerró con 80 atenciones, 73,9% más que mayo.',
+
+    tone:
+      'blue'
+  },
+
+
+  {
+    number: 2,
+
+    label:
+      'MANTENIMIENTO PREVENTIVO',
+
+    action:
+      'Programar rondas preventivas sobre la principal causa de atención.',
+
+    base:
+      'Base: Mantenimiento básico concentra 37,7% del trimestre.',
+
+    tone:
+      'teal'
+  },
+
+
+  {
+    number: 3,
+
+    label:
+      'RECURRENCIA FOCALIZADA',
+
+    action:
+      'Revisar causa, instalación y entorno de las unidades reincidentes.',
+
+    base:
+      'Base: 10 vehículos registraron 3 o más atenciones.',
+
+    tone:
+      'orange'
+  },
+
+
+  {
+    number: 4,
+
+    label:
+      'CONTROL USB-C',
+
+    action:
+      'Mantener el seguimiento del indicador y disponibilidad de repuestos.',
+
+    base:
+      'Base: La participación bajó a 20,0% en julio; acumuló 49 casos.',
+
+    tone:
+      'purple'
+  }
+
+];
+
+
+/* =========================================================
+   PRIORIDADES
+   ========================================================= */
+
+const priorityInput =
+  Array.isArray(
+    managementData.priorities
+  ) &&
+  managementData.priorities.length
+
+    ? managementData.priorities
+
+    : fallbackPriorities;
+
+
+/*
+   El diseño muestra exactamente 4 tarjetas.
+*/
+
+const priorities =
+  priorityInput
+    .slice(
+      0,
+      4
+    );
+
+
+/* =========================================================
+   COMPLETAR A 4 TARJETAS
+   ========================================================= */
+
+const visiblePriorities =
+  Array.from(
+    {
+      length: 4
+    },
+    (
+      _,
+      index
+    ) =>
+
+      priorities[index] ||
+
+      {
+        number:
+          index + 1,
+
+        label:
+          'SEGUIMIENTO OPERATIVO',
+
+        action:
+          'Mantener seguimiento de los indicadores del trimestre.',
+
+        base:
+          'Base: Sin información suficiente para generar una prioridad específica.',
+
+        tone:
+          [
+            'blue',
+            'teal',
+            'orange',
+            'purple'
+          ][index]
+      }
+  );
+
+
+/* =========================================================
+   ENFOQUE
+   ========================================================= */
+
+const focusTitle =
+  managementData.focusTitle ||
+  'Enfoque del próximo trimestre';
+
+
+const focusText =
+  managementData.focusText ||
+  (
+    'Prevenir la repetición, asegurar capacidad en picos ' +
+    'y mantener control visible sobre los principales focos de demanda.'
+  );
+
+
+/* =========================================================
+   COLOR SEGURO
+   ========================================================= */
+
+function tri20Tone(
+  value,
+  index
+) {
+
+  const allowed = [
+    'blue',
+    'teal',
+    'orange',
+    'purple',
+    'cyan',
+    'navy'
+  ];
+
+
+  const input =
+    String(
+      value || ''
+    )
+      .trim()
+      .toLowerCase();
+
+
+  if (
+    allowed.includes(
+      input
+    )
+  ) {
+
+    return input;
+
+  }
+
+
+  return (
+    [
+      'blue',
+      'teal',
+      'orange',
+      'purple'
+    ][index] ||
+    'blue'
+  );
+
+}
+
+%>
+
+
+<div class="tri20">
+
+
+  <div class="tri20-layout">
+
+
+    <!-- ===================================================
+         4 PRIORIDADES
+         =================================================== -->
+
+    <section class="tri20-priorities">
+
+
+      <% visiblePriorities.forEach(function(item, index) {
+
+        const tone =
+          tri20Tone(
+            item.tone,
+            index
+          );
+
+      %>
+
+
+        <article
+          class="
+            tri20-card
+            <%= tone %>
+          "
+        >
+
+
+          <!-- NÚMERO -->
+
+          <div class="tri20-number">
+
+            <%= item.number || index + 1 %>
+
+          </div>
+
+
+
+          <!-- CONTENIDO -->
+
+          <div class="tri20-card-content">
+
+
+            <div class="tri20-card-label">
+
+              <%= item.label %>
+
+            </div>
+
+
+            <div class="tri20-card-action">
+
+              <%= item.action %>
+
+            </div>
+
+
+            <div class="tri20-card-divider"></div>
+
+
+            <div class="tri20-card-base">
+
+              <%= item.base %>
+
+            </div>
+
+
+          </div>
+
+
+        </article>
+
+
+      <% }); %>
+
+
+    </section>
+
+
+
+    <!-- ===================================================
+         ENFOQUE DEL PRÓXIMO TRIMESTRE
+         =================================================== -->
+
+    <section class="tri20-focus">
+
+
+      <div class="tri20-focus-title-wrap">
+
+
+        <span class="tri20-focus-rule"></span>
+
+
+        <div class="tri20-focus-title">
+
+          <%= focusTitle %>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="tri20-focus-divider"></div>
+
+
+      <div class="tri20-focus-text">
+
+        <%= focusText %>
+
+      </div>
+
+
+    </section>
+
+
+  </div>
+
+
+</div>
