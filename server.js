@@ -613,6 +613,878 @@ function registerSlide(
    CONSTRUIR DATA DEL SLIDE
    ========================================================= */
 
+/* =========================================================
+   SLIDE 20 · MOTOR DE CONCLUSIONES Y ACCIONES
+   ========================================================= */
+
+function buildSlide20Management(
+  report
+) {
+
+  const metrics =
+    report.metrics || {};
+
+
+  const monthly =
+    Array.isArray(
+      report.monthlySeries
+    )
+      ? report.monthlySeries
+      : [];
+
+
+  const categories =
+    Array.isArray(
+      report.categories
+    )
+      ? report.categories
+      : [];
+
+
+  const companies =
+    Array.isArray(
+      report.companies
+    )
+      ? report.companies
+      : [];
+
+
+  const supplies =
+    Array.isArray(
+      report.supplies
+    )
+      ? report.supplies
+      : [];
+
+
+  const quarterly =
+    report.quarterly || {};
+
+
+  const totalAttentions =
+    number(
+      metrics.totalAttentions
+    );
+
+
+  const uniqueDevices =
+    number(
+      metrics.uniqueDevices ||
+      metrics.uniqueVehicles
+    );
+
+
+  const reincidenceCount =
+    number(
+      metrics.reincidenceCount
+    );
+
+
+  /* =======================================================
+     HELPERS LOCALES
+     ======================================================= */
+
+  function pct(
+    part,
+    total
+  ) {
+
+    return (
+      total > 0
+
+        ? (
+            part /
+            total
+          ) * 100
+
+        : 0
+    );
+
+  }
+
+
+  function lowerFirst(
+    value
+  ) {
+
+    const input =
+      text(value);
+
+
+    if (
+      !input
+    ) {
+
+      return '';
+
+    }
+
+
+    return (
+      input
+        .charAt(0)
+        .toLowerCase() +
+      input.slice(1)
+    );
+
+  }
+
+
+  /* =======================================================
+     1. CAPACIDAD OPERATIVA
+     ======================================================= */
+
+  const firstMonth =
+    monthly[0] || null;
+
+
+  const lastMonth =
+    monthly.length
+      ? monthly[
+          monthly.length - 1
+        ]
+      : null;
+
+
+  let monthlyGrowth =
+    null;
+
+
+  if (
+    firstMonth &&
+    lastMonth &&
+    number(firstMonth.value) > 0
+  ) {
+
+    monthlyGrowth =
+      (
+        (
+          number(lastMonth.value) -
+          number(firstMonth.value)
+        ) /
+        number(firstMonth.value)
+      ) * 100;
+
+  }
+
+
+  const capacityScore =
+    monthlyGrowth === null
+
+      ? 0
+
+      : (
+          70 +
+          Math.min(
+            Math.abs(
+              monthlyGrowth
+            ) / 2,
+            30
+          )
+        );
+
+
+  const capacityBase =
+    firstMonth &&
+    lastMonth &&
+    monthlyGrowth !== null
+
+      ? (
+          `Base: ${lastMonth.month} cerró con ` +
+          `${formatNumber(lastMonth.value)} atenciones, ` +
+          `${formatPct(Math.abs(monthlyGrowth))} ` +
+          `${
+            monthlyGrowth >= 0
+              ? 'más'
+              : 'menos'
+          } que ${lowerFirst(firstMonth.month)}.`
+        )
+
+      : (
+          `Base: Se registraron ` +
+          `${formatNumber(totalAttentions)} atenciones en el trimestre.`
+        );
+
+
+  /* =======================================================
+     2. CATEGORÍA / MANTENIMIENTO PREVENTIVO
+     ======================================================= */
+
+  const topCategory =
+    categories[0] || {
+      name: 'Sin datos',
+      count: 0
+    };
+
+
+  const topCategoryShare =
+    pct(
+      number(
+        topCategory.count
+      ),
+      totalAttentions
+    );
+
+
+  const maintenanceScore =
+    topCategory.count > 0
+
+      ? (
+          75 +
+          Math.min(
+            topCategoryShare / 2,
+            20
+          )
+        )
+
+      : 0;
+
+
+  const maintenanceBase =
+    topCategory.count > 0
+
+      ? (
+          `Base: ${topCategory.name} concentra ` +
+          `${formatPct(topCategoryShare)} del trimestre.`
+        )
+
+      : 'Base: Sin información suficiente de categorías.';
+
+
+  /* =======================================================
+     3. REINCIDENCIA
+     ======================================================= */
+
+  const recurrenceShare =
+    pct(
+      reincidenceCount,
+      uniqueDevices
+    );
+
+
+  const recurrenceScore =
+    reincidenceCount > 0
+
+      ? (
+          78 +
+          Math.min(
+            recurrenceShare,
+            10
+          )
+        )
+
+      : 0;
+
+
+  const recurrenceBase =
+    reincidenceCount > 0
+
+      ? (
+          `Base: ${formatNumber(reincidenceCount)} ` +
+          `${
+            reincidenceCount === 1
+              ? 'vehículo registró'
+              : 'vehículos registraron'
+          } 3 o más atenciones.`
+        )
+
+      : 'Base: No se registraron vehículos con 3 o más atenciones.';
+
+
+  /* =======================================================
+     4. USB-C
+     ======================================================= */
+
+  const usbCategory =
+    categories.find(
+      item =>
+        /USB[\s-]*C/i.test(
+          item.name
+        )
+    ) || null;
+
+
+  const usbMonthlyRaw =
+    Array.isArray(
+      quarterly.usbCMonthly
+    )
+
+      ? quarterly.usbCMonthly
+
+      : (
+          Array.isArray(
+            quarterly.usbMonthly
+          )
+
+            ? quarterly.usbMonthly
+
+            : (
+                Array.isArray(
+                  quarterly.cambioUsbCMonthly
+                )
+
+                  ? quarterly.cambioUsbCMonthly
+
+                  : []
+              )
+        );
+
+
+  const usbMonthly =
+    usbMonthlyRaw.map(
+      item => ({
+
+        month:
+          text(
+            item.month ||
+            item.mes
+          ),
+
+        value:
+          number(
+            item.value ??
+            item.count ??
+            item.cantidad ??
+            item.casos
+          )
+
+      })
+    );
+
+
+  const usbTotal =
+    usbMonthly.length
+
+      ? usbMonthly.reduce(
+          (
+            total,
+            item
+          ) =>
+            total +
+            item.value,
+          0
+        )
+
+      : (
+          usbCategory
+            ? number(
+                usbCategory.count
+              )
+            : 0
+        );
+
+
+  const usbQuarterShare =
+    pct(
+      usbTotal,
+      totalAttentions
+    );
+
+
+  let usbLastShare =
+    usbQuarterShare;
+
+
+  let usbPreviousShare =
+    null;
+
+
+  if (
+    usbMonthly.length >= 2 &&
+    monthly.length >= 2
+  ) {
+
+    const lastIndex =
+      Math.min(
+        usbMonthly.length,
+        monthly.length
+      ) - 1;
+
+
+    const previousIndex =
+      lastIndex - 1;
+
+
+    const lastTotal =
+      number(
+        monthly[lastIndex].value
+      );
+
+
+    const previousTotal =
+      number(
+        monthly[previousIndex].value
+      );
+
+
+    usbLastShare =
+      pct(
+        usbMonthly[lastIndex].value,
+        lastTotal
+      );
+
+
+    usbPreviousShare =
+      pct(
+        usbMonthly[previousIndex].value,
+        previousTotal
+      );
+
+  }
+
+
+  const usbScore =
+    usbTotal > 0
+
+      ? (
+          70 +
+          Math.min(
+            usbTotal / 5,
+            12
+          ) +
+          Math.min(
+            usbLastShare / 5,
+            6
+          )
+        )
+
+      : 0;
+
+
+  let usbBase;
+
+
+  if (
+    usbTotal <= 0
+  ) {
+
+    usbBase =
+      'Base: No se registraron casos USB-C en el trimestre.';
+
+  } else if (
+    usbPreviousShare !== null &&
+    lastMonth
+  ) {
+
+    const direction =
+      usbLastShare <
+      usbPreviousShare
+
+        ? 'bajó'
+
+        : (
+            usbLastShare >
+            usbPreviousShare
+
+              ? 'subió'
+
+              : 'se mantuvo'
+          );
+
+
+    usbBase =
+      `Base: La participación ${direction} a ` +
+      `${formatPct(usbLastShare)} en ` +
+      `${lowerFirst(lastMonth.month)}; ` +
+      `acumuló ${formatNumber(usbTotal)} casos.`;
+
+  } else {
+
+    usbBase =
+      `Base: USB-C acumuló ` +
+      `${formatNumber(usbTotal)} casos, ` +
+      `${formatPct(usbQuarterShare)} del trimestre.`;
+
+  }
+
+
+  /* =======================================================
+     5. CONCENTRACIÓN DE DEMANDA
+     ======================================================= */
+
+  const demandShare =
+    number(
+      metrics.demandShare
+    );
+
+
+  const demandScore =
+    companies.length
+
+      ? (
+          55 +
+          Math.min(
+            demandShare / 10,
+            8
+          )
+        )
+
+      : 0;
+
+
+  const demandBase =
+    companies.length
+
+      ? (
+          `Base: Las principales compañías concentran ` +
+          `${formatPct(demandShare)} de las atenciones.`
+        )
+
+      : 'Base: Sin información suficiente de compañías.';
+
+
+  /* =======================================================
+     6. GESTIÓN DE INSUMOS
+     ======================================================= */
+
+  const topSupply =
+    supplies[0] || null;
+
+
+  const top10SupplyQuantity =
+    supplies.reduce(
+      (
+        total,
+        item
+      ) =>
+        total +
+        number(
+          item.quantity
+        ),
+      0
+    );
+
+
+  const supplyDominance =
+    topSupply
+
+      ? pct(
+          number(
+            topSupply.quantity
+          ),
+          top10SupplyQuantity
+        )
+
+      : 0;
+
+
+  const supplyScore =
+    topSupply &&
+    number(topSupply.quantity) > 0
+
+      ? (
+          48 +
+          Math.min(
+            supplyDominance / 8,
+            12
+          )
+        )
+
+      : 0;
+
+
+  const supplyBase =
+    topSupply
+
+      ? (
+          `Base: ${topSupply.name} registró ` +
+          `${formatNumber(topSupply.quantity)} ` +
+          `${topSupply.unit || 'unidades'} utilizadas.`
+        )
+
+      : 'Base: Sin información suficiente de consumo de insumos.';
+
+
+  /* =======================================================
+     CANDIDATOS
+     ======================================================= */
+
+  const candidates = [
+
+    {
+      key:
+        'capacity',
+
+      label:
+        'CAPACIDAD OPERATIVA',
+
+      action:
+        monthlyGrowth !== null &&
+        monthlyGrowth < 0
+
+          ? 'Ajustar la programación al nivel de demanda observado.'
+
+          : 'Ajustar la programación al mayor nivel observado.',
+
+      base:
+        capacityBase,
+
+      score:
+        capacityScore,
+
+      tone:
+        'blue'
+    },
+
+
+    {
+      key:
+        'maintenance',
+
+      label:
+        'MANTENIMIENTO PREVENTIVO',
+
+      action:
+        'Programar rondas preventivas sobre la principal causa de atención.',
+
+      base:
+        maintenanceBase,
+
+      score:
+        maintenanceScore,
+
+      tone:
+        'teal'
+    },
+
+
+    {
+      key:
+        'recurrence',
+
+      label:
+        'RECURRENCIA FOCALIZADA',
+
+      action:
+        'Revisar causa, instalación y entorno de las unidades reincidentes.',
+
+      base:
+        recurrenceBase,
+
+      score:
+        recurrenceScore,
+
+      tone:
+        'orange'
+    },
+
+
+    {
+      key:
+        'usb',
+
+      label:
+        'CONTROL USB-C',
+
+      action:
+        'Mantener el seguimiento del indicador y disponibilidad de repuestos.',
+
+      base:
+        usbBase,
+
+      score:
+        usbScore,
+
+      tone:
+        'purple'
+    },
+
+
+    {
+      key:
+        'demand',
+
+      label:
+        'CONCENTRACIÓN DE DEMANDA',
+
+      action:
+        'Priorizar coordinación preventiva con las compañías de mayor demanda.',
+
+      base:
+        demandBase,
+
+      score:
+        demandScore,
+
+      tone:
+        'cyan'
+    },
+
+
+    {
+      key:
+        'supplies',
+
+      label:
+        'GESTIÓN DE INSUMOS',
+
+      action:
+        'Asegurar disponibilidad preventiva de los insumos de mayor rotación.',
+
+      base:
+        supplyBase,
+
+      score:
+        supplyScore,
+
+      tone:
+        'navy'
+    }
+
+  ];
+
+
+  /* =======================================================
+     SELECCIONAR LAS 4 PRIORIDADES MÁS RELEVANTES
+     ======================================================= */
+
+  const priorities =
+    candidates
+
+      .filter(
+        item =>
+          item.score > 0
+      )
+
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b.score -
+          a.score
+      )
+
+      .slice(
+        0,
+        4
+      )
+
+      .map(
+        (
+          item,
+          index
+        ) => ({
+
+          ...item,
+
+          number:
+            index + 1
+
+        })
+      );
+
+
+  /* =======================================================
+     ENFOQUE DEL PRÓXIMO TRIMESTRE
+     ======================================================= */
+
+  const focusFragments = {
+
+    capacity:
+      'asegurar capacidad frente a los niveles de mayor demanda',
+
+    maintenance:
+      'reforzar el mantenimiento preventivo',
+
+    recurrence:
+      'prevenir la repetición de atenciones',
+
+    usb:
+      'mantener control visible sobre USB-C',
+
+    demand:
+      'focalizar la gestión en las compañías de mayor demanda',
+
+    supplies:
+      'asegurar disponibilidad de insumos críticos'
+
+  };
+
+
+  const fragments =
+    priorities
+      .map(
+        item =>
+          focusFragments[
+            item.key
+          ]
+      )
+      .filter(
+        Boolean
+      );
+
+
+  let focusText =
+    'Mantener seguimiento de los principales indicadores operativos.';
+
+
+  if (
+    fragments.length === 1
+  ) {
+
+    focusText =
+      fragments[0];
+
+  }
+
+
+  if (
+    fragments.length === 2
+  ) {
+
+    focusText =
+      `${fragments[0]} y ${fragments[1]}`;
+
+  }
+
+
+  if (
+    fragments.length >= 3
+  ) {
+
+    focusText =
+      `${
+        fragments
+          .slice(
+            0,
+            -1
+          )
+          .join(', ')
+      } y ${
+        fragments[
+          fragments.length - 1
+        ]
+      }`;
+
+  }
+
+
+  focusText =
+    focusText
+      .charAt(0)
+      .toUpperCase() +
+    focusText.slice(1) +
+    '.';
+
+
+  /* =======================================================
+     RESULTADO
+     ======================================================= */
+
+  return {
+
+    priorities,
+
+    focusTitle:
+      'Enfoque del próximo trimestre',
+
+    focusText
+
+  };
+
+}
+
 function buildSlideData(
   raw,
   slide
@@ -622,6 +1494,20 @@ function buildSlideData(
     normalizeReportData(
       raw
     );
+
+
+  /* =======================================================
+     MOTOR GERENCIAL · SOLO PARA SLIDE 20
+     ======================================================= */
+
+  const management =
+    slide.number === '20'
+
+      ? buildSlide20Management(
+          report
+        )
+
+      : null;
 
 
   return {
@@ -635,6 +1521,14 @@ function buildSlideData(
 
 
     /*
+      Conclusiones y recomendaciones
+      automáticas del slide 20.
+    */
+
+    management,
+
+
+    /*
       Plantilla EJS específica.
     */
 
@@ -643,7 +1537,7 @@ function buildSlideData(
 
 
     /*
-      Clase CSS específica del contenido.
+      Clase CSS específica.
     */
 
     viewClass:
@@ -651,8 +1545,7 @@ function buildSlideData(
 
 
     /*
-      Número lógico del PPT.
-      Ya NO se imprime automáticamente.
+      Número lógico del slide.
     */
 
     slideNumber:
@@ -666,16 +1559,18 @@ function buildSlideData(
     slideEyebrow:
       slide.eyebrow || '',
 
+
     slideTitle:
       slide.title || '',
+
 
     slideSubtitle:
       slide.subtitle || '',
 
 
     /*
-      Helpers disponibles dentro
-      de los archivos EJS.
+      Helpers disponibles
+      dentro de los EJS.
     */
 
     formatNumber,
