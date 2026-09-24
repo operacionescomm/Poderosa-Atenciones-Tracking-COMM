@@ -1,1 +1,2067 @@
-<%- include('../components/quarterly-placeholder') %>
+<style>
+
+/* =========================================================
+   SLIDE 16 · CAMBIO DE CABLE USB-C
+   Header y footer compartidos desde report.ejs
+   ========================================================= */
+
+
+/* =========================================================
+   ÁREA GENERAL
+   ========================================================= */
+
+body.slide16-body .q-content {
+  padding:
+    24px
+    34px
+    8px
+    34px !important;
+}
+
+
+.tri16 {
+  width: 100%;
+  height: 100%;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color: #123b8f;
+}
+
+
+.tri16 *,
+.tri16 *::before,
+.tri16 *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.tri16-layout {
+  width: 100%;
+  height: 646px;
+
+  display: grid;
+
+  grid-template-rows:
+    484px
+    144px;
+
+  row-gap: 18px;
+}
+
+
+/* =========================================================
+   FILA SUPERIOR
+   ========================================================= */
+
+.tri16-top {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  column-gap: 28px;
+}
+
+
+/* =========================================================
+   PANEL DE GRÁFICO
+   ========================================================= */
+
+.tri16-panel {
+  height: 484px;
+
+  padding:
+    20px
+    24px
+    16px
+    24px;
+
+  overflow: hidden;
+
+  border:
+    1.5px solid
+    #d6e7f5;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 5px 18px
+    rgba(39, 83, 132, 0.07);
+}
+
+
+/* =========================================================
+   CABECERA INTERNA
+   ========================================================= */
+
+.tri16-panel-heading {
+  height: 72px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+
+.tri16-panel-icon {
+  width: 60px;
+  height: 60px;
+
+  flex: 0 0 60px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #edf7ff 0%,
+      #e2f1ff 100%
+    );
+
+  color: #1764ed;
+}
+
+
+.tri16-panel-icon svg {
+  width: 34px;
+  height: 34px;
+
+  display: block;
+}
+
+
+.tri16-panel-title {
+  margin: 0;
+
+  color: #081f68;
+
+  font-size: 27px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.45px;
+}
+
+
+.tri16-panel-title.italic {
+  font-style: italic;
+}
+
+
+/* =========================================================
+   SVG CHART
+   ========================================================= */
+
+.tri16-chart-svg {
+  width: 100%;
+  height: 360px;
+
+  display: block;
+
+  overflow: visible;
+}
+
+
+/* =========================================================
+   TEXTOS SVG
+   ========================================================= */
+
+.tri16-axis-text {
+  fill: #476aa7;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 15px;
+
+  font-weight: 500;
+}
+
+
+.tri16-month-text {
+  fill: #3f61a0;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 16px;
+
+  font-weight: 500;
+}
+
+
+.tri16-bar-number {
+  fill: #071d63;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 18px;
+
+  font-weight: 800;
+}
+
+
+.tri16-line-number {
+  fill: #ff7200;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 17px;
+
+  font-weight: 800;
+
+  text-anchor: middle;
+}
+
+
+/* =========================================================
+   FILA KPI
+   ========================================================= */
+
+.tri16-bottom {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  column-gap: 18px;
+}
+
+
+/* =========================================================
+   KPI
+   ========================================================= */
+
+.tri16-kpi {
+  position: relative;
+
+  height: 144px;
+
+  display: grid;
+
+  grid-template-columns:
+    82px
+    minmax(0, 1fr)
+    100px;
+
+  column-gap: 18px;
+
+  align-items: center;
+
+  padding:
+    18px
+    16px
+    18px
+    28px;
+
+  overflow: hidden;
+
+  border:
+    1.5px solid
+    #d7e7f4;
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #fbfdff 100%
+    );
+
+  box-shadow:
+    0 5px 16px
+    rgba(39, 83, 132, 0.06);
+}
+
+
+.tri16-kpi::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  width: 10px;
+
+  background:
+    var(--accent);
+}
+
+
+/* =========================================================
+   ICONO KPI
+   ========================================================= */
+
+.tri16-kpi-icon {
+  width: 70px;
+  height: 70px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color:
+    var(--accent);
+
+  background:
+    var(--soft);
+}
+
+
+.tri16-kpi-icon svg {
+  width: 41px;
+  height: 41px;
+
+  display: block;
+}
+
+
+/* =========================================================
+   TEXTO KPI
+   ========================================================= */
+
+.tri16-kpi-copy {
+  min-width: 0;
+}
+
+
+.tri16-kpi-label {
+  color: #506b97;
+
+  font-size: 15px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+
+.tri16-kpi-value {
+  margin-top: 14px;
+
+  color:
+    var(--accent);
+
+  font-size: 34px;
+
+  line-height: 0.95;
+
+  font-weight: 800;
+
+  letter-spacing: -0.7px;
+
+  white-space: nowrap;
+}
+
+
+.tri16-kpi-detail {
+  margin-top: 11px;
+
+  color: #244984;
+
+  font-size: 16px;
+
+  line-height: 1;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   DECORACIÓN KPI
+   ========================================================= */
+
+.tri16-kpi-decoration {
+  width: 96px;
+  height: 96px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color:
+    var(--accent);
+
+  opacity: 0.10;
+}
+
+
+.tri16-kpi-decoration svg {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+}
+
+
+/* =========================================================
+   COLORES KPI
+   ========================================================= */
+
+.tri16-kpi.teal {
+  --accent: #0fa8b6;
+  --soft: #e3f7f9;
+}
+
+
+.tri16-kpi.orange {
+  --accent: #ff7200;
+  --soft: #fff0e2;
+
+  background:
+    linear-gradient(
+      110deg,
+      #ffffff 0%,
+      #fff9f3 100%
+    );
+}
+
+
+.tri16-kpi.blue {
+  --accent: #1764ed;
+  --soft: #e7f2ff;
+}
+
+
+/* =========================================================
+   PROTECCIÓN LEGACY
+   ========================================================= */
+
+body.slide16-body .tri16-panel,
+body.slide16-body .tri16-kpi {
+  box-sizing: border-box !important;
+}
+
+</style>
+
+
+<%
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+const q =
+  typeof quarterly !== 'undefined' &&
+  quarterly
+    ? quarterly
+    : {};
+
+
+const totalsInput =
+  typeof monthlySeries !== 'undefined' &&
+  Array.isArray(monthlySeries)
+    ? monthlySeries.slice(0, 3)
+    : [];
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function tri16Number(value) {
+
+  const n =
+    Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+
+}
+
+
+function tri16Format(value) {
+
+  if (
+    typeof formatNumber ===
+    'function'
+  ) {
+
+    return formatNumber(value);
+
+  }
+
+  return tri16Number(value);
+
+}
+
+
+function tri16Pct(value) {
+
+  return tri16Number(value)
+    .toFixed(1);
+
+}
+
+
+function tri16Change(
+  current,
+  previous
+) {
+
+  const currentValue =
+    tri16Number(current);
+
+  const previousValue =
+    tri16Number(previous);
+
+
+  if (
+    previousValue === 0
+  ) {
+
+    return null;
+
+  }
+
+
+  return (
+    (
+      currentValue -
+      previousValue
+    ) /
+    previousValue
+  ) * 100;
+
+}
+
+
+function tri16SignedPct(value) {
+
+  if (
+    value === null ||
+    !Number.isFinite(value)
+  ) {
+
+    return '—';
+
+  }
+
+
+  const sign =
+    value > 0
+      ? '+'
+      : '';
+
+
+  return (
+    sign +
+    value.toFixed(1) +
+    '%'
+  );
+
+}
+
+
+function tri16SignedPoints(value) {
+
+  if (
+    value === null ||
+    !Number.isFinite(value)
+  ) {
+
+    return '—';
+
+  }
+
+
+  const sign =
+    value > 0
+      ? '+'
+      : '−';
+
+
+  return (
+    sign +
+    Math.abs(value).toFixed(1) +
+    ' p.p.'
+  );
+
+}
+
+
+/* =========================================================
+   MESES TOTALES
+   ========================================================= */
+
+const totals =
+  Array.from(
+    {
+      length: 3
+    },
+    (
+      _,
+      index
+    ) => {
+
+      const fallback = [
+        {
+          month: 'Mayo',
+          value: 46
+        },
+        {
+          month: 'Junio',
+          value: 57
+        },
+        {
+          month: 'Julio',
+          value: 80
+        }
+      ][index];
+
+
+      return (
+        totalsInput[index] ||
+        fallback
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   CASOS USB-C POR MES
+   =========================================================
+
+   Apps Script podrá enviar:
+
+   quarterly: {
+
+     usbCMonthly: [
+
+       {
+         month: "Mayo",
+         value: 14
+       },
+
+       {
+         month: "Junio",
+         value: 19
+       },
+
+       {
+         month: "Julio",
+         value: 16
+       }
+
+     ]
+
+   }
+
+   También aceptamos nombres alternativos.
+*/
+
+const usbInput =
+  Array.isArray(q.usbCMonthly)
+    ? q.usbCMonthly
+
+    : Array.isArray(q.usbMonthly)
+      ? q.usbMonthly
+
+      : Array.isArray(q.cambioUsbCMonthly)
+        ? q.cambioUsbCMonthly
+
+        : [];
+
+
+/*
+   Fallback para el diseño de prueba.
+*/
+
+const usbFallback = [
+
+  {
+    month: 'Mayo',
+    value: 14
+  },
+
+  {
+    month: 'Junio',
+    value: 19
+  },
+
+  {
+    month: 'Julio',
+    value: 16
+  }
+
+];
+
+
+const usbMonths =
+  Array.from(
+    {
+      length: 3
+    },
+    (
+      _,
+      index
+    ) => {
+
+      const item =
+        usbInput[index] ||
+        usbFallback[index];
+
+
+      return {
+
+        month:
+          String(
+            item.month ??
+            item.mes ??
+            totals[index].month ??
+            ''
+          ),
+
+        value:
+          tri16Number(
+            item.value ??
+            item.count ??
+            item.cantidad ??
+            item.casos
+          )
+
+      };
+
+    }
+  );
+
+
+/* =========================================================
+   VALORES
+   ========================================================= */
+
+const usb1 =
+  usbMonths[0].value;
+
+
+const usb2 =
+  usbMonths[1].value;
+
+
+const usb3 =
+  usbMonths[2].value;
+
+
+const total1 =
+  tri16Number(
+    totals[0].value
+  );
+
+
+const total2 =
+  tri16Number(
+    totals[1].value
+  );
+
+
+const total3 =
+  tri16Number(
+    totals[2].value
+  );
+
+
+/* =========================================================
+   PARTICIPACIÓN USB-C
+   ========================================================= */
+
+const share1 =
+  total1 > 0
+    ? (
+        usb1 /
+        total1
+      ) * 100
+    : 0;
+
+
+const share2 =
+  total2 > 0
+    ? (
+        usb2 /
+        total2
+      ) * 100
+    : 0;
+
+
+const share3 =
+  total3 > 0
+    ? (
+        usb3 /
+        total3
+      ) * 100
+    : 0;
+
+
+/* =========================================================
+   KPI INFERIORES
+   ========================================================= */
+
+const usbThirdVsSecond =
+  tri16Change(
+    usb3,
+    usb2
+  );
+
+
+const participationChange =
+  share3 -
+  share2;
+
+
+const totalThirdVsSecond =
+  tri16Change(
+    total3,
+    total2
+  );
+
+
+/* =========================================================
+   ESCALA GRÁFICO DE BARRAS
+   ========================================================= */
+
+function tri16NiceAxis(
+  maximum,
+  divisions = 4
+) {
+
+  const maxValue =
+    Math.max(
+      1,
+      tri16Number(maximum)
+    );
+
+
+  const rawStep =
+    maxValue /
+    divisions;
+
+
+  const magnitude =
+    Math.pow(
+      10,
+      Math.floor(
+        Math.log10(
+          rawStep
+        )
+      )
+    );
+
+
+  const normalized =
+    rawStep /
+    magnitude;
+
+
+  const choices = [
+    1,
+    2,
+    2.5,
+    5,
+    10
+  ];
+
+
+  let nice =
+    choices[
+      choices.length - 1
+    ];
+
+
+  for (
+    const candidate
+    of choices
+  ) {
+
+    if (
+      candidate >=
+      normalized
+    ) {
+
+      nice =
+        candidate;
+
+      break;
+
+    }
+
+  }
+
+
+  const step =
+    nice *
+    magnitude;
+
+
+  const axisMaximum =
+    Math.ceil(
+      maxValue /
+      step
+    ) *
+    step;
+
+
+  return {
+
+    step,
+
+    maximum:
+      axisMaximum
+
+  };
+
+}
+
+
+const barMaximumValue =
+  Math.max(
+    usb1,
+    usb2,
+    usb3
+  );
+
+
+const barAxis =
+  tri16NiceAxis(
+    barMaximumValue,
+    4
+  );
+
+
+const barTicks = [];
+
+
+for (
+  let value = 0;
+  value <= barAxis.maximum + 0.001;
+  value += barAxis.step
+) {
+
+  barTicks.push(
+    value
+  );
+
+}
+
+
+/* =========================================================
+   POSICIONES GRÁFICO BARRAS
+   ========================================================= */
+
+const barPlot = {
+
+  left: 58,
+
+  right: 700,
+
+  top: 24,
+
+  bottom: 290
+
+};
+
+
+const barPlotHeight =
+  barPlot.bottom -
+  barPlot.top;
+
+
+const barData = [
+
+  {
+    x: 96,
+    width: 138,
+    month: usbMonths[0].month,
+    value: usb1
+  },
+
+  {
+    x: 310,
+    width: 138,
+    month: usbMonths[1].month,
+    value: usb2
+  },
+
+  {
+    x: 524,
+    width: 138,
+    month: usbMonths[2].month,
+    value: usb3
+  }
+
+];
+
+
+barData.forEach(
+  item => {
+
+    item.height =
+      barAxis.maximum > 0
+        ? (
+            item.value /
+            barAxis.maximum
+          ) *
+          barPlotHeight
+        : 0;
+
+
+    item.y =
+      barPlot.bottom -
+      item.height;
+
+  }
+);
+
+
+/* =========================================================
+   ESCALA GRÁFICO PARTICIPACIÓN
+   ========================================================= */
+
+const maximumShare =
+  Math.max(
+    share1,
+    share2,
+    share3
+  );
+
+
+/*
+   Mínimo 40% para que el ejemplo
+   se vea exactamente como la referencia.
+
+   Si en otro trimestre supera 40%,
+   el eje aumenta automáticamente.
+*/
+
+const shareAxisMaximum =
+  Math.max(
+    40,
+    Math.ceil(
+      maximumShare /
+      10
+    ) * 10
+  );
+
+
+const shareTicks = [];
+
+
+for (
+  let value = 0;
+  value <= shareAxisMaximum;
+  value += 10
+) {
+
+  shareTicks.push(
+    value
+  );
+
+}
+
+
+/* =========================================================
+   PUNTOS LÍNEA
+   ========================================================= */
+
+const linePlot = {
+
+  left: 72,
+
+  right: 696,
+
+  top: 24,
+
+  bottom: 290
+
+};
+
+
+const linePlotHeight =
+  linePlot.bottom -
+  linePlot.top;
+
+
+const linePoints = [
+
+  {
+    x: 168,
+    month: usbMonths[0].month,
+    value: share1
+  },
+
+  {
+    x: 382,
+    month: usbMonths[1].month,
+    value: share2
+  },
+
+  {
+    x: 596,
+    month: usbMonths[2].month,
+    value: share3
+  }
+
+];
+
+
+linePoints.forEach(
+  item => {
+
+    item.y =
+      linePlot.bottom -
+      (
+        item.value /
+        shareAxisMaximum
+      ) *
+      linePlotHeight;
+
+  }
+);
+
+
+const linePath =
+  linePoints
+    .map(
+      (
+        point,
+        index
+      ) =>
+
+        `${
+          index === 0
+            ? 'M'
+            : 'L'
+        } ${point.x} ${point.y}`
+
+    )
+    .join(' ');
+
+%>
+
+
+<div class="tri16">
+
+
+  <div class="tri16-layout">
+
+
+    <!-- ===================================================
+         FILA SUPERIOR
+         =================================================== -->
+
+    <section class="tri16-top">
+
+
+      <!-- =================================================
+           CASOS USB-C
+           ================================================= -->
+
+      <article class="tri16-panel">
+
+
+        <div class="tri16-panel-heading">
+
+
+          <div class="tri16-panel-icon">
+
+            <svg
+              viewBox="0 0 48 48"
+              aria-hidden="true"
+            >
+
+              <rect
+                x="7"
+                y="28"
+                width="7"
+                height="12"
+                rx="1.5"
+                fill="currentColor"
+              ></rect>
+
+              <rect
+                x="19"
+                y="19"
+                width="7"
+                height="21"
+                rx="1.5"
+                fill="currentColor"
+              ></rect>
+
+              <rect
+                x="31"
+                y="9"
+                width="7"
+                height="31"
+                rx="1.5"
+                fill="currentColor"
+              ></rect>
+
+            </svg>
+
+          </div>
+
+
+          <h2 class="tri16-panel-title">
+            Casos de cambio de cable USB-C
+          </h2>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             BAR CHART
+             ================================================= -->
+
+        <svg
+          class="tri16-chart-svg"
+          viewBox="0 0 720 340"
+          aria-hidden="true"
+        >
+
+
+          <defs>
+
+            <linearGradient
+              id="tri16BarGradient"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+
+              <stop
+                offset="0%"
+                stop-color="#1479f2"
+              ></stop>
+
+              <stop
+                offset="100%"
+                stop-color="#0862dc"
+              ></stop>
+
+            </linearGradient>
+
+          </defs>
+
+
+          <!-- GRID / EJE Y -->
+
+          <% barTicks.forEach(function(tick) {
+
+            const y =
+              barPlot.bottom -
+              (
+                tick /
+                barAxis.maximum
+              ) *
+              barPlotHeight;
+
+          %>
+
+
+            <line
+              x1="<%= barPlot.left %>"
+              y1="<%= y %>"
+              x2="<%= barPlot.right %>"
+              y2="<%= y %>"
+
+              stroke="#d6e5f3"
+
+              stroke-width="1"
+
+              stroke-dasharray="
+                <%= tick === 0 ? '0' : '4 4' %>
+              "
+            ></line>
+
+
+            <text
+              class="tri16-axis-text"
+              x="<%= barPlot.left - 15 %>"
+              y="<%= y + 5 %>"
+              text-anchor="end"
+            >
+
+              <%= tri16Format(tick) %>
+
+            </text>
+
+
+          <% }); %>
+
+
+          <!-- EJE Y -->
+
+          <line
+            x1="<%= barPlot.left %>"
+            y1="<%= barPlot.top %>"
+            x2="<%= barPlot.left %>"
+            y2="<%= barPlot.bottom %>"
+
+            stroke="#9db6d6"
+
+            stroke-width="1.5"
+          ></line>
+
+
+          <!-- EJE X -->
+
+          <line
+            x1="<%= barPlot.left %>"
+            y1="<%= barPlot.bottom %>"
+            x2="<%= barPlot.right %>"
+            y2="<%= barPlot.bottom %>"
+
+            stroke="#9db6d6"
+
+            stroke-width="1.5"
+          ></line>
+
+
+          <!-- BARRAS -->
+
+          <% barData.forEach(function(item) { %>
+
+
+            <rect
+              x="<%= item.x %>"
+              y="<%= item.y %>"
+
+              width="<%= item.width %>"
+              height="<%= item.height %>"
+
+              fill="url(#tri16BarGradient)"
+            ></rect>
+
+
+            <text
+              class="tri16-bar-number"
+              x="<%= item.x + item.width / 2 %>"
+              y="<%= item.y - 12 %>"
+              text-anchor="middle"
+            >
+
+              <%= tri16Format(item.value) %>
+
+            </text>
+
+
+            <text
+              class="tri16-month-text"
+              x="<%= item.x + item.width / 2 %>"
+              y="320"
+              text-anchor="middle"
+            >
+
+              <%= item.month %>
+
+            </text>
+
+
+          <% }); %>
+
+
+        </svg>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           PARTICIPACIÓN
+           ================================================= -->
+
+      <article class="tri16-panel">
+
+
+        <div class="tri16-panel-heading">
+
+
+          <div class="tri16-panel-icon">
+
+            <svg
+              viewBox="0 0 48 48"
+              aria-hidden="true"
+            >
+
+              <path
+                d="
+                  M6 34
+                  L17 23
+                  L25 29
+                  L41 12
+                "
+                fill="none"
+                stroke="currentColor"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+
+            </svg>
+
+          </div>
+
+
+          <h2
+            class="
+              tri16-panel-title
+              italic
+            "
+          >
+            Participación de casos USB-C
+          </h2>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             LINE CHART
+             ================================================= -->
+
+        <svg
+          class="tri16-chart-svg"
+          viewBox="0 0 720 340"
+          aria-hidden="true"
+        >
+
+
+          <!-- GRID -->
+
+          <% shareTicks.forEach(function(tick) {
+
+            const y =
+              linePlot.bottom -
+              (
+                tick /
+                shareAxisMaximum
+              ) *
+              linePlotHeight;
+
+          %>
+
+
+            <line
+              x1="<%= linePlot.left %>"
+              y1="<%= y %>"
+              x2="<%= linePlot.right %>"
+              y2="<%= y %>"
+
+              stroke="#d6e5f3"
+
+              stroke-width="1"
+
+              stroke-dasharray="
+                <%= tick === 0 ? '0' : '4 4' %>
+              "
+            ></line>
+
+
+            <text
+              class="tri16-axis-text"
+              x="<%= linePlot.left - 15 %>"
+              y="<%= y + 5 %>"
+              text-anchor="end"
+            >
+
+              <%= tri16Pct(tick) %>%
+
+            </text>
+
+
+          <% }); %>
+
+
+          <!-- EJES -->
+
+          <line
+            x1="<%= linePlot.left %>"
+            y1="<%= linePlot.top %>"
+            x2="<%= linePlot.left %>"
+            y2="<%= linePlot.bottom %>"
+
+            stroke="#9db6d6"
+
+            stroke-width="1.5"
+          ></line>
+
+
+          <line
+            x1="<%= linePlot.left %>"
+            y1="<%= linePlot.bottom %>"
+            x2="<%= linePlot.right %>"
+            y2="<%= linePlot.bottom %>"
+
+            stroke="#9db6d6"
+
+            stroke-width="1.5"
+          ></line>
+
+
+          <!-- LÍNEA -->
+
+          <path
+            d="<%= linePath %>"
+
+            fill="none"
+
+            stroke="#ff7200"
+
+            stroke-width="4"
+
+            stroke-linecap="round"
+
+            stroke-linejoin="round"
+          ></path>
+
+
+          <!-- PUNTOS -->
+
+          <% linePoints.forEach(function(item) { %>
+
+
+            <circle
+              cx="<%= item.x %>"
+              cy="<%= item.y %>"
+              r="9"
+
+              fill="#ff7a00"
+
+              stroke="#1684df"
+
+              stroke-width="1.5"
+            ></circle>
+
+
+            <text
+              class="tri16-line-number"
+              x="<%= item.x %>"
+              y="<%= item.y - 18 %>"
+            >
+
+              <%= tri16Pct(item.value) %>%
+
+            </text>
+
+
+            <text
+              class="tri16-month-text"
+              x="<%= item.x %>"
+              y="320"
+              text-anchor="middle"
+            >
+
+              <%= item.month %>
+
+            </text>
+
+
+          <% }); %>
+
+
+        </svg>
+
+
+      </article>
+
+
+    </section>
+
+
+
+    <!-- ===================================================
+         KPIs INFERIORES
+         =================================================== -->
+
+    <section class="tri16-bottom">
+
+
+      <!-- =================================================
+           TERCER MES VS SEGUNDO
+           ================================================= -->
+
+      <article class="tri16-kpi teal">
+
+
+        <div class="tri16-kpi-icon">
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <path
+              d="
+                M6 33
+                L17 22
+                L25 28
+                L40 13
+              "
+              fill="none"
+              stroke="currentColor"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+
+            <path
+              d="
+                M32 13
+                H40
+                V21
+              "
+              fill="none"
+              stroke="currentColor"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri16-kpi-copy">
+
+
+          <div class="tri16-kpi-label">
+
+            <%= String(usbMonths[2].month).toUpperCase() %>
+            VS.
+            <%= String(usbMonths[1].month).toUpperCase() %>
+
+          </div>
+
+
+          <div class="tri16-kpi-value">
+
+            <%= tri16SignedPct(usbThirdVsSecond) %>
+            en casos
+
+          </div>
+
+
+          <div class="tri16-kpi-detail">
+
+            <%= tri16Format(usb2) %>
+            →
+            <%= tri16Format(usb3) %>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- decoración -->
+
+        <div class="tri16-kpi-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="8"
+              y="68"
+              width="22"
+              height="20"
+              rx="5"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="39"
+              y="43"
+              width="22"
+              height="45"
+              rx="5"
+              fill="currentColor"
+            ></rect>
+
+            <rect
+              x="70"
+              y="20"
+              width="22"
+              height="68"
+              rx="5"
+              fill="currentColor"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           CAMBIO PARTICIPACIÓN
+           ================================================= -->
+
+      <article class="tri16-kpi orange">
+
+
+        <div class="tri16-kpi-icon">
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <circle
+              cx="24"
+              cy="24"
+              r="15"
+              fill="currentColor"
+            ></circle>
+
+            <path
+              d="
+                M24 9
+                V24
+                H39
+                A15 15 0 0 0
+                24 9
+                Z
+              "
+              fill="#fff0e2"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri16-kpi-copy">
+
+
+          <div class="tri16-kpi-label">
+            CAMBIO EN PARTICIPACIÓN
+          </div>
+
+
+          <div class="tri16-kpi-value">
+
+            <%= tri16SignedPoints(participationChange) %>
+
+          </div>
+
+
+          <div class="tri16-kpi-detail">
+
+            <%= tri16Pct(share2) %>%
+            →
+            <%= tri16Pct(share3) %>%
+
+          </div>
+
+
+        </div>
+
+
+        <!-- decoración -->
+
+        <div class="tri16-kpi-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <circle
+              cx="50"
+              cy="50"
+              r="37"
+              fill="currentColor"
+            ></circle>
+
+            <path
+              d="
+                M50 13
+                V50
+                L84 65
+                A37 37 0 0 0
+                50 13
+                Z
+              "
+              fill="#ffffff"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+
+      <!-- =================================================
+           CONTEXTO OPERATIVO
+           ================================================= -->
+
+      <article class="tri16-kpi blue">
+
+
+        <div class="tri16-kpi-icon">
+
+          <svg
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+
+            <circle
+              cx="24"
+              cy="15"
+              r="6"
+              fill="currentColor"
+            ></circle>
+
+            <circle
+              cx="11"
+              cy="19"
+              r="5"
+              fill="currentColor"
+            ></circle>
+
+            <circle
+              cx="37"
+              cy="19"
+              r="5"
+              fill="currentColor"
+            ></circle>
+
+            <path
+              d="
+                M16 40
+                V32
+                C16 25
+                19 22
+                24 22
+                C29 22
+                32 25
+                32 32
+                V40
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+            <path
+              d="
+                M4 39
+                V32
+                C4 27
+                7 24
+                11 24
+                C14 24
+                16 25
+                17 27
+                C15 30
+                14 34
+                14 39
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+            <path
+              d="
+                M34 39
+                C34 34
+                33 30
+                31 27
+                C32 25
+                34 24
+                37 24
+                C41 24
+                44 27
+                44 32
+                V39
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri16-kpi-copy">
+
+
+          <div class="tri16-kpi-label">
+            CONTEXTO OPERATIVO
+          </div>
+
+
+          <div class="tri16-kpi-value">
+
+            <%= tri16SignedPct(totalThirdVsSecond) %>
+            atención total
+
+          </div>
+
+
+          <div class="tri16-kpi-detail">
+
+            <%= tri16Format(total2) %>
+            →
+            <%= tri16Format(total3) %>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- decoración -->
+
+        <div class="tri16-kpi-decoration">
+
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+
+            <circle
+              cx="50"
+              cy="25"
+              r="13"
+              fill="currentColor"
+            ></circle>
+
+            <circle
+              cx="20"
+              cy="32"
+              r="10"
+              fill="currentColor"
+            ></circle>
+
+            <circle
+              cx="80"
+              cy="32"
+              r="10"
+              fill="currentColor"
+            ></circle>
+
+            <path
+              d="
+                M28 90
+                V68
+                C28 53
+                36 45
+                50 45
+                C64 45
+                72 53
+                72 68
+                V90
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+            <path
+              d="
+                M2 87
+                V66
+                C2 54
+                9 48
+                20 48
+                C25 48
+                29 50
+                32 53
+                C26 61
+                25 71
+                25 87
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+            <path
+              d="
+                M75 87
+                C75 71
+                74 61
+                68 53
+                C71 50
+                75 48
+                80 48
+                C91 48
+                98 54
+                98 66
+                V87
+                Z
+              "
+              fill="currentColor"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+      </article>
+
+
+    </section>
+
+
+  </div>
+
+
+</div>
