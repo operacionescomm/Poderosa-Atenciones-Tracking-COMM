@@ -178,6 +178,24 @@ body.slide18-body .q-content {
   text-overflow: ellipsis;
 }
 
+/* Nombre completo del insumo principal */
+
+.tri18-kpi-description.principal-supply-name {
+  font-size: 8.8px;
+
+  line-height: 1.05;
+
+  font-weight: 600;
+
+  letter-spacing: -0.15px;
+
+  white-space: nowrap;
+
+  overflow: visible;
+
+  text-overflow: clip;
+}
+
 
 .tri18-kpi.teal {
   --accent: #0da7b5;
@@ -1547,11 +1565,11 @@ const chartBars =
         </div>
 
         <div
-          class="tri18-kpi-description"
-          title="<%= principal.name %>"
-        >
-          <%= tri18Short(principal.name, 26) %>
-        </div>
+  class="tri18-kpi-description principal-supply-name"
+  title="<%= principal.name %>"
+>
+  <%= principal.name %>
+</div>
 
       </div>
 
