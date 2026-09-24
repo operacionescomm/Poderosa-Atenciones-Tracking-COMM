@@ -1,1 +1,2317 @@
-<%- include('../components/quarterly-placeholder') %>
+<style>
+
+/* =========================================================
+   SLIDE 18 · CONSUMO TRIMESTRAL DE INSUMOS
+   Header y footer compartidos desde report.ejs
+   ========================================================= */
+
+body.slide18-body .q-content {
+  padding:
+    14px
+    30px
+    6px
+    30px !important;
+}
+
+
+.tri18 {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+
+  grid-template-rows:
+    120px
+    440px
+    118px;
+
+  row-gap: 14px;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color: #123b8f;
+}
+
+
+.tri18 *,
+.tri18 *::before,
+.tri18 *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   FILA DE KPIs
+   ========================================================= */
+
+.tri18-kpis {
+  display: grid;
+
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+
+.tri18-kpi {
+  position: relative;
+
+  height: 120px;
+
+  display: grid;
+
+  grid-template-columns:
+    78px
+    minmax(0, 1fr);
+
+  column-gap: 14px;
+
+  align-items: center;
+
+  padding:
+    13px
+    13px;
+
+  overflow: hidden;
+
+  border:
+    1.5px solid
+    #d8e8f6;
+
+  border-radius: 15px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 14px
+    rgba(39, 83, 132, 0.07);
+}
+
+
+.tri18-kpi-icon {
+  width: 72px;
+  height: 72px;
+
+  border-radius: 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #ffffff;
+
+  background:
+    var(--accent);
+
+  box-shadow:
+    0 7px 14px
+    rgba(25, 92, 160, 0.15);
+}
+
+
+.tri18-kpi-icon svg {
+  width: 43px;
+  height: 43px;
+
+  display: block;
+}
+
+
+.tri18-kpi-copy {
+  min-width: 0;
+}
+
+
+.tri18-kpi-label {
+  min-height: 32px;
+
+  color: #123c92;
+
+  font-size: 13px;
+
+  line-height: 1.1;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+
+.tri18-kpi-number {
+  margin-top: 4px;
+
+  color:
+    var(--accent);
+
+  font-size: 43px;
+
+  line-height: .92;
+
+  font-weight: 800;
+
+  letter-spacing: -1px;
+
+  white-space: nowrap;
+}
+
+
+.tri18-kpi-description {
+  margin-top: 6px;
+
+  color: #244788;
+
+  font-size: 10px;
+
+  line-height: 1.08;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+.tri18-kpi.teal {
+  --accent: #0da7b5;
+}
+
+
+.tri18-kpi.orange {
+  --accent: #ff6c13;
+}
+
+
+.tri18-kpi.purple {
+  --accent: #7023d9;
+}
+
+
+.tri18-kpi.cyan {
+  --accent: #14aabd;
+}
+
+
+.tri18-kpi.blue {
+  --accent: #1460d6;
+}
+
+
+/* =========================================================
+   ZONA CENTRAL
+   ========================================================= */
+
+.tri18-middle {
+  display: grid;
+
+  grid-template-columns:
+    840px
+    minmax(0, 1fr);
+
+  column-gap: 16px;
+
+  height: 440px;
+}
+
+
+/* =========================================================
+   TARJETAS CENTRALES
+   ========================================================= */
+
+.tri18-card {
+  height: 440px;
+
+  overflow: hidden;
+
+  border:
+    1.5px solid
+    #d6e7f5;
+
+  border-radius: 15px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 16px
+    rgba(39, 83, 132, 0.07);
+}
+
+
+/* =========================================================
+   HEADER AZUL / TURQUESA
+   ========================================================= */
+
+.tri18-card-header {
+  height: 52px;
+
+  display: flex;
+
+  align-items: center;
+
+  padding:
+    0
+    20px;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      90deg,
+      #0757c8 0%,
+      #068de5 45%,
+      #0fb4bd 100%
+    );
+}
+
+
+.tri18-card-header-icon {
+  width: 48px;
+  height: 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding-right: 14px;
+
+  margin-right: 15px;
+
+  border-right:
+    1px solid
+    rgba(255,255,255,.36);
+}
+
+
+.tri18-card-header-icon svg {
+  width: 31px;
+  height: 31px;
+
+  display: block;
+}
+
+
+.tri18-card-title {
+  color: #ffffff;
+
+  font-size: 23px;
+
+  line-height: 1;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   LEYENDA GRÁFICO
+   ========================================================= */
+
+.tri18-chart-legend {
+  height: 36px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 9px;
+
+  color: #173c82;
+
+  font-size: 15px;
+
+  font-weight: 600;
+}
+
+
+.tri18-chart-legend-box {
+  width: 35px;
+  height: 16px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #10a8b5 0%,
+      #19bec8 100%
+    );
+}
+
+
+/* =========================================================
+   SVG GRÁFICO
+   ========================================================= */
+
+.tri18-chart-svg {
+  display: block;
+
+  width: 100%;
+  height: 350px;
+
+  overflow: visible;
+}
+
+
+.tri18-grid-line {
+  stroke: #d5e5f3;
+
+  stroke-width: 1;
+
+  stroke-dasharray: 5 4;
+}
+
+
+.tri18-axis-line {
+  stroke: #9fb8d6;
+
+  stroke-width: 1.4;
+}
+
+
+.tri18-axis-label {
+  fill: #264f99;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 13px;
+
+  font-weight: 500;
+}
+
+
+.tri18-axis-title {
+  fill: #123a88;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 800;
+}
+
+
+.tri18-bar-value {
+  fill: #071e69;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 15px;
+
+  font-weight: 800;
+}
+
+
+.tri18-chart-label {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: center;
+
+  padding:
+    5px
+    2px
+    0;
+
+  color: #123b84;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 10px;
+
+  line-height: 1.04;
+
+  font-weight: 600;
+
+  text-align: center;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.tri18-table-wrap {
+  height: 388px;
+
+  padding:
+    10px
+    10px
+    10px;
+}
+
+
+.tri18-table {
+  width: 100%;
+  height: 100%;
+
+  table-layout: fixed;
+
+  border-collapse: collapse;
+
+  border:
+    1px solid
+    #c8ddf1;
+}
+
+
+.tri18-table thead {
+  height: 42px;
+}
+
+
+.tri18-table th {
+  padding:
+    0
+    8px;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      180deg,
+      #084a99 0%,
+      #073b7e 100%
+    );
+
+  border-right:
+    1px solid
+    rgba(255,255,255,.35);
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  text-align: center;
+}
+
+
+.tri18-table th:last-child {
+  border-right: none;
+}
+
+
+.tri18-table tbody tr {
+  height: 32px;
+}
+
+
+.tri18-table tbody tr:nth-child(odd) {
+  background: #ffffff;
+}
+
+
+.tri18-table tbody tr:nth-child(even) {
+  background: #edf6fd;
+}
+
+
+.tri18-table td {
+  padding:
+    0
+    9px;
+
+  border-right:
+    1px solid
+    #c5dcef;
+
+  border-bottom:
+    1px solid
+    #c5dcef;
+
+  color: #183d83;
+
+  font-size: 11px;
+
+  line-height: 1;
+
+  vertical-align: middle;
+}
+
+
+.tri18-table td:last-child {
+  border-right: none;
+}
+
+
+.tri18-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+.tri18-col-rank {
+  width: 60px;
+}
+
+
+.tri18-col-supply {
+  width: auto;
+}
+
+
+.tri18-col-quantity {
+  width: 84px;
+}
+
+
+.tri18-col-unit {
+  width: 115px;
+}
+
+
+.tri18-col-share {
+  width: 105px;
+}
+
+
+.tri18-table-rank,
+.tri18-table-quantity,
+.tri18-table-unit,
+.tri18-table-share {
+  text-align: center;
+}
+
+
+.tri18-table-rank {
+  color: #071e67 !important;
+
+  font-weight: 800 !important;
+}
+
+
+.tri18-table-supply {
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+.tri18-table-quantity {
+  color: #123b89;
+
+  font-weight: 700;
+}
+
+
+.tri18-table-quantity.principal,
+.tri18-table-share.principal {
+  color: #ff7200;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   BANNER INFERIOR
+   ========================================================= */
+
+.tri18-insight {
+  position: relative;
+
+  height: 118px;
+
+  display: grid;
+
+  grid-template-columns:
+    92px
+    2px
+    minmax(0, 1fr)
+    100px;
+
+  column-gap: 20px;
+
+  align-items: center;
+
+  padding:
+    12px
+    18px;
+
+  overflow: hidden;
+
+  border:
+    1.5px solid
+    #139cf0;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #ffffff 80%,
+      #f8fcff 100%
+    );
+
+  box-shadow:
+    0 4px 14px
+    rgba(31, 112, 178, 0.07);
+}
+
+
+.tri18-insight-icon {
+  width: 82px;
+  height: 82px;
+
+  border-radius: 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      145deg,
+      #1578ee 0%,
+      #0755bd 100%
+    );
+
+  box-shadow:
+    0 7px 14px
+    rgba(12, 82, 175, 0.16);
+}
+
+
+.tri18-insight-icon svg {
+  width: 52px;
+  height: 52px;
+
+  display: block;
+}
+
+
+.tri18-insight-divider {
+  width: 2px;
+  height: 79px;
+
+  background: #1764ed;
+}
+
+
+.tri18-insight-copy {
+  min-width: 0;
+}
+
+
+.tri18-insight-title {
+  color: #09296f;
+
+  font-size: 27px;
+
+  line-height: 1;
+
+  font-weight: 800;
+}
+
+
+.tri18-insight-text {
+  margin-top: 8px;
+
+  color: #123d88;
+
+  font-size: 18px;
+
+  line-height: 1.3;
+
+  font-weight: 500;
+}
+
+
+.tri18-insight-decoration {
+  width: 92px;
+  height: 82px;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  opacity: .17;
+}
+
+
+.tri18-insight-decoration span {
+  display: block;
+
+  width: 20px;
+
+  border-radius:
+    5px
+    5px
+    2px
+    2px;
+
+  background: #1687ed;
+}
+
+
+.tri18-insight-decoration span:nth-child(1) {
+  height: 28px;
+}
+
+
+.tri18-insight-decoration span:nth-child(2) {
+  height: 48px;
+}
+
+
+.tri18-insight-decoration span:nth-child(3) {
+  height: 72px;
+}
+
+
+/* =========================================================
+   PROTECCIÓN LEGACY
+   ========================================================= */
+
+body.slide18-body .tri18-card,
+body.slide18-body .tri18-kpi,
+body.slide18-body .tri18-insight {
+  box-sizing: border-box !important;
+}
+
+</style>
+
+
+<%
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+const q =
+  typeof quarterly !== 'undefined' &&
+  quarterly
+    ? quarterly
+    : {};
+
+
+/*
+   Preferimos allSupplies porque necesitamos conocer
+   también los insumos que estén fuera del Top 10.
+
+   Después del pequeño ajuste de server.js que te dejo
+   debajo de este código, allSupplies estará disponible.
+*/
+
+const supplyInput =
+  typeof allSupplies !== 'undefined' &&
+  Array.isArray(allSupplies) &&
+  allSupplies.length
+
+    ? allSupplies
+
+    : (
+        Array.isArray(q.supplies) &&
+        q.supplies.length
+
+          ? q.supplies
+
+          : (
+              typeof supplies !== 'undefined' &&
+              Array.isArray(supplies)
+
+                ? supplies
+
+                : []
+            )
+      );
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function tri18Number(value) {
+
+  const n =
+    Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+
+}
+
+
+function tri18Text(value) {
+
+  return String(
+    value ?? ''
+  ).trim();
+
+}
+
+
+function tri18Quantity(value) {
+
+  const n =
+    tri18Number(value);
+
+
+  if (
+    typeof formatNumber ===
+    'function'
+  ) {
+
+    return formatNumber(
+      n,
+      Number.isInteger(n)
+        ? 0
+        : 1
+    );
+
+  }
+
+
+  return n.toLocaleString(
+    'es-PE',
+    {
+      maximumFractionDigits: 1
+    }
+  );
+
+}
+
+
+function tri18Pct(value) {
+
+  const n =
+    tri18Number(value);
+
+
+  return (
+    n.toLocaleString(
+      'es-PE',
+      {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+      }
+    ) +
+    '%'
+  );
+
+}
+
+
+function tri18Short(
+  value,
+  max = 38
+) {
+
+  const input =
+    tri18Text(value);
+
+
+  if (
+    input.length <= max
+  ) {
+
+    return input;
+
+  }
+
+
+  return (
+    input
+      .slice(
+        0,
+        max - 1
+      )
+      .trim() +
+    '…'
+  );
+
+}
+
+
+/* =========================================================
+   NORMALIZAR INSUMOS
+   ========================================================= */
+
+const normalizedSupplies =
+  supplyInput
+    .map(
+      item => ({
+
+        name:
+          tri18Text(
+            item.name ??
+            item.nombre ??
+            item.insumo
+          ),
+
+        quantity:
+          tri18Number(
+            item.quantity ??
+            item.cantidad
+          ),
+
+        unit:
+          tri18Text(
+            item.unit ??
+            item.unidad ??
+            ''
+          )
+
+      })
+    )
+    .filter(
+      item =>
+        item.name &&
+        item.quantity >= 0
+    )
+    .sort(
+      (
+        a,
+        b
+      ) =>
+        b.quantity -
+        a.quantity
+    );
+
+
+/* =========================================================
+   TOP 10
+   ========================================================= */
+
+const top10 =
+  normalizedSupplies
+    .slice(
+      0,
+      10
+    );
+
+
+const topAnalyzed =
+  top10.length;
+
+
+const totalSupplyTypes =
+  normalizedSupplies.length;
+
+
+/* =========================================================
+   CANTIDAD ACUMULADA
+   ========================================================= */
+
+const totalQuantity =
+  normalizedSupplies
+    .reduce(
+      (
+        total,
+        item
+      ) =>
+        total +
+        item.quantity,
+
+      0
+    );
+
+
+const top10Quantity =
+  top10
+    .reduce(
+      (
+        total,
+        item
+      ) =>
+        total +
+        item.quantity,
+
+      0
+    );
+
+
+/* =========================================================
+   PRINCIPALES INSUMOS
+   ========================================================= */
+
+const principal =
+  top10[0] || {
+    name: 'Sin datos',
+    quantity: 0,
+    unit: ''
+  };
+
+
+const second =
+  top10[1] || {
+    name: 'Sin datos',
+    quantity: 0,
+    unit: ''
+  };
+
+
+const third =
+  top10[2] || {
+    name: 'Sin datos',
+    quantity: 0,
+    unit: ''
+  };
+
+
+/* =========================================================
+   PARTICIPACIONES
+   ========================================================= */
+
+function tri18Share(quantity) {
+
+  return (
+    totalQuantity > 0
+
+      ? (
+          tri18Number(quantity) /
+          totalQuantity
+        ) * 100
+
+      : 0
+  );
+
+}
+
+
+const principalShare =
+  tri18Share(
+    principal.quantity
+  );
+
+
+const secondShare =
+  tri18Share(
+    second.quantity
+  );
+
+
+const thirdShare =
+  tri18Share(
+    third.quantity
+  );
+
+
+const top3Quantity =
+  top10
+    .slice(
+      0,
+      3
+    )
+    .reduce(
+      (
+        total,
+        item
+      ) =>
+        total +
+        item.quantity,
+
+      0
+    );
+
+
+const top3CumulativeShare =
+  totalQuantity > 0
+
+    ? (
+        top3Quantity /
+        totalQuantity
+      ) * 100
+
+    : 0;
+
+
+const top10Share =
+  totalQuantity > 0
+
+    ? (
+        top10Quantity /
+        totalQuantity
+      ) * 100
+
+    : 0;
+
+
+/* =========================================================
+   AGREGAR % A CADA FILA
+   ========================================================= */
+
+top10.forEach(
+  item => {
+
+    item.share =
+      tri18Share(
+        item.quantity
+      );
+
+  }
+);
+
+
+/* =========================================================
+   COMPLETAR TABLA A 10 FILAS
+   ========================================================= */
+
+const tableRows =
+  Array.from(
+    {
+      length: 10
+    },
+    (
+      _,
+      index
+    ) =>
+      top10[index] ||
+      null
+  );
+
+
+/* =========================================================
+   ESCALA DEL GRÁFICO
+   ========================================================= */
+
+function tri18NiceStep(value) {
+
+  if (
+    !Number.isFinite(value) ||
+    value <= 0
+  ) {
+
+    return 50;
+
+  }
+
+
+  const exponent =
+    Math.floor(
+      Math.log10(value)
+    );
+
+
+  const magnitude =
+    Math.pow(
+      10,
+      exponent
+    );
+
+
+  const normalized =
+    value /
+    magnitude;
+
+
+  const choices = [
+    1,
+    2,
+    2.5,
+    5,
+    10
+  ];
+
+
+  for (
+    const choice
+    of choices
+  ) {
+
+    if (
+      choice >= normalized
+    ) {
+
+      return (
+        choice *
+        magnitude
+      );
+
+    }
+
+  }
+
+
+  return (
+    10 *
+    magnitude
+  );
+
+}
+
+
+const maximumQuantity =
+  Math.max(
+    1,
+    ...top10.map(
+      item =>
+        item.quantity
+    )
+  );
+
+
+const rawStep =
+  maximumQuantity /
+  7;
+
+
+const axisStep =
+  tri18NiceStep(
+    rawStep
+  );
+
+
+/*
+   Dejamos un intervalo adicional
+   para que la barra principal no toque
+   el borde superior.
+
+   295 → 350
+*/
+
+let axisMaximum =
+  (
+    Math.ceil(
+      maximumQuantity /
+      axisStep
+    ) +
+    1
+  ) *
+  axisStep;
+
+
+if (
+  axisMaximum <= 0
+) {
+
+  axisMaximum = 350;
+
+}
+
+
+const axisTicks = [];
+
+
+for (
+  let tick = 0;
+  tick <= axisMaximum + 0.0001;
+  tick += axisStep
+) {
+
+  axisTicks.push(
+    Number(
+      tick.toFixed(6)
+    )
+  );
+
+}
+
+
+/* =========================================================
+   GEOMETRÍA DEL GRÁFICO
+   ========================================================= */
+
+const chart = {
+
+  left: 70,
+
+  right: 822,
+
+  top: 16,
+
+  bottom: 248
+
+};
+
+
+const chartWidth =
+  chart.right -
+  chart.left;
+
+
+const chartHeight =
+  chart.bottom -
+  chart.top;
+
+
+const chartCount =
+  Math.max(
+    1,
+    top10.length
+  );
+
+
+const slotWidth =
+  chartWidth /
+  chartCount;
+
+
+const barWidth =
+  Math.min(
+    48,
+    slotWidth * .64
+  );
+
+
+const chartBars =
+  top10.map(
+    (
+      item,
+      index
+    ) => {
+
+      const height =
+        (
+          item.quantity /
+          axisMaximum
+        ) *
+        chartHeight;
+
+
+      const centerX =
+        chart.left +
+        slotWidth *
+        index +
+        slotWidth / 2;
+
+
+      return {
+
+        ...item,
+
+        x:
+          centerX -
+          barWidth / 2,
+
+        centerX,
+
+        y:
+          chart.bottom -
+          height,
+
+        width:
+          barWidth,
+
+        height
+
+      };
+
+    }
+  );
+
+
+const chartUnit =
+  tri18Text(
+    q.supplyChartUnit ??
+    q.unidadGraficoInsumos ??
+    'und'
+  );
+
+%>
+
+
+<div class="tri18">
+
+
+  <!-- =====================================================
+       KPIs
+       ===================================================== -->
+
+  <section class="tri18-kpis">
+
+
+    <!-- TOP 10 ANALIZADOS -->
+
+    <article class="tri18-kpi teal">
+
+      <div class="tri18-kpi-icon">
+
+        <svg viewBox="0 0 48 48">
+
+          <rect
+            x="10"
+            y="7"
+            width="28"
+            height="34"
+            rx="3"
+            fill="none"
+            stroke="#ffffff"
+            stroke-width="3"
+          ></rect>
+
+          <path
+            d="
+              M16 15h16
+              M16 21h16
+              M16 27h16
+              M16 33h16
+            "
+            fill="none"
+            stroke="#ffffff"
+            stroke-width="2.4"
+            stroke-linecap="round"
+          ></path>
+
+        </svg>
+
+      </div>
+
+
+      <div class="tri18-kpi-copy">
+
+        <div class="tri18-kpi-label">
+          TOP 10<br>
+          ANALIZADOS
+        </div>
+
+        <div class="tri18-kpi-number">
+          <%= topAnalyzed %>
+        </div>
+
+      </div>
+
+    </article>
+
+
+
+    <!-- PRINCIPAL -->
+
+    <article class="tri18-kpi orange">
+
+      <div class="tri18-kpi-icon">
+
+        <svg viewBox="0 0 48 48">
+
+          <path
+            d="
+              M8 35
+              L13 16
+              L23 26
+              L34 11
+              L40 35
+              Z
+            "
+            fill="#ffffff"
+          ></path>
+
+          <rect
+            x="8"
+            y="38"
+            width="32"
+            height="4"
+            rx="2"
+            fill="#ffffff"
+          ></rect>
+
+        </svg>
+
+      </div>
+
+
+      <div class="tri18-kpi-copy">
+
+        <div class="tri18-kpi-label">
+          PRINCIPAL INSUMO
+        </div>
+
+        <div class="tri18-kpi-number">
+          <%= tri18Quantity(principal.quantity) %>
+        </div>
+
+        <div
+          class="tri18-kpi-description"
+          title="<%= principal.name %>"
+        >
+          <%= tri18Short(principal.name, 26) %>
+        </div>
+
+      </div>
+
+    </article>
+
+
+
+    <!-- SEGUNDO -->
+
+    <article class="tri18-kpi teal">
+
+      <div class="tri18-kpi-icon">
+
+        <svg viewBox="0 0 48 48">
+
+          <path
+            d="
+              M18 7v12
+              M30 7v12
+              M14 19h20
+              V26
+              C34 33 30 37 24 37
+              C18 37 14 33 14 26
+              Z
+            "
+            fill="none"
+            stroke="#ffffff"
+            stroke-width="3.3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></path>
+
+          <path
+            d="M24 37v6"
+            fill="none"
+            stroke="#ffffff"
+            stroke-width="3.3"
+            stroke-linecap="round"
+          ></path>
+
+        </svg>
+
+      </div>
+
+
+      <div class="tri18-kpi-copy">
+
+        <div class="tri18-kpi-label">
+          SEGUNDO INSUMO<br>
+          MÁS UTILIZADO
+        </div>
+
+        <div class="tri18-kpi-number">
+          <%= tri18Quantity(second.quantity) %>
+        </div>
+
+        <div
+          class="tri18-kpi-description"
+          title="<%= second.name %>"
+        >
+          <%= tri18Short(second.name, 26) %>
+        </div>
+
+      </div>
+
+    </article>
+
+
+
+    <!-- PRINCIPAL % -->
+
+    <article class="tri18-kpi purple">
+
+      <div class="tri18-kpi-icon">
+
+        <svg viewBox="0 0 48 48">
+
+          <text
+            x="24"
+            y="34"
+            text-anchor="middle"
+            fill="#ffffff"
+            font-family="Arial"
+            font-size="35"
+            font-weight="700"
+          >
+            %
+          </text>
+
+        </svg>
+
+      </div>
+
+
+      <div class="tri18-kpi-copy">
+
+        <div class="tri18-kpi-label">
+          % PRINCIPAL
+        </div>
+
+        <div class="tri18-kpi-number">
+          <%= tri18Pct(principalShare) %>
+        </div>
+
+      </div>
+
+    </article>
+
+
+
+    <!-- TOP 2 -->
+
+    <article class="tri18-kpi cyan">
+
+      <div class="tri18-kpi-icon">
+
+        <svg viewBox="0 0 48 48">
+
+          <circle
+            cx="24"
+            cy="24"
+            r="17"
+            fill="#ffffff"
+          ></circle>
+
+          <path
+            d="
+              M24 7
+              A17 17 0 0 1
+              41 24
+              H24
+              Z
+            "
+            fill="#0da7b5"
+          ></path>
+
+        </svg>
+
+      </div>
+
+
+      <div class="tri18-kpi-copy">
+
+        <div class="tri18-kpi-label">
+          TOP 2<br>
+          PARTICIPACIÓN
+        </div>
+
+        <div class="tri18-kpi-number">
+          <%= tri18Pct(secondShare) %>
+        </div>
+
+      </div>
+
+    </article>
+
+
+
+    <!-- TOP 3 -->
+
+    <article class="tri18-kpi blue">
+
+      <div class="tri18-kpi-icon">
+
+        <svg viewBox="0 0 48 48">
+
+          <rect
+            x="8"
+            y="29"
+            width="7"
+            height="12"
+            rx="1.5"
+            fill="#ffffff"
+          ></rect>
+
+          <rect
+            x="20"
+            y="20"
+            width="7"
+            height="21"
+            rx="1.5"
+            fill="#ffffff"
+          ></rect>
+
+          <rect
+            x="32"
+            y="10"
+            width="7"
+            height="31"
+            rx="1.5"
+            fill="#ffffff"
+          ></rect>
+
+        </svg>
+
+      </div>
+
+
+      <div class="tri18-kpi-copy">
+
+        <div class="tri18-kpi-label">
+          TOP 3<br>
+          PARTICIPACIÓN
+        </div>
+
+        <div class="tri18-kpi-number">
+          <%= tri18Pct(thirdShare) %>
+        </div>
+
+      </div>
+
+    </article>
+
+
+  </section>
+
+
+
+  <!-- =====================================================
+       PARTE CENTRAL
+       ===================================================== -->
+
+  <section class="tri18-middle">
+
+
+    <!-- ===================================================
+         GRÁFICO
+         =================================================== -->
+
+    <article class="tri18-card">
+
+
+      <div class="tri18-card-header">
+
+        <div class="tri18-card-header-icon">
+
+          <svg viewBox="0 0 48 48">
+
+            <rect
+              x="7"
+              y="29"
+              width="8"
+              height="11"
+              rx="1.5"
+              fill="#ffffff"
+            ></rect>
+
+            <rect
+              x="20"
+              y="20"
+              width="8"
+              height="20"
+              rx="1.5"
+              fill="#ffffff"
+            ></rect>
+
+            <rect
+              x="33"
+              y="8"
+              width="8"
+              height="32"
+              rx="1.5"
+              fill="#ffffff"
+            ></rect>
+
+          </svg>
+
+        </div>
+
+        <div class="tri18-card-title">
+          Top 10 por cantidad utilizada
+        </div>
+
+      </div>
+
+
+      <div class="tri18-chart-legend">
+
+        <span class="tri18-chart-legend-box"></span>
+
+        <span>
+          Cantidad (<%= chartUnit %>)
+        </span>
+
+      </div>
+
+
+      <svg
+        class="tri18-chart-svg"
+        viewBox="0 0 840 338"
+        aria-hidden="true"
+      >
+
+
+        <defs>
+
+          <linearGradient
+            id="tri18Bars"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="1"
+          >
+
+            <stop
+              offset="0%"
+              stop-color="#16b6c0"
+            ></stop>
+
+            <stop
+              offset="100%"
+              stop-color="#0797aa"
+            ></stop>
+
+          </linearGradient>
+
+        </defs>
+
+
+        <!-- GRID -->
+
+        <% axisTicks.forEach(function(tick) {
+
+          const y =
+            chart.bottom -
+            (
+              tick /
+              axisMaximum
+            ) *
+            chartHeight;
+
+        %>
+
+          <line
+            class="tri18-grid-line"
+
+            x1="<%= chart.left %>"
+            y1="<%= y %>"
+
+            x2="<%= chart.right %>"
+            y2="<%= y %>"
+          ></line>
+
+
+          <text
+            class="tri18-axis-label"
+
+            x="<%= chart.left - 12 %>"
+            y="<%= y + 5 %>"
+
+            text-anchor="end"
+          >
+            <%= tri18Quantity(tick) %>
+          </text>
+
+        <% }); %>
+
+
+        <!-- EJES -->
+
+        <line
+          class="tri18-axis-line"
+
+          x1="<%= chart.left %>"
+          y1="<%= chart.top %>"
+
+          x2="<%= chart.left %>"
+          y2="<%= chart.bottom %>"
+        ></line>
+
+
+        <line
+          class="tri18-axis-line"
+
+          x1="<%= chart.left %>"
+          y1="<%= chart.bottom %>"
+
+          x2="<%= chart.right %>"
+          y2="<%= chart.bottom %>"
+        ></line>
+
+
+        <!-- TÍTULO EJE Y -->
+
+        <text
+          class="tri18-axis-title"
+
+          x="21"
+          y="140"
+
+          text-anchor="middle"
+
+          transform="
+            rotate(
+              -90
+              21
+              140
+            )
+          "
+        >
+          CANTIDAD
+        </text>
+
+
+        <!-- BARRAS -->
+
+        <% chartBars.forEach(function(item, index) { %>
+
+
+          <rect
+
+            x="<%= item.x %>"
+            y="<%= item.y %>"
+
+            width="<%= item.width %>"
+            height="<%= item.height %>"
+
+            fill="url(#tri18Bars)"
+          ></rect>
+
+
+          <text
+            class="tri18-bar-value"
+
+            x="<%= item.centerX %>"
+            y="<%= item.y - 8 %>"
+
+            text-anchor="middle"
+          >
+            <%= tri18Quantity(item.quantity) %>
+          </text>
+
+
+          <!-- NOMBRE -->
+
+          <foreignObject
+
+            x="<%=
+              chart.left +
+              slotWidth * index +
+              2
+            %>"
+
+            y="255"
+
+            width="<%=
+              Math.max(
+                20,
+                slotWidth - 4
+              )
+            %>"
+
+            height="77"
+          >
+
+            <div
+              xmlns="http://www.w3.org/1999/xhtml"
+              class="tri18-chart-label"
+              title="<%= item.name %>"
+            >
+              <%= tri18Short(item.name, 36) %>
+            </div>
+
+          </foreignObject>
+
+
+        <% }); %>
+
+
+      </svg>
+
+
+    </article>
+
+
+
+    <!-- ===================================================
+         TABLA
+         =================================================== -->
+
+    <article class="tri18-card">
+
+
+      <div class="tri18-card-header">
+
+        <div class="tri18-card-header-icon">
+
+          <svg viewBox="0 0 48 48">
+
+            <rect
+              x="9"
+              y="6"
+              width="30"
+              height="36"
+              rx="2"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="3"
+            ></rect>
+
+            <path
+              d="
+                M15 14h18
+                M15 21h18
+                M15 28h18
+                M15 35h18
+              "
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            ></path>
+
+          </svg>
+
+        </div>
+
+
+        <div class="tri18-card-title">
+          Detalle Top 10 insumos
+        </div>
+
+      </div>
+
+
+      <div class="tri18-table-wrap">
+
+
+        <table class="tri18-table">
+
+
+          <thead>
+
+            <tr>
+
+              <th class="tri18-col-rank">
+                N°
+              </th>
+
+              <th class="tri18-col-supply">
+                Insumo
+              </th>
+
+              <th class="tri18-col-quantity">
+                Cantidad
+              </th>
+
+              <th class="tri18-col-unit">
+                Unidad
+              </th>
+
+              <th class="tri18-col-share">
+                % del total
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+            <% tableRows.forEach(function(item, index) { %>
+
+
+              <tr>
+
+
+                <% if (item) { %>
+
+
+                  <td class="tri18-table-rank">
+                    <%= index + 1 %>
+                  </td>
+
+
+                  <td
+                    class="tri18-table-supply"
+                    title="<%= item.name %>"
+                  >
+                    <%= item.name %>
+                  </td>
+
+
+                  <td
+                    class="
+                      tri18-table-quantity
+                      <%= index === 0 ? 'principal' : '' %>
+                    "
+                  >
+                    <%= tri18Quantity(item.quantity) %>
+                  </td>
+
+
+                  <td class="tri18-table-unit">
+                    <%= item.unit || 's/u' %>
+                  </td>
+
+
+                  <td
+                    class="
+                      tri18-table-share
+                      <%= index === 0 ? 'principal' : '' %>
+                    "
+                  >
+                    <%= tri18Pct(item.share) %>
+                  </td>
+
+
+                <% } else { %>
+
+
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+
+
+                <% } %>
+
+
+              </tr>
+
+
+            <% }); %>
+
+
+          </tbody>
+
+
+        </table>
+
+
+      </div>
+
+
+    </article>
+
+
+  </section>
+
+
+
+  <!-- =====================================================
+       LECTURA INFERIOR
+       ===================================================== -->
+
+  <section class="tri18-insight">
+
+
+    <div class="tri18-insight-icon">
+
+      <svg viewBox="0 0 64 64">
+
+        <rect
+          x="10"
+          y="40"
+          width="8"
+          height="12"
+          rx="1.5"
+          fill="#ffffff"
+        ></rect>
+
+        <rect
+          x="24"
+          y="32"
+          width="8"
+          height="20"
+          rx="1.5"
+          fill="#ffffff"
+        ></rect>
+
+        <rect
+          x="38"
+          y="22"
+          width="8"
+          height="30"
+          rx="1.5"
+          fill="#ffffff"
+        ></rect>
+
+
+        <path
+          d="
+            M9 31
+            L22 24
+            L31 28
+            L49 10
+          "
+          fill="none"
+          stroke="#ffffff"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path>
+
+
+        <path
+          d="
+            M40 10
+            H50
+            V20
+          "
+          fill="none"
+          stroke="#ffffff"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path>
+
+      </svg>
+
+    </div>
+
+
+    <div class="tri18-insight-divider"></div>
+
+
+    <div class="tri18-insight-copy">
+
+      <div class="tri18-insight-title">
+        Consumo de insumos
+      </div>
+
+
+      <div class="tri18-insight-text">
+
+        El insumo de mayor consumo es
+        "<strong><%= principal.name %></strong>",
+        con
+        <strong>
+          <%= tri18Quantity(principal.quantity) %>
+          <%= principal.unit %>
+        </strong>
+        y
+        <strong><%= tri18Pct(principalShare) %></strong>
+        del total.
+        <br>
+
+        El Top 3 representa
+        <strong><%= tri18Pct(top3CumulativeShare) %></strong>
+        de la cantidad acumulada y el Top 10 concentra
+        <strong><%= tri18Pct(top10Share) %></strong>.
+
+      </div>
+
+    </div>
+
+
+    <div class="tri18-insight-decoration">
+
+      <span></span>
+      <span></span>
+      <span></span>
+
+    </div>
+
+
+  </section>
+
+
+</div>
