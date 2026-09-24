@@ -73,7 +73,6 @@ body.slide18-body .q-content {
   align-items: center;
 
   padding:
-    13px
     13px;
 
   overflow: hidden;
@@ -116,8 +115,8 @@ body.slide18-body .q-content {
 
 
 .tri18-kpi-icon svg {
-  width: 43px;
-  height: 43px;
+  width: 45px;
+  height: 45px;
 
   display: block;
 }
@@ -461,8 +460,6 @@ body.slide18-body .q-content {
   height: 388px;
 
   padding:
-    10px
-    10px
     10px;
 }
 
@@ -821,35 +818,17 @@ const q =
 
 
 /*
-   Preferimos allSupplies porque necesitamos conocer
-   también los insumos que estén fuera del Top 10.
-
-   Después del pequeño ajuste de server.js que te dejo
-   debajo de este código, allSupplies estará disponible.
+   El servidor ya entrega supplies ordenado
+   y limitado a un máximo de 10 registros.
 */
 
 const supplyInput =
-  typeof allSupplies !== 'undefined' &&
-  Array.isArray(allSupplies) &&
-  allSupplies.length
+  typeof supplies !== 'undefined' &&
+  Array.isArray(supplies)
 
-    ? allSupplies
+    ? supplies
 
-    : (
-        Array.isArray(q.supplies) &&
-        q.supplies.length
-
-          ? q.supplies
-
-          : (
-              typeof supplies !== 'undefined' &&
-              Array.isArray(supplies)
-
-                ? supplies
-
-                : []
-            )
-      );
+    : [];
 
 
 /* =========================================================
@@ -1021,10 +1000,6 @@ const topAnalyzed =
   top10.length;
 
 
-const totalSupplyTypes =
-  normalizedSupplies.length;
-
-
 /* =========================================================
    CANTIDAD ACUMULADA
    ========================================================= */
@@ -1180,7 +1155,7 @@ top10.forEach(
 
 
 /* =========================================================
-   COMPLETAR TABLA A 10 FILAS
+   COMPLETAR TABLA VISUALMENTE A 10 FILAS
    ========================================================= */
 
 const tableRows =
@@ -1287,14 +1262,6 @@ const axisStep =
     rawStep
   );
 
-
-/*
-   Dejamos un intervalo adicional
-   para que la barra principal no toque
-   el borde superior.
-
-   295 → 350
-*/
 
 let axisMaximum =
   (
@@ -1426,14 +1393,6 @@ const chartBars =
     }
   );
 
-
-const chartUnit =
-  tri18Text(
-    q.supplyChartUnit ??
-    q.unidadGraficoInsumos ??
-    'und'
-  );
-
 %>
 
 
@@ -1501,34 +1460,76 @@ const chartUnit =
 
 
 
-    <!-- PRINCIPAL -->
+    <!-- ===================================================
+         PRINCIPAL INSUMO
+         CORONA MEJORADA
+         =================================================== -->
 
     <article class="tri18-kpi orange">
 
       <div class="tri18-kpi-icon">
 
-        <svg viewBox="0 0 48 48">
+        <svg
+          viewBox="0 0 48 48"
+          aria-hidden="true"
+        >
+
+          <!-- CORONA -->
 
           <path
             d="
-              M8 35
-              L13 16
-              L23 26
-              L34 11
-              L40 35
+              M7 18
+              L15 26
+              L23.5 10
+              L32 26
+              L41 17
+              L37 34
+              H11
               Z
             "
             fill="#ffffff"
+            stroke="#ffffff"
+            stroke-width="1.6"
+            stroke-linejoin="round"
           ></path>
 
-          <rect
-            x="8"
-            y="38"
-            width="32"
-            height="4"
-            rx="2"
+
+          <!-- remate inferior -->
+
+          <path
+            d="
+              M11 38
+              H37
+            "
+            fill="none"
+            stroke="#ffffff"
+            stroke-width="3.4"
+            stroke-linecap="round"
+          ></path>
+
+
+          <!-- puntos de corona -->
+
+          <circle
+            cx="7"
+            cy="18"
+            r="2"
             fill="#ffffff"
-          ></rect>
+          ></circle>
+
+          <circle
+            cx="23.5"
+            cy="10"
+            r="2.2"
+            fill="#ffffff"
+          ></circle>
+
+          <circle
+            cx="41"
+            cy="17"
+            r="2"
+            fill="#ffffff"
+          ></circle>
 
         </svg>
 
@@ -1558,7 +1559,7 @@ const chartUnit =
 
 
 
-    <!-- SEGUNDO -->
+    <!-- SEGUNDO INSUMO -->
 
     <article class="tri18-kpi teal">
 
@@ -1827,12 +1828,16 @@ const chartUnit =
       </div>
 
 
+      <!-- =================================================
+           LEYENDA CORREGIDA
+           ================================================= -->
+
       <div class="tri18-chart-legend">
 
         <span class="tri18-chart-legend-box"></span>
 
         <span>
-          Cantidad (<%= chartUnit %>)
+          Cantidad
         </span>
 
       </div>
@@ -1983,8 +1988,6 @@ const chartUnit =
             <%= tri18Quantity(item.quantity) %>
           </text>
 
-
-          <!-- NOMBRE -->
 
           <foreignObject
 
