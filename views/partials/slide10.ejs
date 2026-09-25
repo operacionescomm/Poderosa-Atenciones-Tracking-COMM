@@ -802,6 +802,17 @@ const c =
     : {};
 
 
+/*
+   Serie mensual real enviada por Apps Script.
+   Se usa para que el bloque EVOLUCIÓN sea completamente dinámico.
+*/
+const monthlyData =
+  typeof monthlySeries !== 'undefined' &&
+  Array.isArray(monthlySeries)
+    ? monthlySeries
+    : [];
+
+
 const totalAttentions =
   m.totalAttentions ??
   183;
@@ -862,20 +873,62 @@ const topCompaniesAttentions =
   98;
 
 
-const evolutionPct =
-  c.variationPct ??
-  m.variationPct ??
-  73.9;
-
-
 const evolutionStart =
   c.previousTotal ??
-  46;
+  (
+    monthlyData.length
+      ? monthlyData[0].value
+      : 46
+  );
 
 
 const evolutionEnd =
   c.currentTotal ??
-  80;
+  (
+    monthlyData.length
+      ? monthlyData[monthlyData.length - 1].value
+      : 80
+  );
+
+
+const evolutionPct =
+  c.variationPct ??
+  m.variationPct ??
+  (
+    safeNumber(evolutionStart) !== 0
+      ? (
+          (
+            safeNumber(evolutionEnd) -
+            safeNumber(evolutionStart)
+          ) /
+          safeNumber(evolutionStart)
+        ) * 100
+      : 0
+  );
+
+
+const evolutionStartMonth =
+  monthlyData.length
+    ? String(monthlyData[0].month || '')
+    : String(c.previousPeriod || 'Mayo');
+
+
+const evolutionEndMonth =
+  monthlyData.length
+    ? String(
+        monthlyData[
+          monthlyData.length - 1
+        ].month || ''
+      )
+    : 'Julio';
+
+
+const evolutionDirection =
+  safeNumber(evolutionPct) > 0
+    ? 'up'
+    : safeNumber(evolutionPct) < 0
+      ? 'down'
+      : 'flat';
 
 
 const executiveTitle =
@@ -920,6 +973,27 @@ function oneDecimal(value) {
 
   return safeNumber(value)
     .toFixed(1);
+
+}
+
+
+function signedPercent(value) {
+
+  const n =
+    safeNumber(value);
+
+  const sign =
+    n > 0
+      ? '+'
+      : n < 0
+        ? '−'
+        : '';
+
+  return (
+    sign +
+    Math.abs(n).toFixed(1) +
+    '%'
+  );
 
 }
 
@@ -1536,7 +1610,10 @@ const demandDonut =
         </div>
 
         <span>
-          EVOLUCIÓN MAYO → JULIO
+          EVOLUCIÓN
+          <%= evolutionStartMonth.toUpperCase() %>
+          →
+          <%= evolutionEndMonth.toUpperCase() %>
         </span>
 
       </div>
@@ -1548,7 +1625,7 @@ const demandDonut =
 
           <div class="tri10-analysis-value">
 
-            +<%= oneDecimal(evolutionPct) %>%
+            <%= signedPercent(evolutionPct) %>
 
           </div>
 
@@ -1564,7 +1641,7 @@ const demandDonut =
         </div>
 
 
-        <!-- GRÁFICO ASCENDENTE MEJORADO -->
+        <!-- GRÁFICO DE EVOLUCIÓN DINÁMICO -->
 
         <div class="tri10-evolution-graphic">
 
@@ -1598,74 +1675,220 @@ const demandDonut =
             </defs>
 
 
-            <!-- barras -->
+            <% if (evolutionDirection === 'down') { %>
 
-            <rect
-              x="18"
-              y="72"
-              width="16"
-              height="24"
-              rx="3"
-              fill="url(#tri10EvolutionBars)"
-            ></rect>
+              <!-- barras descendentes -->
 
-            <rect
-              x="43"
-              y="60"
-              width="16"
-              height="36"
-              rx="3"
-              fill="url(#tri10EvolutionBars)"
-            ></rect>
+              <rect
+                x="18"
+                y="29"
+                width="16"
+                height="67"
+                rx="3"
+                fill="url(#tri10EvolutionBars)"
+              ></rect>
 
-            <rect
-              x="68"
-              y="46"
-              width="16"
-              height="50"
-              rx="3"
-              fill="url(#tri10EvolutionBars)"
-            ></rect>
+              <rect
+                x="43"
+                y="46"
+                width="16"
+                height="50"
+                rx="3"
+                fill="url(#tri10EvolutionBars)"
+              ></rect>
 
-            <rect
-              x="93"
-              y="29"
-              width="16"
-              height="67"
-              rx="3"
-              fill="url(#tri10EvolutionBars)"
-            ></rect>
+              <rect
+                x="68"
+                y="60"
+                width="16"
+                height="36"
+                rx="3"
+                fill="url(#tri10EvolutionBars)"
+              ></rect>
 
-
-            <!-- curva de crecimiento -->
-
-            <path
-              d="
-                M18 62
-                C34 60 44 54 55 49
-                C68 43 82 33 103 18
-              "
-              fill="none"
-              stroke="#2786f3"
-              stroke-width="4"
-              stroke-linecap="round"
-            ></path>
+              <rect
+                x="93"
+                y="72"
+                width="16"
+                height="24"
+                rx="3"
+                fill="url(#tri10EvolutionBars)"
+              ></rect>
 
 
-            <!-- flecha -->
+              <!-- curva descendente -->
 
-            <path
-              d="
-                M92 18
-                H105
-                V31
-              "
-              fill="none"
-              stroke="#2786f3"
-              stroke-width="4"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
+              <path
+                d="
+                  M18 18
+                  C38 31 50 40 63 48
+                  C78 58 90 65 104 74
+                "
+                fill="none"
+                stroke="#2786f3"
+                stroke-width="4"
+                stroke-linecap="round"
+              ></path>
+
+
+              <!-- flecha hacia abajo -->
+
+              <path
+                d="
+                  M93 74
+                  H106
+                  V61
+                "
+                fill="none"
+                stroke="#2786f3"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+
+            <% } else if (evolutionDirection === 'flat') { %>
+
+              <!-- barras estables -->
+
+              <rect
+                x="18"
+                y="53"
+                width="16"
+                height="43"
+                rx="3"
+                fill="url(#tri10EvolutionBars)"
+              ></rect>
+
+              <rect
+                x="43"
+                y="50"
+                width="16"
+                height="46"
+                rx="3"
+                fill="url(#tri10EvolutionBars)"
+              ></rect>
+
+              <rect
+                x="68"
+                y="52"
+                width="16"
+                height="44"
+                rx="3"
+                fill="url(#tri10EvolutionBars)"
+              ></rect>
+
+              <rect
+                x="93"
+                y="51"
+                width="16"
+                height="45"
+                rx="3"
+                fill="url(#tri10EvolutionBars)"
+              ></rect>
+
+
+              <!-- tendencia estable -->
+
+              <path
+                d="
+                  M18 42
+                  C40 40 60 43 82 41
+                  C91 40 98 40 105 40
+                "
+                fill="none"
+                stroke="#2786f3"
+                stroke-width="4"
+                stroke-linecap="round"
+              ></path>
+
+
+              <!-- flecha horizontal -->
+
+              <path
+                d="
+                  M95 34
+                  L106 40
+                  L95 46
+                "
+                fill="none"
+                stroke="#2786f3"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+
+            <% } else { %>
+
+              <!-- barras ascendentes -->
+
+              <rect
+                x="18"
+                y="72"
+                width="16"
+                height="24"
+                rx="3"
+                fill="url(#tri10EvolutionBars)"
+              ></rect>
+
+              <rect
+                x="43"
+                y="60"
+                width="16"
+                height="36"
+                rx="3"
+                fill="url(#tri10EvolutionBars)"
+              ></rect>
+
+              <rect
+                x="68"
+                y="46"
+                width="16"
+                height="50"
+                rx="3"
+                fill="url(#tri10EvolutionBars)"
+              ></rect>
+
+              <rect
+                x="93"
+                y="29"
+                width="16"
+                height="67"
+                rx="3"
+                fill="url(#tri10EvolutionBars)"
+              ></rect>
+
+
+              <!-- curva ascendente -->
+
+              <path
+                d="
+                  M18 62
+                  C34 60 44 54 55 49
+                  C68 43 82 33 103 18
+                "
+                fill="none"
+                stroke="#2786f3"
+                stroke-width="4"
+                stroke-linecap="round"
+              ></path>
+
+
+              <!-- flecha hacia arriba -->
+
+              <path
+                d="
+                  M92 18
+                  H105
+                  V31
+                "
+                fill="none"
+                stroke="#2786f3"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+
+            <% } %>
 
           </svg>
 
