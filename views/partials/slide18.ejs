@@ -836,17 +836,28 @@ const q =
 
 
 /*
-   El servidor ya entrega supplies ordenado
-   y limitado a un máximo de 10 registros.
+   Para los cálculos utilizamos TODOS
+   los insumos del trimestre.
+
+   La visualización seguirá mostrando
+   únicamente el Top 10.
 */
 
 const supplyInput =
-  typeof supplies !== 'undefined' &&
-  Array.isArray(supplies)
+  typeof allSupplies !== 'undefined' &&
+  Array.isArray(allSupplies) &&
+  allSupplies.length
 
-    ? supplies
+    ? allSupplies
 
-    : [];
+    : (
+        typeof supplies !== 'undefined' &&
+        Array.isArray(supplies)
+
+          ? supplies
+
+          : []
+      );
 
 
 /* =========================================================
