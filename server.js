@@ -3007,11 +3007,23 @@ function normalizeReportData(
       ),
 
 
-    supplies,
+    /*
+ * Top 10 para gráficos/tablas.
+ */
+supplies,
 
 
-    allSupplyCount:
-      allSupplies.length,
+/*
+ * Lista completa para cálculos.
+ * Slide 18 utiliza esta lista para que
+ * los porcentajes se calculen contra
+ * el consumo TOTAL real.
+ */
+allSupplies,
+
+
+allSupplyCount:
+  allSupplies.length,
 
 
     supplyHeading:
